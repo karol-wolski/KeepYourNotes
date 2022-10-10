@@ -1,7 +1,9 @@
+import Notes from './components/notes/Notes'
+
 function App() {
   return (
     <div className='App'>
-      <p>Homepage</p>
+      <Notes />
     </div>
   )
 }
