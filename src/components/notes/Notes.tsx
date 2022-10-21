@@ -1,5 +1,12 @@
 import { useState } from 'react'
-import Note, { INote } from '../note/Note'
+import Note from '../note/Note'
+
+interface INote {
+  id: string
+  title: string
+  desc: string
+  img?: string
+}
 
 const Notes = () => {
   const [notes, setNotes] = useState<INote[]>([
@@ -45,6 +52,11 @@ const Notes = () => {
     },
   ])
 
+  const handleRemoveNote = (id: string) => {
+    const removeNOte = notes.filter(note => note.id !== id)
+    setNotes(removeNOte)
+  }
+
   return (
     <div className='container'>
       <>
@@ -52,7 +64,7 @@ const Notes = () => {
           <div className='row g-3'>
             {notes.map(note => (
               <div key={note.id} className='col-12 col-sm-6 col-md-4 col-xl-3'>
-                <Note id={note.id} title={note.title} desc={note.desc} />
+                <Note id={note.id} title={note.title} desc={note.desc} handleRemoveNote={handleRemoveNote} />
               </div>
             ))}
           </div>
@@ -70,13 +82,3 @@ const Notes = () => {
 }
 
 export default Notes
-
-// {
-//               notes.map(note => {
-//                   return (
-//                     <div key={note.id} className='col-12 col-sm-6 col-md-4 col-xl-3'>
-//                       <Note id={note.id} title={note.title} desc={note.desc} />
-//                     </div>
-//                   )
-
-//               }

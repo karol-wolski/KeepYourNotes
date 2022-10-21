@@ -1,6 +1,8 @@
-import { INote } from '../note/Note'
-
-interface IModal extends INote {
+interface IModal {
+  id?: string
+  title: string
+  desc: string
+  img?: string
   handleClose: () => void
 }
 
