@@ -1,61 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Note from '../note/Note'
 
-interface INote {
+export type Note = {
   id: string
   title: string
   desc: string
   img?: string
+  createdBy: string
+  createdDate: number
+  updatedDate: number
 }
 
-const Notes = () => {
-  const [notes, setNotes] = useState<INote[]>([
-    {
-      id: '0001',
-      title: 'Note 1',
-      desc: 'This is note number 1',
-    },
-    {
-      id: '0002',
-      title: 'Note 2',
-      desc: 'This is note number 2',
-    },
-    {
-      id: '0003',
-      title: 'Note 3',
-      desc: 'This is note number 3',
-    },
-    {
-      id: '0004',
-      title: 'Note 4',
-      desc: 'This is note number 4',
-    },
-    {
-      id: '0005',
-      title: 'Note 5',
-      desc: 'This is note number 5',
-    },
-    {
-      id: '0006',
-      title: 'Note 6',
-      desc: 'This is note number 6',
-    },
-    {
-      id: '0007',
-      title: 'Note 7',
-      desc: 'This is note number 7',
-    },
-    {
-      id: '0008',
-      title: 'Note 8',
-      desc: 'This is note number 8',
-    },
-  ])
+interface INotes {
+  notesArray: Notes
+  handleRemoveNote: (noteId: string) => void
+}
 
-  const handleRemoveNote = (id: string) => {
-    const removeNOte = notes.filter(note => note.id !== id)
-    setNotes(removeNOte)
-  }
+type Notes = Note[]
+
+const Notes = ({ notesArray, handleRemoveNote }: INotes) => {
+  const [notes, setNotes] = useState(notesArray)
+
+  useEffect(() => setNotes(notesArray), [notesArray])
 
   return (
     <div className='container'>
