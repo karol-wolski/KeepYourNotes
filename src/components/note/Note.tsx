@@ -9,9 +9,10 @@ interface INote {
   desc: string
   img?: string
   handleRemoveNote: (id: string) => void
+  handleDuplicateNote: (id: string) => void
 }
 
-const Note = ({ id, title, desc, img, handleRemoveNote }: INote) => {
+const Note = ({ id, title, desc, img, handleRemoveNote, handleDuplicateNote }: INote) => {
   const [displayModal, setDisplayModal] = useState<boolean>(false)
   const [displayRemoveModal, setDisplayRemoveModal] = useState<boolean>(false)
 
@@ -28,8 +29,21 @@ const Note = ({ id, title, desc, img, handleRemoveNote }: INote) => {
           <h2 className='card-title'>{title}</h2>
           <p className='card-text'>{trimText(desc, 120, ' ')}</p>
           <div className='d-grid gap-2 d-md-flex justify-content-md-end'>
-            <button type='button' className='btn btn-outline-danger btn-sm' onClick={openRemoveModal}>
+            <button
+              type='button'
+              className='btn btn-outline-danger btn-sm'
+              onClick={openRemoveModal}
+              title='Remove note'
+            >
               <i className='bi bi-trash'></i>
+            </button>
+            <button
+              type='button'
+              className='btn btn-outline-danger btn-sm'
+              onClick={() => handleDuplicateNote(id)}
+              title='Duplicate note'
+            >
+              <i className='bi bi-files'></i>
             </button>
             <button type='button' className='btn btn-primary btn-sm' onClick={openModal}>
               See full note
