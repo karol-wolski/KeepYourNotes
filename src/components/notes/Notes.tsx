@@ -14,11 +14,12 @@ export type Note = {
 interface INotes {
   notesArray: Notes
   handleRemoveNote: (noteId: string) => void
+  handleDuplicateNote: (noteId: string) => void
 }
 
 type Notes = Note[]
 
-const Notes = ({ notesArray, handleRemoveNote }: INotes) => {
+const Notes = ({ notesArray, handleRemoveNote, handleDuplicateNote }: INotes) => {
   const [notes, setNotes] = useState(notesArray)
 
   useEffect(() => setNotes(notesArray), [notesArray])
@@ -30,7 +31,13 @@ const Notes = ({ notesArray, handleRemoveNote }: INotes) => {
           <div className='row g-3'>
             {notes.map(note => (
               <div key={note.id} className='col-12 col-sm-6 col-md-4 col-xl-3'>
-                <Note id={note.id} title={note.title} desc={note.desc} handleRemoveNote={handleRemoveNote} />
+                <Note
+                  id={note.id}
+                  title={note.title}
+                  desc={note.desc}
+                  handleRemoveNote={handleRemoveNote}
+                  handleDuplicateNote={handleDuplicateNote}
+                />
               </div>
             ))}
           </div>

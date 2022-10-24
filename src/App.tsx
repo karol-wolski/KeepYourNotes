@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import uuid from 'react-uuid'
 import AddNote from './components/add-note/AddNote'
 import Navigation from './components/navigation/Navigation'
 import Notes, { Note } from './components/notes/Notes'
@@ -74,8 +75,7 @@ function App() {
     },
   ])
 
-  const saveNewNote = (data: Note) => {
-    console.log(data)
+  const handleSaveNewNote = (data: Note) => {
     setNotes([...notes, data])
     closeAddNoteModal()
   }
@@ -85,13 +85,23 @@ function App() {
     setNotes(removeNOte)
   }
 
+  const handleDuplicateNote = (noteId: string) => {
+    const note = notes.find(note => note.id === noteId)
+    if (note) {
+      handleSaveNewNote({
+        ...note,
+        id: uuid(),
+      })
+    }
+  }
+
   return (
     <>
       <div className='App'>
         <Navigation openAddNoteModal={openAddNoteModal} />
-        <Notes notesArray={notes} handleRemoveNote={handleRemoveNote} />
+        <Notes notesArray={notes} handleRemoveNote={handleRemoveNote} handleDuplicateNote={handleDuplicateNote} />
       </div>
-      {isOpenAddNoteModal && <AddNote handleClose={closeAddNoteModal} handleSaveNote={saveNewNote} />}
+      {isOpenAddNoteModal && <AddNote handleClose={closeAddNoteModal} handleSaveNote={handleSaveNewNote} />}
     </>
   )
 }
