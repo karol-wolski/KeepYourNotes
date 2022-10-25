@@ -95,11 +95,22 @@ function App() {
     }
   }
 
+  const handleEditNote = (note: Note, cb: () => void) => {
+    const editNotes = notes.map(noteEl => (noteEl.id === note.id ? { ...noteEl, ...note } : noteEl))
+    setNotes(editNotes)
+    cb()
+  }
+
   return (
     <>
       <div className='App'>
         <Navigation openAddNoteModal={openAddNoteModal} />
-        <Notes notesArray={notes} handleRemoveNote={handleRemoveNote} handleDuplicateNote={handleDuplicateNote} />
+        <Notes
+          notesArray={notes}
+          handleRemoveNote={handleRemoveNote}
+          handleDuplicateNote={handleDuplicateNote}
+          handleEditNote={handleEditNote}
+        />
       </div>
       {isOpenAddNoteModal && <AddNote handleClose={closeAddNoteModal} handleSaveNote={handleSaveNewNote} />}
     </>
