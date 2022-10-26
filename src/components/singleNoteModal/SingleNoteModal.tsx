@@ -1,12 +1,12 @@
+import { Note } from '../notes/Notes'
+
 interface IModal {
-  id?: string
-  title: string
-  desc: string
-  img?: string
+  note: Note
   handleClose: () => void
 }
 
-const SingleNoteModal = ({ title, desc, img, handleClose }: IModal) => {
+const SingleNoteModal = ({ note, handleClose }: IModal) => {
+  const { title, desc, img, categories } = note
   return (
     <div
       className='modal fade show'
@@ -32,6 +32,27 @@ const SingleNoteModal = ({ title, desc, img, handleClose }: IModal) => {
             ></button>
           </div>
           <div className='modal-body'>
+            <div className='d-flex gap-2 justify-start mb-2'>
+              {categories &&
+                categories.map((category, index) => {
+                  return (
+                    <button
+                      key={`${category}-${index}`}
+                      type='button'
+                      className='btn btn-outline-secondary'
+                      style={
+                        {
+                          '--bs-btn-padding-y': '.25rem',
+                          '--bs-btn-padding-x': '.25rem',
+                          '--bs-btn-font-size': '.7rem',
+                        } as React.CSSProperties
+                      }
+                    >
+                      {category}
+                    </button>
+                  )
+                })}
+            </div>
             {img}
             {desc}
           </div>

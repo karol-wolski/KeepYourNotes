@@ -16,6 +16,7 @@ function App() {
       createdBy: 'John Doe',
       createdDate: 1666463333,
       updatedDate: 1666463333,
+      categories: ['test', 'note'],
     },
     {
       id: '0002',
@@ -32,6 +33,7 @@ function App() {
       createdBy: 'John Doe',
       createdDate: 1666463333,
       updatedDate: 1666463333,
+      categories: ['cooking'],
     },
     {
       id: '0004',

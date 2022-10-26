@@ -6,6 +6,7 @@ export type Note = {
   title: string
   desc: string
   img?: string
+  categories?: string[]
   createdBy: string
   createdDate: number
   updatedDate: number
