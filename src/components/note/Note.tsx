@@ -16,7 +16,7 @@ const Note = ({ note, handleRemoveNote, handleDuplicateNote, handleEditNote }: I
   const [displayModal, setDisplayModal] = useState<boolean>(false)
   const [displayRemoveModal, setDisplayRemoveModal] = useState<boolean>(false)
   const [displayEditModal, setDisplayEditModal] = useState<boolean>(false)
-  const { id, title, desc, img } = note
+  const { id, title, desc, img, categories } = note
   const handleClose = () => setDisplayModal(false)
   const openModal = () => setDisplayModal(true)
   const closeRemoveModal = () => setDisplayRemoveModal(false)
@@ -31,8 +31,29 @@ const Note = ({ note, handleRemoveNote, handleDuplicateNote, handleEditNote }: I
         <div className='card-body'>
           <h2 className='card-title'>{title}</h2>
           <p className='card-text'>{trimText(desc, 120, ' ')}</p>
-          <div className='d-grid gap-2 d-md-flex justify-content-md-between'>
-            <div className='gap-2 d-sm-flex justify-content-evenly'>
+          <div className='d-flex gap-2 justify-start'>
+            {categories &&
+              categories.map(category => {
+                return (
+                  <button
+                    key={`${category}-${id}`}
+                    type='button'
+                    className='btn btn-outline-secondary'
+                    style={
+                      {
+                        '--bs-btn-padding-y': '.25rem',
+                        '--bs-btn-padding-x': '.25rem',
+                        '--bs-btn-font-size': '.7rem',
+                      } as React.CSSProperties
+                    }
+                  >
+                    {category}
+                  </button>
+                )
+              })}
+          </div>
+          <div className='d-grid gap-2 d-md-flex justify-content-md-between mt-2'>
+            <div className='gap-2 d-flex justify-content-start'>
               <button
                 type='button'
                 className='btn btn-outline-danger btn-sm'
@@ -59,7 +80,7 @@ const Note = ({ note, handleRemoveNote, handleDuplicateNote, handleEditNote }: I
           </div>
         </div>
       </div>
-      {displayModal && <SingleNoteModal title={title} desc={desc} img={img} handleClose={handleClose} />}
+      {displayModal && <SingleNoteModal note={note} handleClose={handleClose} />}
       {displayRemoveModal && (
         <Modal
           title={`Remove note: ${title} `}
