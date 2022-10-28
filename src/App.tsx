@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import uuid from 'react-uuid'
+import AddCategory, { Category } from './components/add-category/AddCategory'
 import AddNote from './components/add-note/AddNote'
 import Navigation from './components/navigation/Navigation'
 import Notes, { Note } from './components/notes/Notes'
 
 function App() {
   const [isOpenAddNoteModal, setIsOpenAddNoteModal] = useState(false)
+  const [isOpenAddCategoryModal, setIsOpenAddCategoryModal] = useState(false)
   const openAddNoteModal = () => setIsOpenAddNoteModal(true)
   const closeAddNoteModal = () => setIsOpenAddNoteModal(false)
+  const openAddCategoryModal = () => setIsOpenAddCategoryModal(true)
+  const closeAddCategoryModal = () => setIsOpenAddCategoryModal(false)
   const [notes, setNotes] = useState<Note[]>([
     {
       id: '0001',
@@ -77,6 +81,13 @@ function App() {
     },
   ])
 
+  const [categories, setCategories] = useState<Category[]>([
+    {
+      id: '0001',
+      name: 'cooking',
+    },
+  ])
+
   const handleSaveNewNote = (data: Note) => {
     setNotes([...notes, data])
     closeAddNoteModal()
@@ -103,10 +114,17 @@ function App() {
     cb()
   }
 
+  const handleSaveCategory = (data: Category) => {
+    setCategories([...categories, data])
+    closeAddCategoryModal()
+  }
+
+  console.table(categories)
+
   return (
     <>
       <div className='App'>
-        <Navigation openAddNoteModal={openAddNoteModal} />
+        <Navigation openAddNoteModal={openAddNoteModal} openAddCategoryModal={openAddCategoryModal} />
         <Notes
           notesArray={notes}
           handleRemoveNote={handleRemoveNote}
@@ -115,6 +133,9 @@ function App() {
         />
       </div>
       {isOpenAddNoteModal && <AddNote handleClose={closeAddNoteModal} handleSaveNote={handleSaveNewNote} />}
+      {isOpenAddCategoryModal && (
+        <AddCategory handleClose={closeAddCategoryModal} handleSaveCategory={handleSaveCategory} />
+      )}
     </>
   )
 }

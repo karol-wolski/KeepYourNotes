@@ -2,9 +2,10 @@ import { useState } from 'react'
 
 interface INavigation {
   openAddNoteModal: () => void
+  openAddCategoryModal: () => void
 }
 
-const Navigation = ({ openAddNoteModal }: INavigation) => {
+const Navigation = ({ openAddNoteModal, openAddCategoryModal }: INavigation) => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(true)
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed)
   return (
@@ -26,9 +27,14 @@ const Navigation = ({ openAddNoteModal }: INavigation) => {
           <span className='navbar-toggler-icon'></span>
         </button>
         <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id='navbarSupportedContent'>
-          <button type='button' className='btn btn-primary btn-sm' onClick={openAddNoteModal}>
-            Add note
-          </button>
+          <div className='gap-2 d-flex justify-content-start'>
+            <button type='button' className='btn btn-primary btn-sm' onClick={openAddNoteModal}>
+              Add note
+            </button>
+            <button type='button' className='btn btn-primary btn-sm' onClick={openAddCategoryModal}>
+              Add category
+            </button>
+          </div>
         </div>
       </div>
     </nav>
