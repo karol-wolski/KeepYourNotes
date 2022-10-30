@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import trimText from '../../helpers/trimText'
+import { Category } from '../add-category/AddCategory'
 import EditNote from '../edit-note/EditNote'
 import Modal from '../modal/Modal'
 import { Note as NoteType } from '../notes/Notes'
@@ -10,9 +11,18 @@ interface INote {
   handleRemoveNote: (id: string) => void
   handleDuplicateNote: (id: string) => void
   handleEditNote: (note: NoteType, cb: () => void) => void
+  filterNotes: (categoryId: string) => void
+  categories: Category[]
 }
 
-const Note = ({ note, handleRemoveNote, handleDuplicateNote, handleEditNote }: INote) => {
+const Note = ({
+  note,
+  handleRemoveNote,
+  handleDuplicateNote,
+  handleEditNote,
+  filterNotes,
+  categories: categoriesArray,
+}: INote) => {
   const [displayModal, setDisplayModal] = useState<boolean>(false)
   const [displayRemoveModal, setDisplayRemoveModal] = useState<boolean>(false)
   const [displayEditModal, setDisplayEditModal] = useState<boolean>(false)
@@ -33,24 +43,28 @@ const Note = ({ note, handleRemoveNote, handleDuplicateNote, handleEditNote }: I
           <p className='card-text'>{trimText(desc, 120, ' ')}</p>
           <div className='d-flex gap-2 justify-start'>
             {categories &&
-              categories.map(category => {
-                return (
-                  <button
-                    key={`${category}-${id}`}
-                    type='button'
-                    className='btn btn-outline-secondary'
-                    style={
-                      {
-                        '--bs-btn-padding-y': '.25rem',
-                        '--bs-btn-padding-x': '.25rem',
-                        '--bs-btn-font-size': '.7rem',
-                      } as React.CSSProperties
-                    }
-                  >
-                    {category}
-                  </button>
-                )
-              })}
+              categoriesArray &&
+              categoriesArray
+                .filter(categoryObj => categories.includes(categoryObj.id))
+                .map(({ id, name }: { id: string; name: string }) => {
+                  return (
+                    <button
+                      key={`${name}-${id}`}
+                      type='button'
+                      className='btn btn-outline-secondary'
+                      style={
+                        {
+                          '--bs-btn-padding-y': '.25rem',
+                          '--bs-btn-padding-x': '.25rem',
+                          '--bs-btn-font-size': '.7rem',
+                        } as React.CSSProperties
+                      }
+                      onClick={() => filterNotes(id)}
+                    >
+                      {name}
+                    </button>
+                  )
+                })}
           </div>
           <div className='d-grid gap-2 d-md-flex justify-content-md-between mt-2'>
             <div className='gap-2 d-flex justify-content-start'>

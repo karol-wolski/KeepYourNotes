@@ -3,9 +3,10 @@ import { useState } from 'react'
 interface INavigation {
   openAddNoteModal: () => void
   openAddCategoryModal: () => void
+  openCategories: () => void
 }
 
-const Navigation = ({ openAddNoteModal, openAddCategoryModal }: INavigation) => {
+const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: INavigation) => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(true)
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed)
   return (
@@ -28,6 +29,16 @@ const Navigation = ({ openAddNoteModal, openAddCategoryModal }: INavigation) => 
         </button>
         <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id='navbarSupportedContent'>
           <div className='gap-2 d-flex justify-content-start'>
+            <button
+              className='btn btn-primary'
+              type='button'
+              data-bs-toggle='offcanvas'
+              data-bs-target='#offcanvasScrolling'
+              aria-controls='offcanvasScrolling'
+              onClick={openCategories}
+            >
+              Categories
+            </button>
             <button type='button' className='btn btn-primary btn-sm' onClick={openAddNoteModal}>
               Add note
             </button>
