@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Category } from '../add-category/AddCategory'
 import Note from '../note/Note'
 
 export type Note = {
@@ -17,11 +18,20 @@ interface INotes {
   handleRemoveNote: (noteId: string) => void
   handleDuplicateNote: (noteId: string) => void
   handleEditNote: (note: Note, cb: () => void) => void
+  filterNotes: (categoryId: string) => void
+  categories: Category[]
 }
 
 type Notes = Note[]
 
-const Notes = ({ notesArray, handleRemoveNote, handleDuplicateNote, handleEditNote }: INotes) => {
+const Notes = ({
+  notesArray,
+  handleRemoveNote,
+  handleDuplicateNote,
+  handleEditNote,
+  filterNotes,
+  categories,
+}: INotes) => {
   const [notes, setNotes] = useState(notesArray)
 
   useEffect(() => setNotes(notesArray), [notesArray])
@@ -38,6 +48,8 @@ const Notes = ({ notesArray, handleRemoveNote, handleDuplicateNote, handleEditNo
                   handleRemoveNote={handleRemoveNote}
                   handleDuplicateNote={handleDuplicateNote}
                   handleEditNote={handleEditNote}
+                  filterNotes={filterNotes}
+                  categories={categories}
                 />
               </div>
             ))}
