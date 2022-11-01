@@ -23,6 +23,9 @@ const Categories = ({ handleClose, categories, filter }: ICategories) => {
       </div>
       <div className='offcanvas-body'>
         <div className='list-group'>
+          <button type='button' className='list-group-item list-group-item-action' onClick={() => filter('all')}>
+            all
+          </button>
           {categories &&
             categories.map(({ id, name }) => (
               <button

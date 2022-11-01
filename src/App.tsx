@@ -77,10 +77,6 @@ const NOTES = [
 
 const CATEGORIES = [
   {
-    id: 'all',
-    name: 'all',
-  },
-  {
     id: '0001',
     name: 'cooking',
   },
@@ -164,7 +160,9 @@ function App() {
           categories={categories}
         />
       </div>
-      {isOpenAddNoteModal && <AddNote handleClose={closeAddNoteModal} handleSaveNote={handleSaveNewNote} />}
+      {isOpenAddNoteModal && (
+        <AddNote handleClose={closeAddNoteModal} handleSaveNote={handleSaveNewNote} categories={categories} />
+      )}
       {isOpenAddCategoryModal && (
         <AddCategory handleClose={closeAddCategoryModal} handleSaveCategory={handleSaveCategory} />
       )}
