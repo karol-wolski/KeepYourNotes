@@ -14,6 +14,7 @@ const AddNote = ({ handleSaveNote, handleClose }: IAddNote) => {
     createdBy: 'John Doe',
     createdDate: Date.now(),
     updatedDate: Date.now(),
+    pinIt: false,
   })
 
   const isVisibleSendButton = !!note.title.length && !!note.desc.length

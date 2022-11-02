@@ -11,13 +11,14 @@ export type Note = {
   createdBy: string
   createdDate: number
   updatedDate: number
+  pinIt: boolean
 }
 
 interface INotes {
   notesArray: Notes
   handleRemoveNote: (noteId: string) => void
   handleDuplicateNote: (noteId: string) => void
-  handleEditNote: (note: Note, cb: () => void) => void
+  handleEditNote: (note: Note, cb?: () => void) => void
   filterNotes: (categoryId: string) => void
   categories: Category[]
 }
