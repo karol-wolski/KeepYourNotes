@@ -1,12 +1,14 @@
 import { useState } from 'react'
+import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
 interface IEditNote {
   note: Note
   handleEditNote: (data: Note, cb: () => void) => void
   handleClose: () => void
+  categories: Category[]
 }
 
-const EditNote = ({ note, handleEditNote, handleClose }: IEditNote) => {
+const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) => {
   const [editNote, setNote] = useState<Note>(note)
 
   const isVisibleSendButton = !!editNote.title.length && !!editNote.desc.length
@@ -17,6 +19,15 @@ const EditNote = ({ note, handleEditNote, handleClose }: IEditNote) => {
       updatedDate: Date.now(),
       [event.target.name]: event.target.value,
     })
+  }
+
+  const toggleCategories = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isCategory = editNote.categories && editNote.categories.includes(e.target.value)
+    if (isCategory) {
+      editNote.categories = editNote.categories && editNote.categories.filter(item => item !== e.target.value)
+    } else {
+      editNote.categories?.push(e.target.value)
+    }
   }
 
   return (
@@ -61,6 +72,25 @@ const EditNote = ({ note, handleEditNote, handleClose }: IEditNote) => {
                 onChange={createNote}
               ></textarea>
             </div>
+            {categories &&
+              categories.map(({ id, name }) => {
+                const isChecked = editNote.categories?.includes(id)
+                return (
+                  <div key={id} className='form-check form-check-inline'>
+                    <label className='form-check-label' htmlFor={name}>
+                      <input
+                        className='form-check-input'
+                        type='checkbox'
+                        id={name}
+                        value={id}
+                        onChange={toggleCategories}
+                        defaultChecked={isChecked ? true : false}
+                      />
+                      {name}
+                    </label>
+                  </div>
+                )
+              })}
           </div>
           <div className='modal-footer'>
             <button type='button' className='btn btn-secondary' data-bs-dismiss='modal' onClick={handleClose}>

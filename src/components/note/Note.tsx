@@ -115,7 +115,14 @@ const Note = ({
           handleClose={closeRemoveModal}
         />
       )}
-      {displayEditModal && <EditNote note={note} handleClose={closeEditModal} handleEditNote={handleEditNote} />}
+      {displayEditModal && (
+        <EditNote
+          note={note}
+          handleClose={closeEditModal}
+          handleEditNote={handleEditNote}
+          categories={categoriesArray}
+        />
+      )}
     </>
   )
 }

@@ -29,11 +29,10 @@ const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
     })
   }
 
-  const addCategoriess = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const toggleCategories = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isCategory = note.categories && note.categories.includes(e.target.value)
     if (isCategory) {
-      const test = note.categories && note.categories.filter(item => item !== e.target.value)
-      note.categories = test
+      note.categories = note.categories && note.categories.filter(item => item !== e.target.value)
     } else {
       note.categories?.push(e.target.value)
     }
@@ -90,7 +89,7 @@ const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
                         type='checkbox'
                         id={name}
                         value={id}
-                        onChange={addCategoriess}
+                        onChange={toggleCategories}
                       />
                       {name}
                     </label>
