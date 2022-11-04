@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import uuid from 'react-uuid'
+import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
 interface IAddNote {
   handleSaveNote: (data: Note) => void
   handleClose: () => void
+  categories: Category[]
 }
 
-const AddNote = ({ handleSaveNote, handleClose }: IAddNote) => {
+const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
   const [note, setNote] = useState<Note>({
     id: uuid(),
     title: '',
@@ -15,6 +17,7 @@ const AddNote = ({ handleSaveNote, handleClose }: IAddNote) => {
     createdDate: Date.now(),
     updatedDate: Date.now(),
     pinIt: false,
+    categories: [],
   })
 
   const isVisibleSendButton = !!note.title.length && !!note.desc.length
@@ -24,6 +27,15 @@ const AddNote = ({ handleSaveNote, handleClose }: IAddNote) => {
       ...note,
       [event.target.name]: event.target.value,
     })
+  }
+
+  const toggleCategories = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isCategory = note.categories && note.categories.includes(e.target.value)
+    if (isCategory) {
+      note.categories = note.categories && note.categories.filter(item => item !== e.target.value)
+    } else {
+      note.categories?.push(e.target.value)
+    }
   }
 
   return (
@@ -66,6 +78,24 @@ const AddNote = ({ handleSaveNote, handleClose }: IAddNote) => {
                 onChange={createNote}
               ></textarea>
             </div>
+
+            {categories &&
+              categories.map(({ id, name }) => {
+                return (
+                  <div key={id} className='form-check form-check-inline'>
+                    <label className='form-check-label' htmlFor={name}>
+                      <input
+                        className='form-check-input'
+                        type='checkbox'
+                        id={name}
+                        value={id}
+                        onChange={toggleCategories}
+                      />
+                      {name}
+                    </label>
+                  </div>
+                )
+              })}
           </div>
           <div className='modal-footer'>
             <button type='button' className='btn btn-secondary' data-bs-dismiss='modal' onClick={handleClose}>
