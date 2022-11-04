@@ -15,6 +15,7 @@ const NOTES = [
     createdDate: 1666463333,
     updatedDate: 1666463333,
     categories: ['0001', '0002'],
+    pinIt: false,
   },
   {
     id: '0002',
@@ -23,6 +24,7 @@ const NOTES = [
     createdBy: 'John Doe',
     createdDate: 1666463333,
     updatedDate: 1666463333,
+    pinIt: false,
   },
   {
     id: '0003',
@@ -32,6 +34,7 @@ const NOTES = [
     createdDate: 1666463333,
     updatedDate: 1666463333,
     categories: ['0002'],
+    pinIt: true,
   },
   {
     id: '0004',
@@ -40,6 +43,7 @@ const NOTES = [
     createdBy: 'John Doe',
     createdDate: 1666463333,
     updatedDate: 1666463333,
+    pinIt: false,
   },
   {
     id: '0005',
@@ -48,6 +52,7 @@ const NOTES = [
     createdBy: 'John Doe',
     createdDate: 1666463333,
     updatedDate: 1666463333,
+    pinIt: false,
   },
   {
     id: '0006',
@@ -56,6 +61,7 @@ const NOTES = [
     createdBy: 'John Doe',
     createdDate: 1666463333,
     updatedDate: 1666463333,
+    pinIt: true,
   },
   {
     id: '0007',
@@ -64,6 +70,7 @@ const NOTES = [
     createdBy: 'John Doe',
     createdDate: 1666463333,
     updatedDate: 1666463333,
+    pinIt: false,
   },
   {
     id: '0008',
@@ -72,6 +79,7 @@ const NOTES = [
     createdBy: 'John Doe',
     createdDate: 1666463333,
     updatedDate: 1666463333,
+    pinIt: false,
   },
 ]
 
@@ -102,12 +110,15 @@ function App() {
   const openCategories = () => setIsOpenCategories(true)
   const closeCategories = () => setIsOpenCategories(false)
 
-  const [notes, setNotes] = useState<Note[]>(NOTES)
+  const [notes, setNotes] = useState<Note[]>([])
   const [filteredNotes, setFilteredNotes] = useState<Note[]>(notes)
   const [categories, setCategories] = useState<Category[]>(CATEGORIES)
 
+  useEffect(() => setNotes(NOTES), [])
+
   useEffect(() => {
-    setFilteredNotes(notes)
+    const sortArray = notes.sort((a, b) => Number(b.pinIt) - Number(a.pinIt))
+    setFilteredNotes(sortArray)
   }, [notes])
 
   const handleSaveNewNote = (data: Note) => {
@@ -130,10 +141,10 @@ function App() {
     }
   }
 
-  const handleEditNote = (note: Note, cb: () => void) => {
+  const handleEditNote = (note: Note, cb?: () => void) => {
     const editNotes = notes.map(noteEl => (noteEl.id === note.id ? { ...noteEl, ...note } : noteEl))
     setNotes(editNotes)
-    cb()
+    if (cb) cb()
   }
 
   const handleSaveCategory = (data: Category) => {

@@ -10,7 +10,7 @@ interface INote {
   note: NoteType
   handleRemoveNote: (id: string) => void
   handleDuplicateNote: (id: string) => void
-  handleEditNote: (note: NoteType, cb: () => void) => void
+  handleEditNote: (note: NoteType, cb?: () => void) => void
   filterNotes: (categoryId: string) => void
   categories: Category[]
 }
@@ -26,7 +26,7 @@ const Note = ({
   const [displayModal, setDisplayModal] = useState<boolean>(false)
   const [displayRemoveModal, setDisplayRemoveModal] = useState<boolean>(false)
   const [displayEditModal, setDisplayEditModal] = useState<boolean>(false)
-  const { id, title, desc, img, categories } = note
+  const { id, title, desc, img, categories, pinIt } = note
   const handleClose = () => setDisplayModal(false)
   const openModal = () => setDisplayModal(true)
   const closeRemoveModal = () => setDisplayRemoveModal(false)
@@ -34,12 +34,28 @@ const Note = ({
   const closeEditModal = () => setDisplayEditModal(false)
   const openEditModal = () => setDisplayEditModal(true)
 
+  const pinItOnChange = () => {
+    const editNote = {
+      ...note,
+      updatedDate: Date.now(),
+      pinIt: !note.pinIt,
+    }
+    handleEditNote(editNote)
+  }
+
   return (
     <>
       <div className='card'>
         {img && <img src={img} className='card-img-top' alt='' />}
         <div className='card-body'>
-          <h2 className='card-title'>{title}</h2>
+          <div className='position-relative'>
+            <div className='position-absolute top-0 end-0'>
+              <button type='button' className='btn btn-sm btn-light' onClick={() => pinItOnChange()}>
+                <i className={pinIt ? 'bi bi-pin-angle-fill' : 'bi bi-pin-angle'}></i>
+              </button>
+            </div>
+            <h2 className='card-title'>{title}</h2>
+          </div>
           <p className='card-text'>{trimText(desc, 120, ' ')}</p>
           <div className='d-flex gap-2 justify-start'>
             {categories &&
@@ -67,7 +83,7 @@ const Note = ({
                 })}
           </div>
           <div className='d-grid gap-2 d-md-flex justify-content-md-between mt-2'>
-            <div className='gap-2 d-flex justify-content-start'>
+            <div className='gap-1 d-flex justify-content-start'>
               <button type='button' className='btn btn-danger btn-sm' onClick={openRemoveModal} title='Remove note'>
                 <i className='bi bi-trash'></i>
               </button>
@@ -84,7 +100,7 @@ const Note = ({
               </button>
             </div>
             <button type='button' className='btn btn-primary btn-sm' onClick={openModal}>
-              See full note
+              Full note
             </button>
           </div>
         </div>
