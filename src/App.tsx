@@ -17,6 +17,7 @@ const NOTES = [
     updatedDate: 1666463333,
     categories: ['0001', '0002'],
     pinIt: false,
+    backgroundColor: 2,
   },
   {
     id: '0002',
@@ -45,6 +46,7 @@ const NOTES = [
     createdDate: 1666463333,
     updatedDate: 1666463333,
     pinIt: false,
+    backgroundColor: 4,
   },
   {
     id: '0005',

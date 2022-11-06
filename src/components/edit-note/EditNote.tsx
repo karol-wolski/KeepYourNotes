@@ -1,15 +1,17 @@
 import { useState } from 'react'
+import { BG_COLORS } from '../../constants/constants'
 import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
 interface IEditNote {
   note: Note
-  handleEditNote: (data: Note, cb: () => void) => void
+  handleEditNote: (data: Note, cb?: () => void) => void
   handleClose: () => void
   categories: Category[]
 }
 
 const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) => {
   const [editNote, setNote] = useState<Note>(note)
+  const [bgColors] = useState(BG_COLORS)
 
   const isVisibleSendButton = !!editNote.title.length && !!editNote.desc.length
 
@@ -21,13 +23,24 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
     })
   }
 
-  const toggleCategories = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isCategory = editNote.categories && editNote.categories.includes(e.target.value)
+  const toggleCategories = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const isCategory = editNote.categories && editNote.categories.includes(event.target.value)
     if (isCategory) {
-      editNote.categories = editNote.categories && editNote.categories.filter(item => item !== e.target.value)
+      editNote.categories = editNote.categories && editNote.categories.filter(item => item !== event.target.value)
     } else {
-      editNote.categories?.push(e.target.value)
+      editNote.categories?.push(event.target.value)
     }
+  }
+
+  const setBgColors = (bgColorId: number) => {
+    const updatedNote = {
+      ...note,
+      updatedDate: Date.now(),
+      backgroundColor: bgColorId,
+    }
+
+    setNote(updatedNote)
+    handleEditNote(updatedNote)
   }
 
   return (
@@ -91,6 +104,21 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
                   </div>
                 )
               })}
+            <div className='mt-4'>
+              <p>Set the color</p>
+              <>
+                {bgColors.map(bgColor => {
+                  return (
+                    <button
+                      key={bgColor.name}
+                      style={{ backgroundColor: bgColor.bgColor, height: '2rem', width: '2rem' }}
+                      title={bgColor.name}
+                      onClick={() => setBgColors(bgColor.id)}
+                    ></button>
+                  )
+                })}
+              </>
+            </div>
           </div>
           <div className='modal-footer'>
             <button type='button' className='btn btn-secondary' data-bs-dismiss='modal' onClick={handleClose}>

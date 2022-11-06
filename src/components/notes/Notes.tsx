@@ -12,6 +12,7 @@ export type Note = {
   createdDate: number
   updatedDate: number
   pinIt: boolean
+  backgroundColor?: number
 }
 
 interface INotes {

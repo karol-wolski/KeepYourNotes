@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { BG_COLORS } from '../../constants/constants'
 import trimText from '../../helpers/trimText'
 import { Category } from '../add-category/AddCategory'
 import EditNote from '../edit-note/EditNote'
@@ -26,13 +27,15 @@ const Note = ({
   const [displayModal, setDisplayModal] = useState<boolean>(false)
   const [displayRemoveModal, setDisplayRemoveModal] = useState<boolean>(false)
   const [displayEditModal, setDisplayEditModal] = useState<boolean>(false)
-  const { id, title, desc, img, categories, pinIt } = note
+  const { id, title, desc, img, categories, pinIt, backgroundColor } = note
   const handleClose = () => setDisplayModal(false)
   const openModal = () => setDisplayModal(true)
   const closeRemoveModal = () => setDisplayRemoveModal(false)
   const openRemoveModal = () => setDisplayRemoveModal(true)
   const closeEditModal = () => setDisplayEditModal(false)
   const openEditModal = () => setDisplayEditModal(true)
+
+  const bgColor = BG_COLORS.find(bg => bg.id === backgroundColor)
 
   const pinItOnChange = () => {
     const editNote = {
@@ -45,7 +48,7 @@ const Note = ({
 
   return (
     <>
-      <div className='card'>
+      <div className='card' style={{ backgroundColor: bgColor?.bgColor, color: bgColor?.color }}>
         {img && <img src={img} className='card-img-top' alt='' />}
         <div className='card-body'>
           <div className='position-relative'>
