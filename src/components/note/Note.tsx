@@ -108,7 +108,9 @@ const Note = ({
           </div>
         </div>
       </div>
-      {displayModal && <SingleNoteModal note={note} handleClose={handleClose} />}
+      {displayModal && (
+        <SingleNoteModal note={note} handleClose={handleClose} filterNotes={filterNotes} categories={categoriesArray} />
+      )}
       {displayRemoveModal && (
         <Modal
           title={`Remove note: ${title} `}
