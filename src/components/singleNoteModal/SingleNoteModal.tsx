@@ -1,11 +1,14 @@
+import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
 
 interface IModal {
   note: Note
   handleClose: () => void
+  filterNotes: (categoryId: string) => void
+  categories: Category[]
 }
 
-const SingleNoteModal = ({ note, handleClose }: IModal) => {
+const SingleNoteModal = ({ note, handleClose, filterNotes, categories: categoriesArray }: IModal) => {
   const { title, desc, img, categories } = note
   return (
     <div
@@ -34,24 +37,28 @@ const SingleNoteModal = ({ note, handleClose }: IModal) => {
           <div className='modal-body'>
             <div className='d-flex gap-2 justify-start mb-2'>
               {categories &&
-                categories.map((category, index) => {
-                  return (
-                    <button
-                      key={`${category}-${index}`}
-                      type='button'
-                      className='btn btn-outline-secondary'
-                      style={
-                        {
-                          '--bs-btn-padding-y': '.25rem',
-                          '--bs-btn-padding-x': '.25rem',
-                          '--bs-btn-font-size': '.7rem',
-                        } as React.CSSProperties
-                      }
-                    >
-                      {category}
-                    </button>
-                  )
-                })}
+                categoriesArray &&
+                categoriesArray
+                  .filter(categoryObj => categories.includes(categoryObj.id))
+                  .map(({ id, name }: { id: string; name: string }) => {
+                    return (
+                      <button
+                        key={`${name}-${id}`}
+                        type='button'
+                        className='btn btn-outline-secondary'
+                        style={
+                          {
+                            '--bs-btn-padding-y': '.25rem',
+                            '--bs-btn-padding-x': '.25rem',
+                            '--bs-btn-font-size': '.7rem',
+                          } as React.CSSProperties
+                        }
+                        onClick={() => filterNotes(id)}
+                      >
+                        {name}
+                      </button>
+                    )
+                  })}
             </div>
             {img}
             {desc}
