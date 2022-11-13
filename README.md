@@ -62,3 +62,7 @@ Features list:
 - Set background colors for specific note
 - Duplicate note
 - Pin the note
+
+To do:
+- Log in
+- Sign up
