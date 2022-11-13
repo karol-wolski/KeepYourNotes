@@ -66,3 +66,8 @@ Features list:
 To do:
 - Log in
 - Sign up
+- Add / Remove Collabolators
+- Shere the note
+- Edit / Remove category
+- Light / Dark mdoe
+- 
