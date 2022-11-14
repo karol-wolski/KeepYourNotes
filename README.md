@@ -50,4 +50,24 @@ npm run build
 
 Features list:
 
--
+- Add note
+- Remove note
+- Edit note
+- Display notes
+- Display full note
+- Add category
+- Display categories
+- Filter notes by category
+- Filter notes by title
+- Set background colors for specific note
+- Duplicate note
+- Pin the note
+
+To do:
+- Log in
+- Sign up
+- Add / Remove Collabolators
+- Shere the note
+- Edit / Remove category
+- Light / Dark mdoe
+- 
