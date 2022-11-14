@@ -1,4 +1,8 @@
-import { useState } from 'react'
+import { Editor } from 'react-draft-wysiwyg'
+import { EditorState, ContentState } from 'draft-js'
+import { stateToHTML } from 'draft-js-export-html'
+import htmlToDraft from 'html-to-draftjs'
+import { SetStateAction, useState, useEffect } from 'react'
 import { BG_COLORS } from '../../constants/constants'
 import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
@@ -12,6 +16,15 @@ interface IEditNote {
 const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) => {
   const [editNote, setNote] = useState<Note>(note)
   const [bgColors] = useState(BG_COLORS)
+  const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
+
+  useEffect(() => {
+    const blocksFromHtml = htmlToDraft(note.desc)
+    const { contentBlocks, entityMap } = blocksFromHtml
+    const contentStates = ContentState.createFromBlockArray(contentBlocks, entityMap)
+    const editorStates = EditorState.createWithContent(contentStates)
+    setEditorState(editorStates)
+  }, [note])
 
   const isVisibleSendButton = !!editNote.title.length && !!editNote.desc.length
 
@@ -43,6 +56,16 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
     handleEditNote(updatedNote)
   }
 
+  const updateTextDescription = async (state: SetStateAction<EditorState>) => {
+    await setEditorState(state)
+
+    const data = stateToHTML(editorState.getCurrentContent())
+    setNote({
+      ...note,
+      desc: data,
+    })
+  }
+
   return (
     <div className='modal fade show' tabIndex={-1} style={{ display: 'block', background: 'rgba(0, 0, 0, 0.5)' }}>
       <div className='modal-dialog'>
@@ -59,7 +82,7 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
           </div>
           <div className='modal-body'>
             <div className='mb-3'>
-              <label htmlFor='exampleFormControlInput1' className='form-label'>
+              <label htmlFor='exampleFormControlInput1' className='form-label visually-hidden'>
                 Title
               </label>
               <input
@@ -73,17 +96,14 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
               />
             </div>
             <div className='mb-3'>
-              <label htmlFor='exampleFormControlTextarea1' className='form-label'>
+              <label htmlFor='exampleFormControlTextarea1' className='form-label visually-hidden'>
                 Note
               </label>
-              <textarea
-                className='form-control'
-                id='exampleFormControlTextarea1'
-                rows={3}
-                name='desc'
-                value={editNote.desc}
-                onChange={createNote}
-              ></textarea>
+              <Editor
+                editorState={editorState}
+                editorClassName='wysywig-editor'
+                onEditorStateChange={updateTextDescription}
+              />
             </div>
             {categories &&
               categories.map(({ id, name }) => {

@@ -1,5 +1,6 @@
 import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
+import parse from 'html-react-parser'
 
 interface IModal {
   note: Note
@@ -61,7 +62,7 @@ const SingleNoteModal = ({ note, handleClose, filterNotes, categories: categorie
                   })}
             </div>
             {img}
-            {desc}
+            <div>{parse(desc)}</div>
           </div>
           <div className='modal-footer'>
             <button type='button' className='btn btn-secondary' data-bs-dismiss='modal' onClick={handleClose}>

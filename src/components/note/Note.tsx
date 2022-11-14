@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { BG_COLORS } from '../../constants/constants'
-import trimText from '../../helpers/trimText'
+// import trimText from '../../helpers/trimText'
 import { Category } from '../add-category/AddCategory'
 import EditNote from '../edit-note/EditNote'
 import Modal from '../modal/Modal'
 import { Note as NoteType } from '../notes/Notes'
 import SingleNoteModal from '../singleNoteModal/SingleNoteModal'
+import parse from 'html-react-parser'
 
 interface INote {
   note: NoteType
@@ -59,7 +60,7 @@ const Note = ({
             </div>
             <h2 className='card-title'>{title}</h2>
           </div>
-          <p className='card-text'>{trimText(desc, 120, ' ')}</p>
+          <div className='card-text'>{parse(desc)}</div>
           <div className='d-flex gap-2 justify-start'>
             {categories &&
               categoriesArray &&

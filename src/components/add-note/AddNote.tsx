@@ -1,7 +1,11 @@
-import { useState } from 'react'
+import { Editor } from 'react-draft-wysiwyg'
+import { EditorState } from 'draft-js'
+import { stateToHTML } from 'draft-js-export-html'
+import { SetStateAction, useState } from 'react'
 import uuid from 'react-uuid'
 import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 interface IAddNote {
   handleSaveNote: (data: Note) => void
   handleClose: () => void
@@ -19,6 +23,18 @@ const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
     pinIt: false,
     categories: [],
   })
+
+  const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
+
+  const updateTextDescription = async (state: SetStateAction<EditorState>) => {
+    await setEditorState(state)
+
+    const data = stateToHTML(editorState.getCurrentContent())
+    setNote({
+      ...note,
+      desc: data,
+    })
+  }
 
   const isVisibleSendButton = !!note.title.length && !!note.desc.length
 
@@ -54,29 +70,27 @@ const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
           </div>
           <div className='modal-body'>
             <div className='mb-3'>
-              <label htmlFor='exampleFormControlInput1' className='form-label'>
+              <label htmlFor='title' className='form-label visually-hidden'>
                 Title
               </label>
               <input
                 type='text'
                 className='form-control'
-                id='exampleFormControlInput1'
+                id='title'
                 placeholder='Title'
                 name='title'
                 onChange={createNote}
               />
             </div>
             <div className='mb-3'>
-              <label htmlFor='exampleFormControlTextarea1' className='form-label'>
+              <label htmlFor='description' className='form-label visually-hidden'>
                 Note
               </label>
-              <textarea
-                className='form-control'
-                id='exampleFormControlTextarea1'
-                rows={3}
-                name='desc'
-                onChange={createNote}
-              ></textarea>
+              <Editor
+                editorState={editorState}
+                editorClassName='wysywig-editor'
+                onEditorStateChange={updateTextDescription}
+              />
             </div>
 
             {categories &&
