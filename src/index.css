@@ -9,3 +9,9 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+.wysywig-editor {
+  min-height: 10rem;
+  border: 1px solid #d6d6d6;
+  border-radius: 5px;
+}
