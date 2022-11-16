@@ -17,7 +17,7 @@ Keep your notes is an application that let you keep all of your notes in one pla
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 You can see the project by clicking on the link below.\
-[See project](https://karol-wolski.github.io/KeepYourNotes/)
+[See project](https://keepyour-notes.netlify.app/)
 
 Project status: _in progress_
 
@@ -70,4 +70,3 @@ To do:
 - Shere the note
 - Edit / Remove category
 - Light / Dark mdoe
-- 
