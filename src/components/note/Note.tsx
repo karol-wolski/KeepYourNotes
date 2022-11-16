@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { BG_COLORS } from '../../constants/constants'
-// import trimText from '../../helpers/trimText'
+import trimText from '../../helpers/trimText'
 import { Category } from '../add-category/AddCategory'
 import EditNote from '../edit-note/EditNote'
 import Modal from '../modal/Modal'
@@ -60,7 +60,7 @@ const Note = ({
             </div>
             <h2 className='card-title'>{title}</h2>
           </div>
-          <div className='card-text'>{parse(desc)}</div>
+          <div className='card-text'>{parse(trimText(desc, 160, ' '))}</div>
           <div className='d-flex gap-2 justify-start'>
             {categories &&
               categoriesArray &&
