@@ -157,7 +157,7 @@ const NotesPage = () => {
   }
 
   const searchByTitle = (text: string) => {
-    const filteredNotes = notes.filter(note => note.title.toLowerCase().includes(text))
+    const filteredNotes = notes.filter(note => note.title.toLowerCase().includes(text.toLowerCase()))
     setFilteredNotes(filteredNotes)
   }
 
