@@ -1,13 +1,22 @@
-import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
 import LoginForm from '../components/loginForm/LoginForm'
+import { AuthContext, IAuthContext } from '../context/AuthContext'
+import { asyncFetch } from '../helpers/asyncFetch'
+import { addToLocalStorage } from '../helpers/localStorage'
 
 const LoginPage = () => {
-  const navigate = useNavigate()
-  const handleOnSubmit = (email: string, password: string) => {
-    console.log(email, password)
-
-    navigate('/')
+  const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
+  const handleOnSubmit = async (email: string, password: string) => {
+    asyncFetch('auth/login', 'POST', { email: email, password: password }).then(response => {
+      if (response.token) {
+        addToLocalStorage('token', response.token)
+        setIsLoggedIn((state: boolean) => !state)
+      } else {
+        console.log(response.error)
+      }
+    })
   }
+
   return (
     <div className='d-flex justify-content-center align-items-center vh-100'>
       <div className='row w-50'>
