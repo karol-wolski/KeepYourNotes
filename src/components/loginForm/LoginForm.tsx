@@ -6,7 +6,7 @@ interface ILoginForm {
   handleOnSubmit: (
     email: string,
     password: string,
-    cb: React.Dispatch<React.SetStateAction<{ email: string; password: string; form: string }>>,
+    cb: React.Dispatch<React.SetStateAction<{ email?: string; password?: string; form: string }>>,
   ) => void
 }
 
@@ -16,7 +16,11 @@ const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
     password: '',
   })
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<{
+    email?: string
+    password?: string
+    form: string
+  }>({
     email: '',
     password: '',
     form: '',

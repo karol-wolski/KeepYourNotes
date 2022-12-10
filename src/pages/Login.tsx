@@ -3,13 +3,14 @@ import LoginForm from '../components/loginForm/LoginForm'
 import { AuthContext, IAuthContext } from '../context/AuthContext'
 import { asyncFetch } from '../helpers/asyncFetch'
 import { addToLocalStorage } from '../helpers/localStorage'
-import { AuthContext, IAuthContext } from '../context/AuthContext'
-import { asyncFetch } from '../helpers/asyncFetch'
-import { addToLocalStorage } from '../helpers/localStorage'
 
 const LoginPage = () => {
   const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
-  const handleOnSubmit = async (email: string, password: string, cb: (param: any) => void) => {
+  const handleOnSubmit = async (
+    email: string,
+    password: string,
+    cb: React.Dispatch<React.SetStateAction<{ form: string }>>,
+  ) => {
     asyncFetch('auth/login', 'POST', { email: email, password: password }).then(response => {
       if (response.token) {
         addToLocalStorage('token', response.token)
