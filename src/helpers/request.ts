@@ -16,7 +16,7 @@ export const request = async (url: string, method: string, payload?: object) => 
       case 'POST':
         return { method, headers, body: JSON.stringify(payload) }
 
-      case 'PUT':
+      case 'PATCH':
         return { method, headers, body: JSON.stringify(payload) }
 
       default:
