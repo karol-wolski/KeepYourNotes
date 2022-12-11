@@ -6,13 +6,17 @@ import { addToLocalStorage } from '../helpers/localStorage'
 
 const LoginPage = () => {
   const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
-  const handleOnSubmit = async (email: string, password: string) => {
+  const handleOnSubmit = async (
+    email: string,
+    password: string,
+    cb: React.Dispatch<React.SetStateAction<{ form: string }>>,
+  ) => {
     asyncFetch('auth/login', 'POST', { email: email, password: password }).then(response => {
       if (response.token) {
         addToLocalStorage('token', response.token)
         setIsLoggedIn((state: boolean) => !state)
       } else {
-        console.log(response.error)
+        cb({ form: response.message })
       }
     })
   }

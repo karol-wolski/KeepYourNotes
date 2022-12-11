@@ -3,7 +3,11 @@ import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 
 interface ILoginForm {
-  handleOnSubmit: (email: string, password: string) => void
+  handleOnSubmit: (
+    email: string,
+    password: string,
+    cb: React.Dispatch<React.SetStateAction<{ email?: string; password?: string; form: string }>>,
+  ) => void
 }
 
 const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
@@ -12,7 +16,11 @@ const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
     password: '',
   })
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<{
+    email?: string
+    password?: string
+    form: string
+  }>({
     email: '',
     password: '',
     form: '',
@@ -33,10 +41,10 @@ const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
     event.preventDefault()
     const { email, password } = data
     if (isEmailValidate.isValidate && isPasswordValidate.isValidate) {
-      handleOnSubmit(email, password)
+      handleOnSubmit(email, password, setErrors)
     } else {
       setErrors({
-        ...errors,
+        form: '',
         email: isEmailValidate.errorMsg,
         password: isPasswordValidate.errorMsg,
       })
