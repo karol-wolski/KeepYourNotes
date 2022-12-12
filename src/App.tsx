@@ -42,7 +42,7 @@ function App() {
           <Route path='/signup' element={!isLoggedIn ? <RegisterPage /> : <Navigate to='/' />} />
           <Route path='/activate-account' element={!isLoggedIn ? <ActivationPage /> : <Navigate to='/' />} />
           <Route path='/remindPassword' element={<RemindPasswordPage />} />
-          <Route path='/resetPassword' element={<ResetPasswordPage />} />
+          <Route path='/reset-password' element={<ResetPasswordPage />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>

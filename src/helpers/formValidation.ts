@@ -20,7 +20,7 @@ const isPasswordValidate = (password: string) => {
   let isValidate = false
   let errorMsg = ''
 
-  if (password.length < 7) {
+  if (password.length < 8) {
     errorMsg = 'Password should have at least 8 characters.'
   } else if (password.length >= 16) {
     errorMsg = 'Password should have less than 16 characters.'
@@ -37,7 +37,7 @@ const isConfirmPasswordValidate = (password: string, confirmPassword: string) =>
   let isValidate = false
   let errorMsg = ''
 
-  if (confirmPassword.length < 7) {
+  if (confirmPassword.length < 8) {
     errorMsg = 'Confirm Password should have at least 8 characters.'
   } else if (password !== confirmPassword) {
     errorMsg = 'The passwords are not identical.'

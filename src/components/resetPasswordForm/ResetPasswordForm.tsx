@@ -3,7 +3,7 @@ import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 
 interface IResetPassword {
-  handleOnSubmit: (password: string) => void
+  handleOnSubmit: (password: string, cb: (msg: string) => void) => void
 }
 
 const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
@@ -18,11 +18,22 @@ const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
     form: '',
   })
 
+  const [success, setSuccess] = useState('')
+
   const setDataOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
       [event.target.name]: event.target.value,
     })
+  }
+
+  const setApiMsg = (msg: string) => {
+    setErrors({
+      password: '',
+      confirmPassword: '',
+      form: '',
+    })
+    setSuccess(msg)
   }
 
   const isPasswordValidate = formValidation.isPasswordValidate(data.password)
@@ -32,7 +43,7 @@ const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
     event.preventDefault()
     const { password } = data
     if (isPasswordValidate.isValidate && isConfirmPasswordValidate.isValidate) {
-      handleOnSubmit(password)
+      handleOnSubmit(password, setApiMsg)
     } else {
       setErrors({
         ...errors,
@@ -67,6 +78,7 @@ const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
         {errors.confirmPassword && <Alert type={ALERT_TYPE.DANGER} text={errors.confirmPassword} />}
       </div>
       {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
+      {success && <Alert type={ALERT_TYPE.SUCCESS} text={success} />}
 
       <button type='submit' className='btn btn-primary' onClick={e => sendData(e)} disabled={!isVisibleSendButton}>
         Submit
