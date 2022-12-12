@@ -3,7 +3,13 @@ import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 
 interface IRegisterForm {
-  handleOnSubmit: (username: string, email: string, password: string) => void
+  handleOnSubmit: (
+    username: string,
+    email: string,
+    password: string,
+    cbError: React.Dispatch<React.SetStateAction<{ form: string }>>,
+    cbSuccess: (msg: string) => void,
+  ) => void
 }
 
 const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
@@ -14,12 +20,29 @@ const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
     confirmPassword: '',
   })
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<{
+    username?: string
+    email?: string
+    password?: string
+    form: string
+  }>({
     username: '',
     email: '',
     password: '',
     form: '',
   })
+
+  const [success, setSuccess] = useState('')
+
+  const setSuccesMsg = (msg: string) => {
+    setErrors({
+      username: '',
+      email: '',
+      password: '',
+      form: '',
+    })
+    setSuccess(msg)
+  }
 
   const setDataOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -36,7 +59,7 @@ const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
     event.preventDefault()
     const { username, email, password } = data
     if (isEmailValidate.isValidate && isPasswordValidate.isValidate && isUsernameValidate.isValidate) {
-      handleOnSubmit(username, email, password)
+      handleOnSubmit(username, email, password, setErrors, setSuccesMsg)
     } else {
       setErrors({
         ...errors,
@@ -73,6 +96,7 @@ const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
         {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
       </div>
       {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
+      {success && <Alert type={ALERT_TYPE.SUCCESS} text={success} />}
 
       <button type='submit' className='btn btn-primary' onClick={e => sendData(e)} disabled={!isVisibleSendButton}>
         Submit

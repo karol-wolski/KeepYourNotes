@@ -1,12 +1,22 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import RegisterForm from '../components/registerForm/RegisterForm'
+import { asyncFetch } from '../helpers/asyncFetch'
 
 const RegisterPage = () => {
-  const navigate = useNavigate()
-  const handleOnSubmit = (username: string, email: string, password: string) => {
-    console.log(username, email, password)
-
-    navigate('/')
+  const handleOnSubmit = (
+    username: string,
+    email: string,
+    password: string,
+    cbError: React.Dispatch<React.SetStateAction<{ form: string }>>,
+    cbSuccess: (msg: string) => void,
+  ) => {
+    asyncFetch('auth/register', 'POST', { username: username, email: email, password: password }).then(response => {
+      if (response.message) {
+        cbSuccess(response.message)
+      } else {
+        cbError({ form: response.errors[0].msg })
+      }
+    })
   }
   return (
     <div className='d-flex justify-content-center align-items-center vh-100'>
