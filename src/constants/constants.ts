@@ -55,4 +55,9 @@ const BG_COLORS = [
   },
 ]
 
-export { BG_COLORS }
+const STATUS = {
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR',
+}
+
+export { BG_COLORS, STATUS }

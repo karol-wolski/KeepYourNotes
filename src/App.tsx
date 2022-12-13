@@ -6,6 +6,8 @@ import ActivationPage from './pages/Activation'
 import LoginPage from './pages/Login'
 import NotesPage from './pages/Notes'
 import RegisterPage from './pages/Register'
+import RemindPasswordPage from './pages/RemindPassword'
+import ResetPasswordPage from './pages/ResetPassword'
 
 interface IProtectedRoute {
   isAllowed: boolean
@@ -39,6 +41,8 @@ function App() {
           <Route path='/login' element={!isLoggedIn ? <LoginPage /> : <Navigate to='/' />} />
           <Route path='/signup' element={!isLoggedIn ? <RegisterPage /> : <Navigate to='/' />} />
           <Route path='/activate-account' element={!isLoggedIn ? <ActivationPage /> : <Navigate to='/' />} />
+          <Route path='/remindPassword' element={<RemindPasswordPage />} />
+          <Route path='/reset-password' element={<ResetPasswordPage />} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
