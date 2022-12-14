@@ -14,7 +14,7 @@ interface IAddNote {
 
 const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
   const [note, setNote] = useState<Note>({
-    id: uuid(),
+    _id: uuid(),
     title: '',
     desc: '',
     createdBy: 'John Doe',
