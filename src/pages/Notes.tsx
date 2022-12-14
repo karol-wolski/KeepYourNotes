@@ -6,6 +6,7 @@ import Categories from '../components/categories/Categories'
 import Navigation from '../components/navigation/Navigation'
 import Notes, { Note } from '../components/notes/Notes'
 import SearchForm from '../components/searchForm/SearchForm'
+import { asyncFetch } from '../helpers/asyncFetch'
 
 const NOTES = [
   {
@@ -120,8 +121,12 @@ const NotesPage = () => {
   }, [notes])
 
   const handleSaveNewNote = (data: Note) => {
-    setNotes([...notes, data])
-    closeAddNoteModal()
+    asyncFetch('notes', 'POST', data).then(response => {
+      if (response.data) {
+        setNotes([...notes, response.data])
+        closeAddNoteModal()
+      }
+    })
   }
 
   const handleRemoveNote = (noteId: string) => {

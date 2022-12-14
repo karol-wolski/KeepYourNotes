@@ -4,7 +4,7 @@ export const request = async (url: string, method: string, payload?: object) => 
   const getRequest = () => {
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${getFromLocalStorage('token')}`,
+      Authorization: `${getFromLocalStorage('token')}`,
     }
     switch (method) {
       case 'GET':
