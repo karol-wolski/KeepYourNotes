@@ -28,7 +28,7 @@ const Note = ({
   const [displayModal, setDisplayModal] = useState<boolean>(false)
   const [displayRemoveModal, setDisplayRemoveModal] = useState<boolean>(false)
   const [displayEditModal, setDisplayEditModal] = useState<boolean>(false)
-  const { id, title, desc, img, categories, pinIt, backgroundColor } = note
+  const { _id, title, desc, img, categories, pinIt, backgroundColor } = note
   const handleClose = () => setDisplayModal(false)
   const openModal = () => setDisplayModal(true)
   const closeRemoveModal = () => setDisplayRemoveModal(false)
@@ -97,7 +97,7 @@ const Note = ({
               <button
                 type='button'
                 className='btn btn-dark btn-sm'
-                onClick={() => handleDuplicateNote(id)}
+                onClick={() => handleDuplicateNote(_id)}
                 title='Duplicate note'
               >
                 <i className='bi bi-files'></i>
@@ -117,7 +117,7 @@ const Note = ({
           title={`Remove note: ${title} `}
           desc='Are you sure you want to delete this note?'
           btnName='Remove'
-          handleBtnEvent={() => handleRemoveNote(id)}
+          handleBtnEvent={() => handleRemoveNote(_id)}
           handleClose={closeRemoveModal}
         />
       )}

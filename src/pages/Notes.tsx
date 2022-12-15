@@ -8,85 +8,6 @@ import Notes, { Note } from '../components/notes/Notes'
 import SearchForm from '../components/searchForm/SearchForm'
 import { asyncFetch } from '../helpers/asyncFetch'
 
-const NOTES = [
-  {
-    id: '0001',
-    title: 'Note 1',
-    desc: 'This is note number 1',
-    createdBy: 'John Doe',
-    createdDate: 1666463333,
-    updatedDate: 1666463333,
-    categories: ['0001', '0002'],
-    pinIt: false,
-    backgroundColor: 2,
-  },
-  {
-    id: '0002',
-    title: 'Note 2',
-    desc: 'This is note number 2',
-    createdBy: 'John Doe',
-    createdDate: 1666463333,
-    updatedDate: 1666463333,
-    pinIt: false,
-  },
-  {
-    id: '0003',
-    title: 'Note 3',
-    desc: 'This is note number 3',
-    createdBy: 'John Doe',
-    createdDate: 1666463333,
-    updatedDate: 1666463333,
-    categories: ['0002'],
-    pinIt: true,
-  },
-  {
-    id: '0004',
-    title: 'Note 4',
-    desc: 'This is note number 4',
-    createdBy: 'John Doe',
-    createdDate: 1666463333,
-    updatedDate: 1666463333,
-    pinIt: false,
-    backgroundColor: 4,
-  },
-  {
-    id: '0005',
-    title: 'Note 5',
-    desc: 'This is note number 5',
-    createdBy: 'John Doe',
-    createdDate: 1666463333,
-    updatedDate: 1666463333,
-    pinIt: false,
-  },
-  {
-    id: '0006',
-    title: 'Note 6',
-    desc: 'This is note number 6',
-    createdBy: 'John Doe',
-    createdDate: 1666463333,
-    updatedDate: 1666463333,
-    pinIt: true,
-  },
-  {
-    id: '0007',
-    title: 'Note 7',
-    desc: 'This is note number 7',
-    createdBy: 'John Doe',
-    createdDate: 1666463333,
-    updatedDate: 1666463333,
-    pinIt: false,
-  },
-  {
-    id: '0008',
-    title: 'Note 8',
-    desc: 'This is note number 8',
-    createdBy: 'John Doe',
-    createdDate: 1666463333,
-    updatedDate: 1666463333,
-    pinIt: false,
-  },
-]
-
 const CATEGORIES = [
   {
     id: '0001',
@@ -113,7 +34,13 @@ const NotesPage = () => {
   const openCategories = () => setIsOpenCategories(true)
   const closeCategories = () => setIsOpenCategories(false)
 
-  useEffect(() => setNotes(NOTES), [])
+  useEffect(() => {
+    asyncFetch('notes', 'GET').then(response => {
+      if (response.data) {
+        setNotes(response.data)
+      }
+    })
+  }, [])
 
   useEffect(() => {
     const sortArray = notes.sort((a, b) => Number(b.pinIt) - Number(a.pinIt))
@@ -130,22 +57,22 @@ const NotesPage = () => {
   }
 
   const handleRemoveNote = (noteId: string) => {
-    const removeNOte = notes.filter(note => note.id !== noteId)
+    const removeNOte = notes.filter(note => note._id !== noteId)
     setNotes(removeNOte)
   }
 
   const handleDuplicateNote = (noteId: string) => {
-    const note = notes.find(note => note.id === noteId)
+    const note = notes.find(note => note._id === noteId)
     if (note) {
       handleSaveNewNote({
         ...note,
-        id: uuid(),
+        _id: uuid(),
       })
     }
   }
 
   const handleEditNote = (note: Note, cb?: () => void) => {
-    const editNotes = notes.map(noteEl => (noteEl.id === note.id ? { ...noteEl, ...note } : noteEl))
+    const editNotes = notes.map(noteEl => (noteEl._id === note._id ? { ...noteEl, ...note } : noteEl))
     setNotes(editNotes)
     if (cb) cb()
   }

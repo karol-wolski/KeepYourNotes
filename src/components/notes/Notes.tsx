@@ -3,7 +3,7 @@ import { Category } from '../add-category/AddCategory'
 import Note from '../note/Note'
 
 export type Note = {
-  id: string
+  _id: string
   title: string
   desc: string
   img?: string
@@ -44,7 +44,7 @@ const Notes = ({
         {notes.length > 0 ? (
           <div className='row g-3'>
             {notes.map(note => (
-              <div key={note.id} className='col-12 col-sm-6 col-md-4 col-xl-3'>
+              <div key={note._id} className='col-12 col-sm-6 col-md-4 col-xl-3'>
                 <Note
                   note={note}
                   handleRemoveNote={handleRemoveNote}

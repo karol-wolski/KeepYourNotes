@@ -10,7 +10,6 @@ const ActivationPage = () => {
     const token = search.get('activeIt')
     if (token) {
       asyncFetch('auth/activate-account', 'PATCH', { activateToken: token }).then(response => {
-        console.log(response)
         if (response.isActive) {
           setIsActive(response.isActive)
         } else {
