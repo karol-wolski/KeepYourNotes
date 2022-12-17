@@ -57,8 +57,12 @@ const NotesPage = () => {
   }
 
   const handleRemoveNote = (noteId: string) => {
-    const removeNOte = notes.filter(note => note._id !== noteId)
-    setNotes(removeNOte)
+    asyncFetch(`notes/${noteId}`, 'DELETE').then(response => {
+      if (response.data) {
+        const removeNOte = notes.filter(note => note._id !== noteId)
+        setNotes(removeNOte)
+      }
+    })
   }
 
   const handleDuplicateNote = (noteId: string) => {
