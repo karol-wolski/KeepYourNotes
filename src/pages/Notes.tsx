@@ -76,9 +76,13 @@ const NotesPage = () => {
   }
 
   const handleEditNote = (note: Note, cb?: () => void) => {
-    const editNotes = notes.map(noteEl => (noteEl._id === note._id ? { ...noteEl, ...note } : noteEl))
-    setNotes(editNotes)
-    if (cb) cb()
+    asyncFetch(`notes/${note._id}`, 'PATCH', note).then(response => {
+      if (response.message === 'Success') {
+        const editNotes = notes.map(noteEl => (noteEl._id === note._id ? { ...noteEl, ...note } : noteEl))
+        setNotes(editNotes)
+        if (cb) cb()
+      }
+    })
   }
 
   const handleSaveCategory = (data: Category) => {

@@ -29,10 +29,12 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
   const isVisibleSendButton = !!editNote.title.length && !!editNote.desc.length
 
   const createNote = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setNote({
-      ...note,
-      updatedDate: Date.now(),
-      [event.target.name]: event.target.value,
+    setNote(prevState => {
+      return {
+        ...prevState,
+        updatedDate: Date.now(),
+        [event.target.name]: event.target.value,
+      }
     })
   }
 
@@ -46,23 +48,23 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
   }
 
   const setBgColors = (bgColorId: number) => {
-    const updatedNote = {
-      ...note,
-      updatedDate: Date.now(),
-      backgroundColor: bgColorId,
-    }
-
-    setNote(updatedNote)
-    handleEditNote(updatedNote)
+    setNote(prevState => {
+      return {
+        ...prevState,
+        backgroundColor: bgColorId,
+      }
+    })
   }
 
   const updateTextDescription = async (state: SetStateAction<EditorState>) => {
     await setEditorState(state)
 
     const data = stateToHTML(editorState.getCurrentContent())
-    setNote({
-      ...note,
-      desc: data,
+    setNote(prevState => {
+      return {
+        ...prevState,
+        desc: data,
+      }
     })
   }
 
