@@ -2,7 +2,7 @@ import { useState } from 'react'
 import uuid from 'react-uuid'
 
 export type Category = {
-  id: string
+  _id: string
   name: string
 }
 
@@ -13,7 +13,7 @@ interface IAddCategory {
 
 const AddCategory = ({ handleClose, handleSaveCategory }: IAddCategory) => {
   const [category, setCategory] = useState<Category>({
-    id: uuid(),
+    _id: uuid(),
     name: '',
   })
 

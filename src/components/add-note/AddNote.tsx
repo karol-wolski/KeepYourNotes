@@ -94,7 +94,7 @@ const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
             </div>
 
             {categories &&
-              categories.map(({ id, name }) => {
+              categories.map(({ _id: id, name }) => {
                 return (
                   <div key={id} className='form-check form-check-inline'>
                     <label className='form-check-label' htmlFor={name}>

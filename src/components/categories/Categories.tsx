@@ -27,7 +27,7 @@ const Categories = ({ handleClose, categories, filter }: ICategories) => {
             all
           </button>
           {categories &&
-            categories.map(({ id, name }) => (
+            categories.map(({ _id: id, name }) => (
               <button
                 key={name}
                 type='button'
