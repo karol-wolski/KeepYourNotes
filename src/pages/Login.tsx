@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { Link } from 'react-router-dom'
 import LoginForm from '../components/loginForm/LoginForm'
 import { AuthContext, IAuthContext } from '../context/AuthContext'
 import { asyncFetch } from '../helpers/asyncFetch'
@@ -26,6 +27,11 @@ const LoginPage = () => {
       <div className='row w-50'>
         <h2>Login</h2>
         <LoginForm handleOnSubmit={handleOnSubmit} />
+
+        <Link to='/remindPassword'>Reset your password</Link>
+        <p className='pt-4 text-center'>
+          Go to <Link to='/signup'>Sign up</Link>
+        </p>
       </div>
     </div>
   )
