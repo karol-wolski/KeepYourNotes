@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { AuthContext, IAuthContext } from '../../context/AuthContext'
+import { removeFromLocalStorage } from '../../helpers/localStorage'
 
 interface INavigation {
   openAddNoteModal: () => void
@@ -7,8 +9,18 @@ interface INavigation {
 }
 
 const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: INavigation) => {
+  const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
   const [isNavCollapsed, setIsNavCollapsed] = useState(true)
+  const [isUserNavOpen, setIsUserNavOpen] = useState(false)
+
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed)
+  const setUserNavOpen = () => setIsUserNavOpen(state => !state)
+
+  const logOut = () => {
+    removeFromLocalStorage('token')
+    setIsLoggedIn((state: boolean) => !state)
+  }
+
   return (
     <nav className='navbar navbar-expand-lg bg-light'>
       <div className='container'>
@@ -27,7 +39,10 @@ const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: 
         >
           <span className='navbar-toggler-icon'></span>
         </button>
-        <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id='navbarSupportedContent'>
+        <div
+          className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse justify-content-end`}
+          id='navbarSupportedContent'
+        >
           <div className='gap-2 d-flex justify-content-start'>
             <button
               className='btn btn-primary'
@@ -45,6 +60,26 @@ const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: 
             <button type='button' className='btn btn-primary btn-sm' onClick={openAddCategoryModal}>
               Add category
             </button>
+          </div>
+          <div className='dropdown'>
+            <a
+              className='btn'
+              href='#'
+              role='button'
+              data-bs-toggle='dropdown'
+              aria-expanded={isUserNavOpen ? true : false}
+              onClick={setUserNavOpen}
+            >
+              Account
+            </a>
+
+            <ul className={`${isUserNavOpen ? 'd-block' : ''} dropdown-menu`}>
+              <li>
+                <button className='dropdown-item' onClick={logOut}>
+                  Logout
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
