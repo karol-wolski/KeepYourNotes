@@ -1,7 +1,11 @@
+import { useState } from 'react'
 import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
 import parse from 'html-react-parser'
 import Modal from '../modal/Modal'
+import { copyToClipboard } from '../../helpers/copyToClipboard'
+import stylesNote from './FullNote.module.scss'
+import stylesBtn from '../../styles/buttons.module.scss'
 
 interface IModal {
   note: Note
@@ -12,6 +16,10 @@ interface IModal {
 
 const FullNote = ({ note, handleClose, filterNotes, categories: categoriesArray }: IModal) => {
   const { title, desc, img, categories } = note
+  const [isCopied, setIsCopied] = useState<boolean>(false)
+
+  const handleSetIsCopied = () => setIsCopied(true)
+
   return (
     <Modal handleClose={handleClose} title={title}>
       <div className='d-flex gap-2 justify-start mb-2'>
@@ -40,7 +48,19 @@ const FullNote = ({ note, handleClose, filterNotes, categories: categoriesArray 
             })}
       </div>
       {img}
-      <div>{parse(desc)}</div>
+      <div className={stylesNote.fullNote}>
+        <button
+          type='button'
+          className={`btn btn-sm btn-secondary float-end sticky-top ${stylesNote.btn__copy} ${
+            isCopied ? stylesBtn.btn__primary : stylesBtn.btn__secondary
+          }`}
+          onClick={() => copyToClipboard(desc, handleSetIsCopied)}
+          title='Copy to clipboard'
+        >
+          <i className={isCopied ? 'bi bi-clipboard-check-fill' : 'bi bi-clipboard-fill'}></i>
+        </button>
+        {parse(desc)}
+      </div>
     </Modal>
   )
 }

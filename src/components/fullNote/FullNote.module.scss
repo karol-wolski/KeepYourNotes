@@ -1,0 +1,10 @@
+.fullNote {
+  &:hover .btn__copy {
+    display: block;
+  }
+}
+
+.btn__copy {
+  top: 1rem;
+  display: none;
+}
