@@ -108,7 +108,7 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
               />
             </div>
             {categories &&
-              categories.map(({ id, name }) => {
+              categories.map(({ _id: id, name }) => {
                 const isChecked = editNote.categories?.includes(id)
                 return (
                   <div key={id} className='form-check form-check-inline'>
