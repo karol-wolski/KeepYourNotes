@@ -19,3 +19,7 @@ code {
 .btn {
   border-radius: unset;
 }
+
+.link {
+  text-decoration: none;
+}

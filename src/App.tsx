@@ -24,6 +24,7 @@ const RegisterPage = lazy(() => import('./pages/Register'))
 const ActivationPage = lazy(() => import('./pages/Activation'))
 const ResetPasswordPage = lazy(() => import('./pages/ResetPassword'))
 const RemindPasswordPage = lazy(() => import('./pages/RemindPassword'))
+const NotFoundPage = lazy(() => import('./pages/NotFound/NotFound'))
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(isAuthorized())
@@ -81,6 +82,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path='*' element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
