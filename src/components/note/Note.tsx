@@ -65,8 +65,8 @@ const Note = ({
             {categories &&
               categoriesArray &&
               categoriesArray
-                .filter(categoryObj => categories.includes(categoryObj.id))
-                .map(({ id, name }: { id: string; name: string }) => {
+                .filter(categoryObj => categories.includes(categoryObj._id))
+                .map(({ _id: id, name }: { _id: string; name: string }) => {
                   return (
                     <button
                       key={`${name}-${id}`}

@@ -8,21 +8,10 @@ import Notes, { Note } from '../components/notes/Notes'
 import SearchForm from '../components/searchForm/SearchForm'
 import { asyncFetch } from '../helpers/asyncFetch'
 
-const CATEGORIES = [
-  {
-    id: '0001',
-    name: 'cooking',
-  },
-  {
-    id: '0002',
-    name: 'travel',
-  },
-]
-
 const NotesPage = () => {
   const [notes, setNotes] = useState<Note[]>([])
   const [filteredNotes, setFilteredNotes] = useState<Note[]>(notes)
-  const [categories, setCategories] = useState<Category[]>(CATEGORIES)
+  const [categories, setCategories] = useState<Category[]>([])
   const [isOpenAddNoteModal, setIsOpenAddNoteModal] = useState(false)
   const [isOpenAddCategoryModal, setIsOpenAddCategoryModal] = useState(false)
   const [isOpenCategories, setIsOpenCategories] = useState(false)
@@ -35,6 +24,12 @@ const NotesPage = () => {
   const closeCategories = () => setIsOpenCategories(false)
 
   useEffect(() => {
+    asyncFetch('categories', 'GET').then(response => {
+      if (response.data) {
+        setCategories(response.data)
+      }
+    })
+
     asyncFetch('notes', 'GET').then(response => {
       if (response.data) {
         setNotes(response.data)
@@ -76,14 +71,22 @@ const NotesPage = () => {
   }
 
   const handleEditNote = (note: Note, cb?: () => void) => {
-    const editNotes = notes.map(noteEl => (noteEl._id === note._id ? { ...noteEl, ...note } : noteEl))
-    setNotes(editNotes)
-    if (cb) cb()
+    asyncFetch(`notes/${note._id}`, 'PATCH', note).then(response => {
+      if (response.message === 'Success') {
+        const editNotes = notes.map(noteEl => (noteEl._id === note._id ? { ...noteEl, ...note } : noteEl))
+        setNotes(editNotes)
+        if (cb) cb()
+      }
+    })
   }
 
   const handleSaveCategory = (data: Category) => {
-    setCategories([...categories, data])
-    closeAddCategoryModal()
+    asyncFetch('categories', 'POST', data).then(response => {
+      if (response.data) {
+        setCategories([...categories, data])
+        closeAddCategoryModal()
+      }
+    })
   }
 
   const filterByCategory = (categoryId: string) => {
