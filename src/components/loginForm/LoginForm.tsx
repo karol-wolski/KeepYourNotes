@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
+import LabelInput from '../labelInput/LabelInput'
+import styles from '../../styles/buttons.module.scss'
 
 interface ILoginForm {
   handleOnSubmit: (
@@ -56,22 +58,21 @@ const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
   return (
     <form>
       <div className='mb-3'>
-        <label htmlFor='email' className='form-label'>
-          Email
-        </label>
-        <input type='email' className='form-control' id='email' onChange={setDataOnChange} name='email' />
+        <LabelInput id='email' type='email' labelText='Email' onChange={setDataOnChange} isLabelVisible />
         {errors.email && <Alert type={ALERT_TYPE.DANGER} text={errors.email} />}
       </div>
       <div className='mb-3'>
-        <label htmlFor='password' className='form-label'>
-          Password
-        </label>
-        <input type='password' className='form-control' id='password' name='password' onChange={setDataOnChange} />
+        <LabelInput id='password' type='password' labelText='Password' onChange={setDataOnChange} isLabelVisible />
         {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
       </div>
       {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
 
-      <button type='submit' className='btn btn-primary' onClick={e => sendData(e)} disabled={!isVisibleSendButton}>
+      <button
+        type='submit'
+        className={`btn btn-primary ${styles.btn__form}`}
+        onClick={e => sendData(e)}
+        disabled={!isVisibleSendButton}
+      >
         Submit
       </button>
     </form>

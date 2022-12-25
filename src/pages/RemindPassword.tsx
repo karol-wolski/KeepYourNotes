@@ -1,6 +1,7 @@
 import RemindPasswordForm from '../components/RemindPasswordForm/RemindPasswordForm'
 import { STATUS } from '../constants/constants'
 import { asyncFetch } from '../helpers/asyncFetch'
+import LayoutForm from '../layout/LayoutForm/LayoutForm'
 
 const RemindPasswordPage = () => {
   const handleOnSubmit = async (email: string, cb: (status: string, msg: string) => void) => {
@@ -14,12 +15,9 @@ const RemindPasswordPage = () => {
   }
 
   return (
-    <div className='d-flex justify-content-center align-items-center vh-100'>
-      <div className='row w-50'>
-        <h2>Remind Password</h2>
-        <RemindPasswordForm handleOnSubmit={handleOnSubmit} />
-      </div>
-    </div>
+    <LayoutForm title='Remind Password'>
+      <RemindPasswordForm handleOnSubmit={handleOnSubmit} />
+    </LayoutForm>
   )
 }
 
