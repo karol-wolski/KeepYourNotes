@@ -1,0 +1,10 @@
+@import '../../styles/variables.scss';
+
+.modal {
+  display: block;
+  background-color: $black75Alpha;
+
+  &__content {
+    border-radius: unset;
+  }
+}
