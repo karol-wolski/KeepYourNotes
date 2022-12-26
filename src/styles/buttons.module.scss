@@ -25,10 +25,30 @@
   &__secondary {
     background-color: $blue;
 
-    &:hover,
+    :not(.btn-check) + &:hover,
     &:first-child:hover,
     &:focus-visible {
       background-color: $blueDark;
+    }
+  }
+
+  &__danger {
+    background-color: $red;
+
+    :not(.btn-check) + &:hover,
+    &:first-child:hover,
+    &:focus-visible {
+      background-color: $redDark;
+    }
+  }
+
+  &__dark {
+    background-color: $black;
+
+    :not(.btn-check) + &:hover,
+    &:first-child:hover,
+    &:focus-visible {
+      background-color: $black75Alpha;
     }
   }
 }

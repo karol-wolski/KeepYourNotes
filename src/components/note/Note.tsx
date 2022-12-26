@@ -7,6 +7,8 @@ import Modal from '../modal/Modal'
 import { Note as NoteType } from '../notes/Notes'
 import FullNote from '../fullNote/FullNote'
 import parse from 'html-react-parser'
+import stylesBtn from '../../styles/buttons.module.scss'
+import stylesCard from './Note.module.scss'
 
 interface INote {
   note: NoteType
@@ -28,7 +30,7 @@ const Note = ({
   const [displayModal, setDisplayModal] = useState<boolean>(false)
   const [displayRemoveModal, setDisplayRemoveModal] = useState<boolean>(false)
   const [displayEditModal, setDisplayEditModal] = useState<boolean>(false)
-  const { _id, title, desc, img, categories, pinIt, backgroundColor } = note
+  const { _id, title, desc, categories, pinIt, backgroundColor } = note
   const handleClose = () => setDisplayModal(false)
   const openModal = () => setDisplayModal(true)
   const closeRemoveModal = () => setDisplayRemoveModal(false)
@@ -49,12 +51,15 @@ const Note = ({
 
   return (
     <>
-      <div className='card' style={{ backgroundColor: bgColor?.bgColor, color: bgColor?.color }}>
-        {img && <img src={img} className='card-img-top' alt='' />}
+      <div className={`card ${stylesCard.card}`} style={{ backgroundColor: bgColor?.bgColor, color: bgColor?.color }}>
         <div className='card-body'>
           <div className='position-relative'>
             <div className='position-absolute top-0 end-0'>
-              <button type='button' className='btn btn-sm btn-light' onClick={() => pinItOnChange()}>
+              <button
+                type='button'
+                className={`btn btn-sm btn-light ${stylesCard.card__pin}`}
+                onClick={() => pinItOnChange()}
+              >
                 <i className={pinIt ? 'bi bi-pin-angle-fill' : 'bi bi-pin-angle'}></i>
               </button>
             </div>
@@ -88,22 +93,32 @@ const Note = ({
           </div>
           <div className='d-grid gap-2 d-md-flex justify-content-md-between mt-2'>
             <div className='gap-1 d-flex justify-content-start'>
-              <button type='button' className='btn btn-danger btn-sm' onClick={openRemoveModal} title='Remove note'>
+              <button
+                type='button'
+                className={`btn btn-danger btn-sm ${stylesBtn.btn__danger}`}
+                onClick={openRemoveModal}
+                title='Remove note'
+              >
                 <i className='bi bi-trash'></i>
               </button>
-              <button type='button' className='btn btn-warning btn-sm' onClick={openEditModal} title='Edit note'>
+              <button
+                type='button'
+                className={`btn btn-warning btn-sm ${stylesBtn.btn__primary}`}
+                onClick={openEditModal}
+                title='Edit note'
+              >
                 <i className='bi bi-pencil'></i>
               </button>
               <button
                 type='button'
-                className='btn btn-dark btn-sm'
+                className={`btn btn-dark btn-sm ${stylesBtn.btn__dark}`}
                 onClick={() => handleDuplicateNote(_id)}
                 title='Duplicate note'
               >
                 <i className='bi bi-files'></i>
               </button>
             </div>
-            <button type='button' className='btn btn-primary btn-sm' onClick={openModal}>
+            <button type='button' className={`btn btn-primary btn-sm ${stylesBtn.btn__secondary}`} onClick={openModal}>
               Full note
             </button>
           </div>
