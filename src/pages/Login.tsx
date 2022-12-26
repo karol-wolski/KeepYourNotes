@@ -4,6 +4,8 @@ import LoginForm from '../components/loginForm/LoginForm'
 import { AuthContext, IAuthContext } from '../context/AuthContext'
 import { asyncFetch } from '../helpers/asyncFetch'
 import { addToLocalStorage } from '../helpers/localStorage'
+import LayoutForm from '../layout/LayoutForm/LayoutForm'
+import styles from './Login.module.scss'
 
 const LoginPage = () => {
   const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
@@ -23,17 +25,18 @@ const LoginPage = () => {
   }
 
   return (
-    <div className='d-flex justify-content-center align-items-center vh-100'>
-      <div className='row w-50'>
-        <h2>Login</h2>
-        <LoginForm handleOnSubmit={handleOnSubmit} />
+    <LayoutForm title='Login'>
+      <LoginForm handleOnSubmit={handleOnSubmit} />
 
-        <Link to='/remindPassword'>Reset your password</Link>
-        <p className='pt-4 text-center'>
-          Go to <Link to='/signup'>Sign up</Link>
-        </p>
+      <div className='d-flex justify-content-between align-items-center mt-2'>
+        <Link to='/remindPassword' className={`${styles.link} ${styles['link__reset']}`}>
+          Reset your password
+        </Link>
+        <Link to='/signup' className={`${styles.link} ${styles['link__sign-up']}`}>
+          Sign up
+        </Link>
       </div>
-    </div>
+    </LayoutForm>
   )
 }
 

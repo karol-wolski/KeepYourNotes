@@ -1,0 +1,35 @@
+.link {
+  width: 100%;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 1rem;
+  min-height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+
+  &__hover {
+    color: #000;
+  }
+
+  &__reset {
+    border: 2px solid #14213d;
+
+    &:hover,
+    &:focus {
+      background-color: #14213d;
+      color: #fff;
+    }
+  }
+
+  &__sign-up {
+    border: 2px solid #fca311;
+
+    &:hover,
+    &:focus {
+      background-color: #fca311;
+      color: #000;
+    }
+  }
+}

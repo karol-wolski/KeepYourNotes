@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { STATUS } from '../../constants/constants'
 import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
+import LabelInput from '../labelInput/LabelInput'
+import styles from '../../styles/buttons.module.scss'
 
 interface IRemindPassword {
   handleOnSubmit: (email: string, cb: (status: string, msg: string) => void) => void
@@ -60,16 +62,18 @@ const RemindPasswordForm = ({ handleOnSubmit }: IRemindPassword) => {
   return (
     <form>
       <div className='mb-3'>
-        <label htmlFor='email' className='form-label'>
-          Email
-        </label>
-        <input type='email' className='form-control' id='email' onChange={setDataOnChange} name='email' />
+        <LabelInput id='email' type='email' labelText='Email' onChange={setDataOnChange} isLabelVisible />
         {errors.email && <Alert type={ALERT_TYPE.DANGER} text={errors.email} />}
       </div>
       {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
       {success && <Alert type={ALERT_TYPE.SUCCESS} text={success} />}
 
-      <button type='submit' className='btn btn-primary' onClick={e => sendData(e)} disabled={!isVisibleSendButton}>
+      <button
+        type='submit'
+        className={`btn btn-primary ${styles.btn__form}`}
+        onClick={e => sendData(e)}
+        disabled={!isVisibleSendButton}
+      >
         Submit
       </button>
     </form>

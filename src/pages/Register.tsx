@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import RegisterForm from '../components/registerForm/RegisterForm'
 import { asyncFetch } from '../helpers/asyncFetch'
+import LayoutForm from '../layout/LayoutForm/LayoutForm'
 
 const RegisterPage = () => {
   const handleOnSubmit = (
@@ -19,16 +20,12 @@ const RegisterPage = () => {
     })
   }
   return (
-    <div className='d-flex justify-content-center align-items-center vh-100'>
-      <div className='row w-50'>
-        <h2>Sign up</h2>
-        <RegisterForm handleOnSubmit={handleOnSubmit} />
-
-        <p className='pt-4 text-center'>
-          Go to <Link to='/login'>Login page</Link>
-        </p>
-      </div>
-    </div>
+    <LayoutForm title='Sign up'>
+      <RegisterForm handleOnSubmit={handleOnSubmit} />
+      <p className='pt-4 text-center'>
+        Go to <Link to='/login'>Login page</Link>
+      </p>
+    </LayoutForm>
   )
 }
 

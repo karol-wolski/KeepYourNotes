@@ -1,0 +1,10 @@
+@import '../../styles/variables.scss';
+.input {
+  border-radius: unset;
+
+  &:focus,
+  &:focus-visible {
+    box-shadow: $shadow;
+    border-color: $yellowDark;
+  }
+}

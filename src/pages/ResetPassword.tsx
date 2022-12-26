@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import ResetPasswordForm from '../components/resetPasswordForm/ResetPasswordForm'
 import { asyncFetch } from '../helpers/asyncFetch'
+import LayoutForm from '../layout/LayoutForm/LayoutForm'
 
 const ResetPasswordPage = () => {
   const location = useLocation().search
@@ -11,12 +12,9 @@ const ResetPasswordPage = () => {
     })
   }
   return (
-    <div className='d-flex justify-content-center align-items-center vh-100'>
-      <div className='row w-50'>
-        <h2>Reset Password</h2>
-        <ResetPasswordForm handleOnSubmit={handleOnSubmit} />
-      </div>
-    </div>
+    <LayoutForm title='Reset Password'>
+      <ResetPasswordForm handleOnSubmit={handleOnSubmit} />
+    </LayoutForm>
   )
 }
 
