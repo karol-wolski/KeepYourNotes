@@ -6,6 +6,9 @@ import uuid from 'react-uuid'
 import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
+import LabelInput from '../labelInput/LabelInput'
+import Modal from '../modal/Modal'
+
 interface IAddNote {
   handleSaveNote: (data: Note) => void
   handleClose: () => void
@@ -55,78 +58,46 @@ const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
   }
 
   return (
-    <div className='modal fade show' tabIndex={-1} style={{ display: 'block', background: 'rgba(0, 0, 0, 0.5)' }}>
-      <div className='modal-dialog'>
-        <div className='modal-content'>
-          <div className='modal-header'>
-            <h5 className='modal-title'>Add note</h5>
-            <button
-              type='button'
-              className='btn-close'
-              data-bs-dismiss='modal'
-              aria-label='Close'
-              onClick={handleClose}
-            ></button>
-          </div>
-          <div className='modal-body'>
-            <div className='mb-3'>
-              <label htmlFor='title' className='form-label visually-hidden'>
-                Title
-              </label>
-              <input
-                type='text'
-                className='form-control'
-                id='title'
-                placeholder='Title'
-                name='title'
-                onChange={createNote}
-              />
-            </div>
-            <div className='mb-3'>
-              <label htmlFor='description' className='form-label visually-hidden'>
-                Note
-              </label>
-              <Editor
-                editorState={editorState}
-                editorClassName='wysywig-editor'
-                onEditorStateChange={updateTextDescription}
-              />
-            </div>
-
-            {categories &&
-              categories.map(({ _id: id, name }) => {
-                return (
-                  <div key={id} className='form-check form-check-inline'>
-                    <label className='form-check-label' htmlFor={name}>
-                      <input
-                        className='form-check-input'
-                        type='checkbox'
-                        id={name}
-                        value={id}
-                        onChange={toggleCategories}
-                      />
-                      {name}
-                    </label>
-                  </div>
-                )
-              })}
-          </div>
-          <div className='modal-footer'>
-            <button type='button' className='btn btn-secondary' data-bs-dismiss='modal' onClick={handleClose}>
-              Close
-            </button>
-            <button
-              type='button'
-              className='btn btn-primary'
-              onClick={() => handleSaveNote(note)}
-              disabled={!isVisibleSendButton}
-            >
-              Add Note
-            </button>
-          </div>
-        </div>
+    <Modal
+      title='Add note'
+      btnName='Save'
+      isDisabledBtn={!isVisibleSendButton}
+      handleClose={handleClose}
+      handleBtnEvent={() => handleSaveNote(note)}
+    >
+      <div className='mb-3'>
+        <LabelInput
+          labelText='Title'
+          type='text'
+          id='title'
+          onChange={createNote}
+          isLabelVisible={false}
+          placeholder='Note title'
+        />
       </div>
-    </div>
+      <div className='mb-3'>
+        <label htmlFor='description' className='form-label visually-hidden'>
+          Note
+        </label>
+        <Editor
+          editorState={editorState}
+          editorClassName='wysywig-editor'
+          onEditorStateChange={updateTextDescription}
+        />
+      </div>
+
+      {categories &&
+        categories.map(({ _id: id, name }) => {
+          return (
+            <div key={id} className='form-check form-check-inline'>
+              <label className='form-check-label' htmlFor={name}>
+                <input className='form-check-input' type='checkbox' id={name} value={id} onChange={toggleCategories} />
+                {name}
+              </label>
+            </div>
+          )
+        })}
+    </Modal>
   )
 }
 

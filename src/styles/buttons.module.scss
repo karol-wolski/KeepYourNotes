@@ -1,23 +1,34 @@
 @import './variables.scss';
 
 .btn {
-  border-radius: unset;
-}
+  &__primary {
+    background-color: $yellow;
+    border: none;
 
-.btn__form,
-.btn__form:disabled {
-  background-color: $yellow;
-  border: none;
-}
+    &:disabled {
+      background-color: $yellow;
+    }
 
-:not(.btn-check) + .btn__form:hover,
-.btn__form:first-child:hover,
-.btn__form:focus-visible {
-  background-color: $yellowDark;
-  border: none;
-  box-shadow: none;
-}
+    &:hover,
+    &:first-child:hover,
+    &:focus-visible {
+      background-color: $yellowDark;
+      border: none;
+      box-shadow: none;
+    }
 
-.btn__form:focus-visible {
-  box-shadow: $shadow;
+    &:focus-visible {
+      box-shadow: $shadow;
+    }
+  }
+
+  &__secondary {
+    background-color: $blue;
+
+    &:hover,
+    &:first-child:hover,
+    &:focus-visible {
+      background-color: $blueDark;
+    }
+  }
 }
