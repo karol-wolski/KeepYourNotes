@@ -4,8 +4,8 @@ import stylesModal from './Modal.module.scss'
 interface IModal {
   title: string
   children: ReactNode
-  btnName: string
-  handleBtnEvent: () => void
+  btnName?: string
+  handleBtnEvent?: () => void
   handleClose: () => void
   isDisabledBtn?: boolean
 }
@@ -35,14 +35,16 @@ const Modal = ({ title, children, btnName, handleBtnEvent, handleClose, isDisabl
             >
               Close
             </button>
-            <button
-              type='button'
-              className={`btn btn-primary ${stylesBtn.btn__primary}`}
-              onClick={handleBtnEvent}
-              disabled={isDisabledBtn}
-            >
-              {btnName}
-            </button>
+            {btnName && handleBtnEvent && (
+              <button
+                type='button'
+                className={`btn btn-primary ${stylesBtn.btn__primary}`}
+                onClick={handleBtnEvent}
+                disabled={isDisabledBtn}
+              >
+                {btnName}
+              </button>
+            )}
           </div>
         </div>
       </div>
