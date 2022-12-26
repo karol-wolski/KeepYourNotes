@@ -78,7 +78,7 @@ const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
 
       <button
         type='submit'
-        className={`btn btn-primary ${styles.btn__form}`}
+        className={`btn btn-primary ${styles.btn__primary}`}
         onClick={e => sendData(e)}
         disabled={!isVisibleSendButton}
       >
