@@ -1,0 +1,11 @@
+.card {
+  border-radius: unset;
+
+  &__pin {
+    display: none;
+  }
+
+  &:hover &__pin {
+    display: block;
+  }
+}
