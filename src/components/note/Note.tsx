@@ -5,7 +5,7 @@ import { Category } from '../add-category/AddCategory'
 import EditNote from '../edit-note/EditNote'
 import Modal from '../modal/Modal'
 import { Note as NoteType } from '../notes/Notes'
-import SingleNoteModal from '../singleNoteModal/SingleNoteModal'
+import FullNote from '../fullNote/FullNote'
 import parse from 'html-react-parser'
 
 interface INote {
@@ -110,7 +110,7 @@ const Note = ({
         </div>
       </div>
       {displayModal && (
-        <SingleNoteModal note={note} handleClose={handleClose} filterNotes={filterNotes} categories={categoriesArray} />
+        <FullNote note={note} handleClose={handleClose} filterNotes={filterNotes} categories={categoriesArray} />
       )}
       {displayRemoveModal && (
         <Modal
