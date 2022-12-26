@@ -9,7 +9,7 @@
       background-color: $yellow;
     }
 
-    &:hover,
+    :not(.btn-check) + &:hover,
     &:first-child:hover,
     &:focus-visible {
       background-color: $yellowDark;
