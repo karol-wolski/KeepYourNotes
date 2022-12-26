@@ -115,11 +115,12 @@ const Note = ({
       {displayRemoveModal && (
         <Modal
           title={`Remove note: ${title} `}
-          desc='Are you sure you want to delete this note?'
           btnName='Remove'
           handleBtnEvent={() => handleRemoveNote(_id)}
           handleClose={closeRemoveModal}
-        />
+        >
+          <p>Are you sure you want to delete this note?</p>
+        </Modal>
       )}
       {displayEditModal && (
         <EditNote
