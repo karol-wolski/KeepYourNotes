@@ -1,6 +1,8 @@
 import { useState, useContext } from 'react'
+import { Link } from 'react-router-dom'
 import { AuthContext, IAuthContext } from '../../context/AuthContext'
 import { removeFromLocalStorage } from '../../helpers/localStorage'
+import stylesBtn from '../../styles/buttons.module.scss'
 
 interface INavigation {
   openAddNoteModal: () => void
@@ -22,13 +24,13 @@ const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: 
   }
 
   return (
-    <nav className='navbar navbar-expand-lg bg-light'>
+    <nav className='navbar navbar-expand-lg bg-dark'>
       <div className='container'>
-        <a className='navbar-brand' href='#'>
+        <Link to='/' className='navbar-brand text-white'>
           KeepYourNotes
-        </a>
+        </Link>
         <button
-          className='navbar-toggler'
+          className='navbar-toggler navbar-dark'
           type='button'
           data-bs-toggle='collapse'
           data-bs-target='#navbarSupportedContent'
@@ -54,7 +56,11 @@ const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: 
             >
               Categories
             </button>
-            <button type='button' className='btn btn-primary btn-sm' onClick={openAddNoteModal}>
+            <button
+              type='button'
+              className={`btn btn-primary btn-sm ${stylesBtn.btn__primary}`}
+              onClick={openAddNoteModal}
+            >
               Add note
             </button>
             <button type='button' className='btn btn-primary btn-sm' onClick={openAddCategoryModal}>
@@ -63,7 +69,7 @@ const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: 
           </div>
           <div className='dropdown'>
             <a
-              className='btn'
+              className='btn text-white'
               href='#'
               role='button'
               data-bs-toggle='dropdown'
