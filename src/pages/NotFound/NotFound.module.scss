@@ -1,0 +1,13 @@
+@import '../../styles/variables.scss';
+
+.notFound {
+  background-color: $blueDark;
+
+  &__link {
+    color: $yellow;
+
+    &:hover {
+      color: $yellowDark;
+    }
+  }
+}
