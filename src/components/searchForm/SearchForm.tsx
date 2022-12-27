@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import LabelInput from '../labelInput/LabelInput'
+import stylesBtn from '../../styles/buttons.module.scss'
 
 interface ISearchForm {
   searchByTitle: (text: string) => void
@@ -19,14 +21,15 @@ const SearchForm = ({ searchByTitle }: ISearchForm) => {
       <div className='row'>
         <form className='d-inline-flex flex-row justify-content-center'>
           <div className='d-inline-flex col-8 m-3'>
-            <input
-              type='text'
-              className='form-control'
+            <LabelInput
               id='searchInput'
+              type='text'
               placeholder='Search the note'
               onChange={onChangeInput}
+              isLabelVisible={false}
+              labelText='Search the note'
             />
-            <button type='submit' className='btn btn-primary' onClick={sendText}>
+            <button type='submit' className={`btn btn-primary mx-1 ${stylesBtn.btn__secondary}`} onClick={sendText}>
               Search
             </button>
           </div>
