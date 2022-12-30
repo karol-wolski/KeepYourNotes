@@ -100,6 +100,27 @@ const NotesPage = () => {
     setFilteredNotes(filteredNotes)
   }
 
+  const handleRemoveCategory = (categoryId: string) => {
+    asyncFetch(`categories/${categoryId}`, 'DELETE').then(response => {
+      if (response.data) {
+        const removeCategory = categories.filter(category => category._id !== categoryId)
+        setCategories(removeCategory)
+      }
+    })
+  }
+
+  const handleEditCategory = (category: Category, cb?: () => void) => {
+    asyncFetch(`categories/${category._id}`, 'PATCH', category).then(response => {
+      if (response.message === 'Success') {
+        const editCategory = categories.map(categoryEl =>
+          categoryEl._id === category._id ? { ...categoryEl, ...category } : categoryEl,
+        )
+        setCategories(editCategory)
+        if (cb) cb()
+      }
+    })
+  }
+
   return (
     <>
       <div className='App'>
@@ -125,7 +146,13 @@ const NotesPage = () => {
         <AddCategory handleClose={closeAddCategoryModal} handleSaveCategory={handleSaveCategory} />
       )}
       {isOpenCategories && (
-        <Categories handleClose={closeCategories} categories={categories} filter={filterByCategory} />
+        <Categories
+          handleClose={closeCategories}
+          categories={categories}
+          filter={filterByCategory}
+          handleRemoveCategory={handleRemoveCategory}
+          handleEditCategory={handleEditCategory}
+        />
       )}
     </>
   )
