@@ -1,4 +1,3 @@
-import { Editor } from 'react-draft-wysiwyg'
 import { EditorState, ContentState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 import htmlToDraft from 'html-to-draftjs'
@@ -6,6 +5,7 @@ import { SetStateAction, useState, useEffect } from 'react'
 import { BG_COLORS } from '../../constants/constants'
 import { Category } from '../add-category/AddCategory'
 import { Note } from '../notes/Notes'
+import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
 interface IEditNote {
   note: Note
   handleEditNote: (data: Note, cb?: () => void) => void
@@ -18,13 +18,17 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
   const [bgColors] = useState(BG_COLORS)
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
 
-  useEffect(() => {
-    const blocksFromHtml = htmlToDraft(note.desc)
+  const htmlToDraftBlocks = (html: string) => {
+    const blocksFromHtml = htmlToDraft(html)
     const { contentBlocks, entityMap } = blocksFromHtml
-    const contentStates = ContentState.createFromBlockArray(contentBlocks, entityMap)
-    const editorStates = EditorState.createWithContent(contentStates)
-    setEditorState(editorStates)
-  }, [note])
+    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap)
+    const editorState = EditorState.createWithContent(contentState)
+    return editorState
+  }
+
+  useEffect(() => {
+    setEditorState(htmlToDraftBlocks(note.desc))
+  }, [])
 
   const isVisibleSendButton = !!editNote.title.length && !!editNote.desc.length
 
@@ -56,8 +60,8 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
     })
   }
 
-  const updateTextDescription = async (state: SetStateAction<EditorState>) => {
-    await setEditorState(state)
+  const updateTextDescription = (state: SetStateAction<EditorState>) => {
+    setEditorState(state)
 
     const data = stateToHTML(editorState.getCurrentContent())
     setNote(prevState => {
@@ -101,11 +105,7 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
               <label htmlFor='exampleFormControlTextarea1' className='form-label visually-hidden'>
                 Note
               </label>
-              <Editor
-                editorState={editorState}
-                editorClassName='wysywig-editor'
-                onEditorStateChange={updateTextDescription}
-              />
+              <EditorWysiwyg editorState={editorState} updateTextDescription={updateTextDescription} />
             </div>
             {categories &&
               categories.map(({ _id: id, name }) => {
