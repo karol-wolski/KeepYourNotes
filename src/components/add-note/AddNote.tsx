@@ -1,4 +1,3 @@
-import { Editor } from 'react-draft-wysiwyg'
 import { EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 import { SetStateAction, useState } from 'react'
@@ -8,6 +7,7 @@ import { Note } from '../notes/Notes'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import LabelInput from '../labelInput/LabelInput'
 import Modal from '../modal/Modal'
+import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
 
 interface IAddNote {
   handleSaveNote: (data: Note) => void
@@ -29,8 +29,8 @@ const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
 
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
 
-  const updateTextDescription = async (state: SetStateAction<EditorState>) => {
-    await setEditorState(state)
+  const updateTextDescription = (state: SetStateAction<EditorState>) => {
+    setEditorState(state)
 
     const data = stateToHTML(editorState.getCurrentContent())
     setNote({
@@ -79,11 +79,7 @@ const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
         <label htmlFor='description' className='form-label visually-hidden'>
           Note
         </label>
-        <Editor
-          editorState={editorState}
-          editorClassName='wysywig-editor'
-          onEditorStateChange={updateTextDescription}
-        />
+        <EditorWysiwyg editorState={editorState} updateTextDescription={updateTextDescription} />
       </div>
 
       {categories &&
