@@ -7,8 +7,9 @@ interface ILabelInput {
   isLabelVisible: boolean
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
+  value?: string
 }
-const LabelInput = ({ id, type, labelText, onChange, isLabelVisible, placeholder }: ILabelInput) => {
+const LabelInput = ({ id, type, labelText, onChange, isLabelVisible, placeholder, value }: ILabelInput) => {
   return (
     <>
       <label htmlFor={id} className={`form-label ${!isLabelVisible && 'visually-hidden'} `}>
@@ -21,6 +22,7 @@ const LabelInput = ({ id, type, labelText, onChange, isLabelVisible, placeholder
         onChange={onChange}
         name={id}
         placeholder={placeholder}
+        value={value}
       />
     </>
   )
