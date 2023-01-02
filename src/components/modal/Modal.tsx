@@ -25,7 +25,7 @@ const Modal = ({ title, children, btnName, handleBtnEvent, handleClose, isDisabl
               onClick={handleClose}
             ></button>
           </div>
-          <div className='modal-body'>{children}</div>
+          <div className={`modal-body ${stylesModal.modal__body}`}>{children}</div>
           <div className='modal-footer'>
             <button
               type='button'
