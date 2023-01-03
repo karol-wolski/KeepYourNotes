@@ -6,5 +6,10 @@
 
   &__content {
     border-radius: unset;
+    max-height: 90vh;
+  }
+
+  &__body {
+    overflow-y: auto;
   }
 }
