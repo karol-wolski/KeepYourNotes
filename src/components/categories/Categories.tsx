@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import useBoolean from '../../hooks/useBoolean'
 import { Category } from '../add-category/AddCategory'
 import MenageCategories from '../manageCategories/ManageCategories'
 import FocusTrap from 'focus-trap-react'
@@ -20,9 +20,7 @@ const Categories = ({
   handleEditCategory,
   isOpen,
 }: ICategories) => {
-  const [isOpenManageModal, setIsOpenMenageModal] = useState(false)
-  const handleOpenManageModal = () => setIsOpenMenageModal(true)
-  const handleCloseMenageModal = () => setIsOpenMenageModal(false)
+  const [isOpenManageModal, { setTrue: openManageModal, setFalse: closeMenageModal }] = useBoolean()
 
   return (
     <>
@@ -42,7 +40,7 @@ const Categories = ({
           </div>
           <div className='offcanvas-body'>
             <div className='list-group'>
-              <button type='button' className='btn btn-primary' onClick={handleOpenManageModal}>
+              <button type='button' className='btn btn-primary' onClick={openManageModal}>
                 <i className='bi bi-folder'></i> Manage categories
               </button>
               <button type='button' className='list-group-item list-group-item-action' onClick={() => filter('all')}>
@@ -66,7 +64,7 @@ const Categories = ({
       {isOpenManageModal && (
         <MenageCategories
           categories={categories}
-          handleCloseMenageModal={handleCloseMenageModal}
+          handleCloseMenageModal={closeMenageModal}
           handleEditCategory={handleEditCategory}
           handleRemoveCategory={handleRemoveCategory}
           isOpen={isOpenManageModal}
