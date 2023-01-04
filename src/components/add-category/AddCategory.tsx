@@ -10,9 +10,10 @@ export type Category = {
 interface IAddCategory {
   handleSaveCategory: (data: Category) => void
   handleClose: () => void
+  isOpen: boolean
 }
 
-const AddCategory = ({ handleClose, handleSaveCategory }: IAddCategory) => {
+const AddCategory = ({ handleClose, handleSaveCategory, isOpen }: IAddCategory) => {
   const [category, setCategory] = useState<Category>({
     _id: '',
     name: '',
@@ -34,6 +35,7 @@ const AddCategory = ({ handleClose, handleSaveCategory }: IAddCategory) => {
       btnName='Save'
       handleBtnEvent={() => handleSaveCategory(category)}
       isDisabledBtn={!isVisibleSendButton}
+      isOpen={isOpen}
     >
       <div className='mb-3'>
         <LabelInput

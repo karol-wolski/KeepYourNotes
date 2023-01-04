@@ -140,10 +140,19 @@ const NotesPage = () => {
         />
       </div>
       {isOpenAddNoteModal && (
-        <AddNote handleClose={closeAddNoteModal} handleSaveNote={handleSaveNewNote} categories={categories} />
+        <AddNote
+          handleClose={closeAddNoteModal}
+          handleSaveNote={handleSaveNewNote}
+          categories={categories}
+          isOpen={isOpenAddNoteModal}
+        />
       )}
       {isOpenAddCategoryModal && (
-        <AddCategory handleClose={closeAddCategoryModal} handleSaveCategory={handleSaveCategory} />
+        <AddCategory
+          handleClose={closeAddCategoryModal}
+          handleSaveCategory={handleSaveCategory}
+          isOpen={isOpenAddCategoryModal}
+        />
       )}
       {isOpenCategories && (
         <Categories
@@ -152,6 +161,7 @@ const NotesPage = () => {
           filter={filterByCategory}
           handleRemoveCategory={handleRemoveCategory}
           handleEditCategory={handleEditCategory}
+          isOpen={isOpenCategories}
         />
       )}
     </>

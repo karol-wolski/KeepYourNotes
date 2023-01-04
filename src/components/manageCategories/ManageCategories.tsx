@@ -8,6 +8,7 @@ interface IMenageCategories {
   handleCloseMenageModal: () => void
   handleRemoveCategory: (categoryId: string) => void
   handleEditCategory: (category: Category, cb?: () => void) => void
+  isOpen: boolean
 }
 
 const ManageCategories = ({
@@ -15,6 +16,7 @@ const ManageCategories = ({
   handleEditCategory,
   handleCloseMenageModal,
   handleRemoveCategory,
+  isOpen,
 }: IMenageCategories) => {
   const inputRefs = useRef<HTMLInputElement[]>([])
 
@@ -29,7 +31,7 @@ const ManageCategories = ({
   }
 
   return (
-    <Modal title='Manage Categories' isDisabledBtn={true} handleClose={handleCloseMenageModal}>
+    <Modal title='Manage Categories' isDisabledBtn={true} handleClose={handleCloseMenageModal} isOpen={isOpen}>
       <table className='table'>
         <thead>
           <tr>

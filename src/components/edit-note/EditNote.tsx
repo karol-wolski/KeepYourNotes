@@ -13,9 +13,10 @@ interface IEditNote {
   handleEditNote: (data: Note, cb?: () => void) => void
   handleClose: () => void
   categories: Category[]
+  isOpen: boolean
 }
 
-const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) => {
+const EditNote = ({ note, handleEditNote, handleClose, categories, isOpen }: IEditNote) => {
   const [editNote, setNote] = useState<Note>(note)
   const [bgColors] = useState(BG_COLORS)
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
@@ -81,6 +82,7 @@ const EditNote = ({ note, handleEditNote, handleClose, categories }: IEditNote) 
       handleClose={handleClose}
       handleBtnEvent={() => handleEditNote(editNote, handleClose)}
       isDisabledBtn={!isVisibleSendButton}
+      isOpen={isOpen}
     >
       <div className='mb-3'>
         <LabelInput
