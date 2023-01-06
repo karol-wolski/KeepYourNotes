@@ -58,7 +58,7 @@ const EditNote = ({ note, handleEditNote, handleClose, categories, isOpen }: IEd
     setNote(prevState => {
       return {
         ...prevState,
-        backgroundColor: bgColorId,
+        backgroundColor: prevState.backgroundColor === bgColorId ? undefined : bgColorId,
       }
     })
   }
@@ -122,7 +122,7 @@ const EditNote = ({ note, handleEditNote, handleClose, categories, isOpen }: IEd
         })}
       <div className='mt-4'>
         <p>Set the color</p>
-        <>
+        <div className='d-flex'>
           {bgColors.map(bgColor => {
             return (
               <button
@@ -130,10 +130,14 @@ const EditNote = ({ note, handleEditNote, handleClose, categories, isOpen }: IEd
                 style={{ backgroundColor: bgColor.bgColor, height: '2rem', width: '2rem' }}
                 title={bgColor.name}
                 onClick={() => setBgColors(bgColor.id)}
-              ></button>
+              >
+                {editNote.backgroundColor === bgColor.id && (
+                  <i className='bi bi-check' style={{ color: bgColor.color }}></i>
+                )}
+              </button>
             )
           })}
-        </>
+        </div>
       </div>
     </Modal>
   )
