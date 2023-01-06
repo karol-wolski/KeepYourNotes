@@ -12,16 +12,17 @@ interface IModal {
   handleClose: () => void
   filterNotes: (categoryId: string) => void
   categories: Category[]
+  isOpen: boolean
 }
 
-const FullNote = ({ note, handleClose, filterNotes, categories: categoriesArray }: IModal) => {
+const FullNote = ({ note, handleClose, filterNotes, categories: categoriesArray, isOpen }: IModal) => {
   const { title, desc, img, categories } = note
   const [isCopied, setIsCopied] = useState<boolean>(false)
 
   const handleSetIsCopied = () => setIsCopied(true)
 
   return (
-    <Modal handleClose={handleClose} title={title}>
+    <Modal handleClose={handleClose} title={title} isOpen={isOpen}>
       <div className='d-flex gap-2 justify-start mb-2'>
         {categories &&
           categoriesArray &&

@@ -13,9 +13,10 @@ interface IAddNote {
   handleSaveNote: (data: Note) => void
   handleClose: () => void
   categories: Category[]
+  isOpen: boolean
 }
 
-const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
+const AddNote = ({ handleSaveNote, handleClose, categories, isOpen }: IAddNote) => {
   const [note, setNote] = useState<Note>({
     _id: uuid(),
     title: '',
@@ -64,6 +65,7 @@ const AddNote = ({ handleSaveNote, handleClose, categories }: IAddNote) => {
       isDisabledBtn={!isVisibleSendButton}
       handleClose={handleClose}
       handleBtnEvent={() => handleSaveNote(note)}
+      isOpen={isOpen}
     >
       <div className='mb-3'>
         <LabelInput

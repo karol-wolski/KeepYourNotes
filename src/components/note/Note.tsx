@@ -125,7 +125,13 @@ const Note = ({
         </div>
       </div>
       {displayModal && (
-        <FullNote note={note} handleClose={handleClose} filterNotes={filterNotes} categories={categoriesArray} />
+        <FullNote
+          note={note}
+          handleClose={handleClose}
+          filterNotes={filterNotes}
+          categories={categoriesArray}
+          isOpen={displayModal}
+        />
       )}
       {displayRemoveModal && (
         <Modal
@@ -133,6 +139,7 @@ const Note = ({
           btnName='Remove'
           handleBtnEvent={() => handleRemoveNote(_id)}
           handleClose={closeRemoveModal}
+          isOpen={displayRemoveModal}
         >
           <p>Are you sure you want to delete this note?</p>
         </Modal>
@@ -143,6 +150,7 @@ const Note = ({
           handleClose={closeEditModal}
           handleEditNote={handleEditNote}
           categories={categoriesArray}
+          isOpen={displayEditModal}
         />
       )}
     </>
