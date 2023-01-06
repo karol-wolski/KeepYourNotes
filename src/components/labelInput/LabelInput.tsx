@@ -22,7 +22,7 @@ const LabelInput = ({ id, type, labelText, onChange, isLabelVisible, placeholder
         onChange={onChange}
         name={id}
         placeholder={placeholder}
-        value={value}
+        defaultValue={value}
       />
     </>
   )
