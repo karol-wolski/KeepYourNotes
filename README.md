@@ -64,8 +64,10 @@ Features list:
 - Pin the note
 - Log in
 - Sign up
+- Edit user profile
 
 To do:
+
 - Add / Remove Collabolators
 - Shere the note
 - Edit / Remove category

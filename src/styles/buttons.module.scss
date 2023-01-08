@@ -24,6 +24,7 @@
 
   &__secondary {
     background-color: $blue;
+    color: $white;
 
     :not(.btn-check) + &:hover,
     &:first-child:hover,

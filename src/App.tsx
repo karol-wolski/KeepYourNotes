@@ -25,6 +25,8 @@ const ActivationPage = lazy(() => import('./pages/Activation'))
 const ResetPasswordPage = lazy(() => import('./pages/ResetPassword'))
 const RemindPasswordPage = lazy(() => import('./pages/RemindPassword'))
 const NotFoundPage = lazy(() => import('./pages/NotFound/NotFound'))
+const EditUserPage = lazy(() => import('./pages/EditUser/EditUser'))
+const EditPasswordPage = lazy(() => import('./pages/EditPassword/EditPassword'))
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(isAuthorized())
@@ -79,6 +81,22 @@ function App() {
               element={
                 <ProtectedRoute redirectPath='/' isAllowed={!isLoggedIn}>
                   <ResetPasswordPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/profile/edit'
+              element={
+                <ProtectedRoute redirectPath='/login' isAllowed={isLoggedIn}>
+                  <EditUserPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/profile/password'
+              element={
+                <ProtectedRoute redirectPath='/login' isAllowed={isLoggedIn}>
+                  <EditPasswordPage />
                 </ProtectedRoute>
               }
             />
