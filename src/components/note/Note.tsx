@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BG_COLORS } from '../../constants/constants'
 import trimText from '../../helpers/trimText'
-import { Category } from '../add-category/AddCategory'
+import { ICategory } from '../addCategory/AddCategory'
 import EditNote from '../edit-note/EditNote'
 import Modal from '../modal/Modal'
 import { Note as NoteType } from '../notes/Notes'
@@ -16,7 +16,7 @@ interface INote {
   handleDuplicateNote: (id: string) => void
   handleEditNote: (note: NoteType, cb?: () => void) => void
   filterNotes: (categoryId: string) => void
-  categories: Category[]
+  categories: ICategory[]
 }
 
 const Note = ({

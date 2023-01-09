@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Category } from '../add-category/AddCategory'
+import { ICategory } from '../addCategory/AddCategory'
 import Note from '../note/Note'
 
 export type Note = {
@@ -21,7 +21,7 @@ interface INotes {
   handleDuplicateNote: (noteId: string) => void
   handleEditNote: (note: Note, cb?: () => void) => void
   filterNotes: (categoryId: string) => void
-  categories: Category[]
+  categories: ICategory[]
 }
 
 type Notes = Note[]

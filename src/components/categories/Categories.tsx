@@ -1,14 +1,16 @@
 import useBoolean from '../../hooks/useBoolean'
-import { Category } from '../add-category/AddCategory'
+import AddCategory, { ICategory, INewCategory } from '../addCategory/AddCategory'
 import MenageCategories from '../manageCategories/ManageCategories'
 import FocusTrap from 'focus-trap-react'
+import stylesBtn from '../../styles/buttons.module.scss'
 
 interface ICategories {
   handleClose: () => void
-  categories: Category[]
+  categories: ICategory[]
   filter: (categoryId: string) => void
   handleRemoveCategory: (categoryId: string) => void
-  handleEditCategory: (category: Category, cb?: () => void) => void
+  handleEditCategory: (category: ICategory, cb?: () => void) => void
+  handleSaveCategory: (category: INewCategory, cb?: () => void) => void
   isOpen: boolean
 }
 
@@ -18,9 +20,15 @@ const Categories = ({
   filter,
   handleRemoveCategory,
   handleEditCategory,
+  handleSaveCategory,
   isOpen,
 }: ICategories) => {
   const [isOpenManageModal, { setTrue: openManageModal, setFalse: closeMenageModal }] = useBoolean()
+
+  const categoryOnClick = (id: string) => {
+    filter(id)
+    handleClose()
+  }
 
   return (
     <>
@@ -39,8 +47,9 @@ const Categories = ({
             ></button>
           </div>
           <div className='offcanvas-body'>
+            <AddCategory handleSaveCategory={handleSaveCategory} categories={categories} />
             <div className='list-group'>
-              <button type='button' className='btn btn-primary' onClick={openManageModal}>
+              <button type='button' className={`btn btn-primary ${stylesBtn.btn__secondary}`} onClick={openManageModal}>
                 <i className='bi bi-folder'></i> Manage categories
               </button>
               <button type='button' className='list-group-item list-group-item-action' onClick={() => filter('all')}>
@@ -52,7 +61,7 @@ const Categories = ({
                     key={name}
                     type='button'
                     className='list-group-item list-group-item-action'
-                    onClick={() => filter(id)}
+                    onClick={() => categoryOnClick(id)}
                   >
                     {name}
                   </button>

@@ -1,13 +1,13 @@
 import { useRef } from 'react'
-import { Category } from '../add-category/AddCategory'
+import { ICategory } from '../addCategory/AddCategory'
 import Modal from '../modal/Modal'
 import stylesBtn from '../../styles/buttons.module.scss'
 
 interface IMenageCategories {
-  categories: Category[]
+  categories: ICategory[]
   handleCloseMenageModal: () => void
   handleRemoveCategory: (categoryId: string) => void
-  handleEditCategory: (category: Category, cb?: () => void) => void
+  handleEditCategory: (category: ICategory, cb?: () => void) => void
   isOpen: boolean
 }
 

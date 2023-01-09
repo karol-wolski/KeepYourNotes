@@ -7,11 +7,10 @@ import stylesBtn from '../../styles/buttons.module.scss'
 
 interface INavigation {
   openAddNoteModal?: () => void
-  openAddCategoryModal?: () => void
   openCategories?: () => void
 }
 
-const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: INavigation) => {
+const Navigation = ({ openAddNoteModal, openCategories }: INavigation) => {
   const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
   const [isNavCollapsed, { toggle: toggleCollapsed }] = useBoolean()
   const [isUserNavOpen, { toggle: toggleNavOpen }] = useBoolean()
@@ -71,9 +70,6 @@ const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: 
                   onClick={openAddNoteModal}
                 >
                   Add note
-                </button>
-                <button type='button' className='btn btn-primary btn-sm' onClick={openAddCategoryModal}>
-                  Add category
                 </button>
               </>
             )}

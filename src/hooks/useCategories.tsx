@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Category } from '../components/add-category/AddCategory'
+import { ICategory } from '../components/addCategory/AddCategory'
 import { asyncFetch } from '../helpers/asyncFetch'
 
 const useCategories = () => {
-  const [categories, setCategories] = useState<Category[]>([])
+  const [categories, setCategories] = useState<ICategory[]>([])
 
   useEffect(() => {
     asyncFetch('categories', 'GET').then(response => {

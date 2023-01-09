@@ -2,7 +2,7 @@ import { EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 import { SetStateAction, useState } from 'react'
 import uuid from 'react-uuid'
-import { Category } from '../add-category/AddCategory'
+import { ICategory } from '../addCategory/AddCategory'
 import { Note } from '../notes/Notes'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import LabelInput from '../labelInput/LabelInput'
@@ -12,7 +12,7 @@ import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
 interface IAddNote {
   handleSaveNote: (data: Note) => void
   handleClose: () => void
-  categories: Category[]
+  categories: ICategory[]
   isOpen: boolean
 }
 

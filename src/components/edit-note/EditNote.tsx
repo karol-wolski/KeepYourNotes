@@ -3,7 +3,7 @@ import { stateToHTML } from 'draft-js-export-html'
 import htmlToDraft from 'html-to-draftjs'
 import { SetStateAction, useState, useEffect } from 'react'
 import { BG_COLORS } from '../../constants/constants'
-import { Category } from '../add-category/AddCategory'
+import { ICategory } from '../addCategory/AddCategory'
 import { Note } from '../notes/Notes'
 import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
 import Modal from '../modal/Modal'
@@ -12,7 +12,7 @@ interface IEditNote {
   note: Note
   handleEditNote: (data: Note, cb?: () => void) => void
   handleClose: () => void
-  categories: Category[]
+  categories: ICategory[]
   isOpen: boolean
 }
 
