@@ -7,35 +7,17 @@ import Navigation from '../components/navigation/Navigation'
 import Notes, { Note } from '../components/notes/Notes'
 import SearchForm from '../components/searchForm/SearchForm'
 import { asyncFetch } from '../helpers/asyncFetch'
+import useBoolean from '../hooks/useBoolean'
+import useCategories from '../hooks/useCategories'
+import useNotes from '../hooks/useNotes'
 
 const NotesPage = () => {
-  const [notes, setNotes] = useState<Note[]>([])
+  const { notes, setNotes } = useNotes()
+  const { categories, setCategories } = useCategories()
   const [filteredNotes, setFilteredNotes] = useState<Note[]>(notes)
-  const [categories, setCategories] = useState<Category[]>([])
-  const [isOpenAddNoteModal, setIsOpenAddNoteModal] = useState(false)
-  const [isOpenAddCategoryModal, setIsOpenAddCategoryModal] = useState(false)
-  const [isOpenCategories, setIsOpenCategories] = useState(false)
-
-  const openAddNoteModal = () => setIsOpenAddNoteModal(true)
-  const closeAddNoteModal = () => setIsOpenAddNoteModal(false)
-  const openAddCategoryModal = () => setIsOpenAddCategoryModal(true)
-  const closeAddCategoryModal = () => setIsOpenAddCategoryModal(false)
-  const openCategories = () => setIsOpenCategories(true)
-  const closeCategories = () => setIsOpenCategories(false)
-
-  useEffect(() => {
-    asyncFetch('categories', 'GET').then(response => {
-      if (response.data) {
-        setCategories(response.data)
-      }
-    })
-
-    asyncFetch('notes', 'GET').then(response => {
-      if (response.data) {
-        setNotes(response.data)
-      }
-    })
-  }, [])
+  const [isOpenAddNoteModal, { setTrue: openAddNoteModal, setFalse: closeAddNoteModal }] = useBoolean()
+  const [isOpenAddCategoryModal, { setTrue: openAddCategoryModal, setFalse: closeAddCategoryModal }] = useBoolean()
+  const [isOpenCategories, { setFalse: closeCategories, toggle: toggleCategories }] = useBoolean()
 
   useEffect(() => {
     const sortArray = notes.sort((a, b) => Number(b.pinIt) - Number(a.pinIt))
@@ -127,7 +109,7 @@ const NotesPage = () => {
         <Navigation
           openAddNoteModal={openAddNoteModal}
           openAddCategoryModal={openAddCategoryModal}
-          openCategories={openCategories}
+          openCategories={toggleCategories}
         />
         <SearchForm searchByTitle={searchByTitle} />
         <Notes
