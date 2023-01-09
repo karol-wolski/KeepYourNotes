@@ -1,22 +1,23 @@
-import { useState, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { AuthContext, IAuthContext } from '../../context/AuthContext'
 import { removeFromLocalStorage } from '../../helpers/localStorage'
+import useBoolean from '../../hooks/useBoolean'
 import stylesBtn from '../../styles/buttons.module.scss'
 
 interface INavigation {
-  openAddNoteModal: () => void
-  openAddCategoryModal: () => void
-  openCategories: () => void
+  openAddNoteModal?: () => void
+  openAddCategoryModal?: () => void
+  openCategories?: () => void
 }
 
 const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: INavigation) => {
   const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
-  const [isNavCollapsed, setIsNavCollapsed] = useState(true)
-  const [isUserNavOpen, setIsUserNavOpen] = useState(false)
+  const [isNavCollapsed, { toggle: toggleCollapsed }] = useBoolean()
+  const [isUserNavOpen, { toggle: toggleNavOpen }] = useBoolean()
 
-  const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed)
-  const setUserNavOpen = () => setIsUserNavOpen(state => !state)
+  const { pathname } = useLocation()
+  const isProfileSettings = pathname.includes('profile')
 
   const logOut = () => {
     removeFromLocalStorage('token')
@@ -37,7 +38,7 @@ const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: 
           aria-controls='navbarSupportedContent'
           aria-expanded={!isNavCollapsed ? true : false}
           aria-label='Toggle navigation'
-          onClick={handleNavCollapse}
+          onClick={toggleCollapsed}
         >
           <span className='navbar-toggler-icon'></span>
         </button>
@@ -46,40 +47,55 @@ const Navigation = ({ openAddNoteModal, openAddCategoryModal, openCategories }: 
           id='navbarSupportedContent'
         >
           <div className='gap-2 d-flex justify-content-start'>
-            <button
-              className='btn btn-primary'
-              type='button'
-              data-bs-toggle='offcanvas'
-              data-bs-target='#offcanvasScrolling'
-              aria-controls='offcanvasScrolling'
-              onClick={openCategories}
-            >
-              Categories
-            </button>
-            <button
-              type='button'
-              className={`btn btn-primary btn-sm ${stylesBtn.btn__primary}`}
-              onClick={openAddNoteModal}
-            >
-              Add note
-            </button>
-            <button type='button' className='btn btn-primary btn-sm' onClick={openAddCategoryModal}>
-              Add category
-            </button>
+            {isProfileSettings ? (
+              <>
+                <Link className='btn text-white' to='/' role='button'>
+                  Notes
+                </Link>
+              </>
+            ) : (
+              <>
+                <button
+                  className='btn btn-primary'
+                  type='button'
+                  data-bs-toggle='offcanvas'
+                  data-bs-target='#offcanvasScrolling'
+                  aria-controls='offcanvasScrolling'
+                  onClick={openCategories}
+                >
+                  Categories
+                </button>
+                <button
+                  type='button'
+                  className={`btn btn-primary btn-sm ${stylesBtn.btn__primary}`}
+                  onClick={openAddNoteModal}
+                >
+                  Add note
+                </button>
+                <button type='button' className='btn btn-primary btn-sm' onClick={openAddCategoryModal}>
+                  Add category
+                </button>
+              </>
+            )}
           </div>
           <div className='dropdown'>
-            <a
+            <Link
               className='btn text-white'
-              href='#'
+              to='#'
               role='button'
               data-bs-toggle='dropdown'
               aria-expanded={isUserNavOpen ? true : false}
-              onClick={setUserNavOpen}
+              onClick={toggleNavOpen}
             >
-              Account
-            </a>
+              Settings
+            </Link>
 
             <ul className={`${isUserNavOpen ? 'd-block' : ''} dropdown-menu`}>
+              <li>
+                <Link className='btn' to='/profile/edit' role='button'>
+                  Profile
+                </Link>
+              </li>
               <li>
                 <button className='dropdown-item' onClick={logOut}>
                   Logout
