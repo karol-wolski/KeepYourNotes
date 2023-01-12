@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Category } from '../add-category/AddCategory'
+import { ICategory } from '../addCategory/AddCategory'
 import { Note } from '../notes/Notes'
 import parse from 'html-react-parser'
 import Modal from '../modal/Modal'
@@ -11,7 +11,7 @@ interface IModal {
   note: Note
   handleClose: () => void
   filterNotes: (categoryId: string) => void
-  categories: Category[]
+  categories: ICategory[]
   isOpen: boolean
 }
 

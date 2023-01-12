@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import uuid from 'react-uuid'
-import AddCategory, { Category } from '../components/add-category/AddCategory'
+import { ICategory, INewCategory } from '../components/addCategory/AddCategory'
 import AddNote from '../components/add-note/AddNote'
 import Categories from '../components/categories/Categories'
 import Navigation from '../components/navigation/Navigation'
@@ -16,7 +16,6 @@ const NotesPage = () => {
   const { categories, setCategories } = useCategories()
   const [filteredNotes, setFilteredNotes] = useState<Note[]>(notes)
   const [isOpenAddNoteModal, { setTrue: openAddNoteModal, setFalse: closeAddNoteModal }] = useBoolean()
-  const [isOpenAddCategoryModal, { setTrue: openAddCategoryModal, setFalse: closeAddCategoryModal }] = useBoolean()
   const [isOpenCategories, { setFalse: closeCategories, toggle: toggleCategories }] = useBoolean()
 
   useEffect(() => {
@@ -62,11 +61,10 @@ const NotesPage = () => {
     })
   }
 
-  const handleSaveCategory = (data: Category) => {
-    asyncFetch('categories', 'POST', data).then(response => {
-      if (response.data) {
-        setCategories([...categories, data])
-        closeAddCategoryModal()
+  const handleSaveCategory = (data: INewCategory) => {
+    asyncFetch('categories', 'POST', data).then(({ data: resData }) => {
+      if (resData) {
+        setCategories(prevState => [...prevState, resData])
       }
     })
   }
@@ -91,7 +89,7 @@ const NotesPage = () => {
     })
   }
 
-  const handleEditCategory = (category: Category, cb?: () => void) => {
+  const handleEditCategory = (category: ICategory, cb?: () => void) => {
     asyncFetch(`categories/${category._id}`, 'PATCH', category).then(response => {
       if (response.message === 'Success') {
         const editCategory = categories.map(categoryEl =>
@@ -106,11 +104,7 @@ const NotesPage = () => {
   return (
     <>
       <div className='App'>
-        <Navigation
-          openAddNoteModal={openAddNoteModal}
-          openAddCategoryModal={openAddCategoryModal}
-          openCategories={toggleCategories}
-        />
+        <Navigation openAddNoteModal={openAddNoteModal} openCategories={toggleCategories} />
         <SearchForm searchByTitle={searchByTitle} />
         <Notes
           notesArray={filteredNotes}
@@ -129,13 +123,6 @@ const NotesPage = () => {
           isOpen={isOpenAddNoteModal}
         />
       )}
-      {isOpenAddCategoryModal && (
-        <AddCategory
-          handleClose={closeAddCategoryModal}
-          handleSaveCategory={handleSaveCategory}
-          isOpen={isOpenAddCategoryModal}
-        />
-      )}
       {isOpenCategories && (
         <Categories
           handleClose={closeCategories}
@@ -143,6 +130,7 @@ const NotesPage = () => {
           filter={filterByCategory}
           handleRemoveCategory={handleRemoveCategory}
           handleEditCategory={handleEditCategory}
+          handleSaveCategory={handleSaveCategory}
           isOpen={isOpenCategories}
         />
       )}
