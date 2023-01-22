@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import uuid from 'react-uuid'
 import { ICategory, INewCategory } from '../components/addCategory/AddCategory'
 import AddNote from '../components/add-note/AddNote'
 import Categories from '../components/categories/Categories'
@@ -10,9 +9,10 @@ import { asyncFetch } from '../helpers/asyncFetch'
 import useBoolean from '../hooks/useBoolean'
 import useCategories from '../hooks/useCategories'
 import useNotes from '../hooks/useNotes'
+import LoaderPage from '../components/loaderPage/LoaderPage'
 
 const NotesPage = () => {
-  const { notes, setNotes } = useNotes()
+  const { notes, isLoading, setNotes } = useNotes()
   const { categories, setCategories } = useCategories()
   const [filteredNotes, setFilteredNotes] = useState<Note[]>(notes)
   const [isOpenAddNoteModal, { setTrue: openAddNoteModal, setFalse: closeAddNoteModal }] = useBoolean()
@@ -23,10 +23,12 @@ const NotesPage = () => {
     setFilteredNotes(sortArray)
   }, [notes])
 
-  const handleSaveNewNote = (data: Note) => {
-    asyncFetch('notes', 'POST', data).then(response => {
-      if (response.data) {
-        setNotes([...notes, response.data])
+  const handleSaveNewNote = (data: FormData, cb: (msg: string) => void) => {
+    asyncFetch('notes', 'POST_FORM_DATA', data).then(response => {
+      if (response.errors) {
+        cb(response.message)
+      } else {
+        setNotes(prevState => [...prevState, response.data])
         closeAddNoteModal()
       }
     })
@@ -44,9 +46,10 @@ const NotesPage = () => {
   const handleDuplicateNote = (noteId: string) => {
     const note = notes.find(note => note._id === noteId)
     if (note) {
-      handleSaveNewNote({
-        ...note,
-        _id: uuid(),
+      asyncFetch(`notes/duplicate/${noteId}`, 'GET').then(response => {
+        if (response.data) {
+          setNotes(prevState => [...prevState, response.data])
+        }
       })
     }
   }
@@ -106,14 +109,18 @@ const NotesPage = () => {
       <div className='App'>
         <Navigation openAddNoteModal={openAddNoteModal} openCategories={toggleCategories} />
         <SearchForm searchByTitle={searchByTitle} />
-        <Notes
-          notesArray={filteredNotes}
-          handleRemoveNote={handleRemoveNote}
-          handleDuplicateNote={handleDuplicateNote}
-          handleEditNote={handleEditNote}
-          filterNotes={filterByCategory}
-          categories={categories}
-        />
+        {isLoading ? (
+          <LoaderPage isDark={false} />
+        ) : (
+          <Notes
+            notesArray={filteredNotes}
+            handleRemoveNote={handleRemoveNote}
+            handleDuplicateNote={handleDuplicateNote}
+            handleEditNote={handleEditNote}
+            filterNotes={filterByCategory}
+            categories={categories}
+          />
+        )}
       </div>
       {isOpenAddNoteModal && (
         <AddNote

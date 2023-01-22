@@ -6,13 +6,23 @@ interface IModal {
   title: string
   children: ReactNode
   btnName?: string
-  handleBtnEvent?: () => void
+  handleBtnEvent?: ((e: React.FormEvent) => Promise<void>) | (() => void)
   handleClose: () => void
   isDisabledBtn?: boolean
   isOpen: boolean
+  btnSubmitType?: 'submit' | 'button'
 }
 
-const Modal = ({ title, children, btnName, handleBtnEvent, handleClose, isDisabledBtn = false, isOpen }: IModal) => {
+const Modal = ({
+  title,
+  children,
+  btnName,
+  handleBtnEvent,
+  handleClose,
+  isDisabledBtn = false,
+  isOpen,
+  btnSubmitType = 'button',
+}: IModal) => {
   return (
     <FocusTrap active={isOpen}>
       <div className={`modal fade show ${stylesModal.modal}`} tabIndex={-1}>
@@ -38,9 +48,9 @@ const Modal = ({ title, children, btnName, handleBtnEvent, handleClose, isDisabl
               >
                 Close
               </button>
-              {btnName && handleBtnEvent && (
+              {btnName && (
                 <button
-                  type='button'
+                  type={btnSubmitType}
                   className={`btn btn-primary ${stylesBtn.btn__primary}`}
                   onClick={handleBtnEvent}
                   disabled={isDisabledBtn}
