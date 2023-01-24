@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { ICategory } from '../addCategory/AddCategory'
-import { Note } from '../notes/Notes'
+import { Attachment, Note } from '../notes/Notes'
 import parse from 'html-react-parser'
 import Modal from '../modal/Modal'
 import { copyToClipboard } from '../../helpers/copyToClipboard'
@@ -16,9 +16,8 @@ interface IModal {
 }
 
 const FullNote = ({ note, handleClose, filterNotes, categories: categoriesArray, isOpen }: IModal) => {
-  const { title, desc, img, categories } = note
+  const { title, desc, attachments, categories } = note
   const [isCopied, setIsCopied] = useState<boolean>(false)
-
   const handleSetIsCopied = () => setIsCopied(true)
 
   return (
@@ -48,7 +47,17 @@ const FullNote = ({ note, handleClose, filterNotes, categories: categoriesArray,
               )
             })}
       </div>
-      {img}
+      <>
+        {attachments &&
+          attachments.map((attachment: Attachment) => (
+            <img
+              key={attachment._id}
+              className='img-fluid'
+              src={`${process.env.REACT_APP_API_URL}/${attachment.path}`}
+              alt=''
+            />
+          ))}
+      </>
       <div className={stylesNote.fullNote}>
         <button
           type='button'

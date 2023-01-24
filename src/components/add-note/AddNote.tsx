@@ -1,32 +1,32 @@
 import { EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
-import { SetStateAction, useState } from 'react'
-import uuid from 'react-uuid'
+import { SetStateAction, useState, useRef } from 'react'
 import { ICategory } from '../addCategory/AddCategory'
-import { Note } from '../notes/Notes'
+import { AddNote as AddNoteType } from '../notes/Notes'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import LabelInput from '../labelInput/LabelInput'
 import Modal from '../modal/Modal'
 import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
+import Alert, { ALERT_TYPE } from '../alert/Alert'
 
 interface IAddNote {
-  handleSaveNote: (data: Note) => void
+  handleSaveNote: (data: FormData, cb: (msg: string) => void) => void
   handleClose: () => void
   categories: ICategory[]
   isOpen: boolean
 }
 
 const AddNote = ({ handleSaveNote, handleClose, categories, isOpen }: IAddNote) => {
-  const [note, setNote] = useState<Note>({
-    _id: uuid(),
+  const formRef = useRef<HTMLFormElement>(null)
+  const [note, setNote] = useState<AddNoteType>({
     title: '',
     desc: '',
-    createdBy: 'John Doe',
-    createdDate: Date.now(),
-    updatedDate: Date.now(),
     pinIt: false,
     categories: [],
   })
+  const [errors, setErrors] = useState('')
+
+  const errorMsg = (msg: string) => setErrors(msg)
 
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
 
@@ -58,43 +58,73 @@ const AddNote = ({ handleSaveNote, handleClose, categories, isOpen }: IAddNote) 
     }
   }
 
+  const submitNote = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const data = new FormData(formRef.current as HTMLFormElement)
+    data.append('desc', note.desc)
+    data.append('pinIt', JSON.stringify(note.pinIt))
+    if (note.categories) data.append('categories', JSON.stringify(note.categories))
+    handleSaveNote(data, errorMsg)
+  }
+
   return (
     <Modal
       title='Add note'
       btnName='Save'
       isDisabledBtn={!isVisibleSendButton}
       handleClose={handleClose}
-      handleBtnEvent={() => handleSaveNote(note)}
       isOpen={isOpen}
+      btnSubmitType='submit'
+      handleBtnEvent={submitNote}
     >
-      <div className='mb-3'>
-        <LabelInput
-          labelText='Title'
-          type='text'
-          id='title'
-          onChange={createNote}
-          isLabelVisible={false}
-          placeholder='Note title'
-        />
-      </div>
-      <div className='mb-3'>
-        <label htmlFor='description' className='form-label visually-hidden'>
-          Note
-        </label>
-        <EditorWysiwyg editorState={editorState} updateTextDescription={updateTextDescription} />
-      </div>
+      <form ref={formRef}>
+        <div className='mb-3'>
+          <LabelInput
+            labelText='Title'
+            type='text'
+            id='title'
+            onChange={createNote}
+            isLabelVisible={false}
+            placeholder='Note title'
+          />
+        </div>
+        <div className='mb-3'>
+          <label htmlFor='description' className='form-label visually-hidden'>
+            Note
+          </label>
+          <EditorWysiwyg editorState={editorState} updateTextDescription={updateTextDescription} />
+        </div>
+        <div className='mb-3'>
+          <LabelInput
+            labelText='Add files'
+            type='file'
+            id='files'
+            onChange={createNote}
+            isLabelVisible={false}
+            placeholder='Add file'
+            multiple={true}
+          />
+        </div>
 
-      {categories &&
-        categories.map(({ _id: id, name }) => {
-          return (
-            <div key={id} className='form-check form-check-inline'>
-              <label className='form-check-label' htmlFor={name}>
-                <input className='form-check-input' type='checkbox' id={name} value={id} onChange={toggleCategories} />
-                {name}
-              </label>
-            </div>
-          )
-        })}
+        {categories &&
+          categories.map(({ _id: id, name }) => {
+            return (
+              <div key={id} className='form-check form-check-inline'>
+                <label className='form-check-label' htmlFor={name}>
+                  <input
+                    className='form-check-input'
+                    type='checkbox'
+                    id={name}
+                    value={id}
+                    onChange={toggleCategories}
+                  />
+                  {name}
+                </label>
+              </div>
+            )
+          })}
+        {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
+      </form>
     </Modal>
   )
 }

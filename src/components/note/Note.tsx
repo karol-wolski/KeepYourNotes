@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { BG_COLORS } from '../../constants/constants'
 import trimText from '../../helpers/trimText'
 import { ICategory } from '../addCategory/AddCategory'
@@ -9,6 +8,8 @@ import FullNote from '../fullNote/FullNote'
 import parse from 'html-react-parser'
 import stylesBtn from '../../styles/buttons.module.scss'
 import stylesCard from './Note.module.scss'
+import useNotes from '../../hooks/useNotes'
+import useBoolean from '../../hooks/useBoolean'
 
 interface INote {
   note: NoteType
@@ -27,23 +28,18 @@ const Note = ({
   filterNotes,
   categories: categoriesArray,
 }: INote) => {
-  const [displayModal, setDisplayModal] = useState<boolean>(false)
-  const [displayRemoveModal, setDisplayRemoveModal] = useState<boolean>(false)
-  const [displayEditModal, setDisplayEditModal] = useState<boolean>(false)
+  const [displayModal, { setFalse: handleClose, setTrue: openModal }] = useBoolean(false)
+  const [displayRemoveModal, { setFalse: closeRemoveModal, setTrue: openRemoveModal }] = useBoolean(false)
+  const [displayEditModal, { setFalse: closeEditModal, setTrue: openEditModal }] = useBoolean(false)
   const { _id, title, desc, categories, pinIt, backgroundColor } = note
-  const handleClose = () => setDisplayModal(false)
-  const openModal = () => setDisplayModal(true)
-  const closeRemoveModal = () => setDisplayRemoveModal(false)
-  const openRemoveModal = () => setDisplayRemoveModal(true)
-  const closeEditModal = () => setDisplayEditModal(false)
-  const openEditModal = () => setDisplayEditModal(true)
+
+  const { notes: singleNote, isLoading } = useNotes(_id)
 
   const bgColor = BG_COLORS.find(bg => bg.id === backgroundColor)
 
   const pinItOnChange = () => {
     const editNote = {
       ...note,
-      updatedDate: Date.now(),
       pinIt: !note.pinIt,
     }
     handleEditNote(editNote)
@@ -124,9 +120,9 @@ const Note = ({
           </div>
         </div>
       </div>
-      {displayModal && (
+      {displayModal && !isLoading && (
         <FullNote
-          note={note}
+          note={singleNote[0]}
           handleClose={handleClose}
           filterNotes={filterNotes}
           categories={categoriesArray}
@@ -144,9 +140,9 @@ const Note = ({
           <p>Are you sure you want to delete this note?</p>
         </Modal>
       )}
-      {displayEditModal && (
+      {displayEditModal && !isLoading && (
         <EditNote
-          note={note}
+          note={singleNote[0]}
           handleClose={closeEditModal}
           handleEditNote={handleEditNote}
           categories={categoriesArray}

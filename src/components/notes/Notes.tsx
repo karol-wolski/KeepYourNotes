@@ -2,15 +2,27 @@ import { useState, useEffect } from 'react'
 import { ICategory } from '../addCategory/AddCategory'
 import Note from '../note/Note'
 
+export type Attachment = {
+  _id: string
+  path: string
+  name: string
+  mimetype: string
+}
+
+export type AddNote = {
+  title: string
+  desc: string
+  pinIt: boolean
+  categories?: string[]
+}
+
 export type Note = {
   _id: string
   title: string
   desc: string
-  img?: string
+  attachments?: Attachment[]
   categories?: string[]
   createdBy: string
-  createdDate: number
-  updatedDate: number
   pinIt: boolean
   backgroundColor?: number
 }
