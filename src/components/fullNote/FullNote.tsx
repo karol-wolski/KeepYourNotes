@@ -50,12 +50,7 @@ const FullNote = ({ note, handleClose, filterNotes, categories: categoriesArray,
       <>
         {attachments &&
           attachments.map((attachment: Attachment) => (
-            <img
-              key={attachment._id}
-              className='img-fluid'
-              src={`${process.env.REACT_APP_API_URL}/${attachment.path}`}
-              alt=''
-            />
+            <img key={attachment._id} className='img-fluid' src={attachment.path} alt='' />
           ))}
       </>
       <div className={stylesNote.fullNote}>
