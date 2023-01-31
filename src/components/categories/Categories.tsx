@@ -1,6 +1,6 @@
 import useBoolean from '../../hooks/useBoolean'
 import AddCategory, { ICategory, INewCategory } from '../addCategory/AddCategory'
-import MenageCategories from '../manageCategories/ManageCategories'
+import ManageCategories from '../manageCategories/ManageCategories'
 import FocusTrap from 'focus-trap-react'
 import stylesBtn from '../../styles/buttons.module.scss'
 
@@ -23,7 +23,7 @@ const Categories = ({
   handleSaveCategory,
   isOpen,
 }: ICategories) => {
-  const [isOpenManageModal, { setTrue: openManageModal, setFalse: closeMenageModal }] = useBoolean()
+  const [isOpenManageModal, { setTrue: openManageModal, setFalse: closeManageModal }] = useBoolean()
 
   const categoryOnClick = (id: string) => {
     filter(id)
@@ -71,9 +71,9 @@ const Categories = ({
         </div>
       </FocusTrap>
       {isOpenManageModal && (
-        <MenageCategories
+        <ManageCategories
           categories={categories}
-          handleCloseMenageModal={closeMenageModal}
+          handleCloseManageModal={closeManageModal}
           handleEditCategory={handleEditCategory}
           handleRemoveCategory={handleRemoveCategory}
           isOpen={isOpenManageModal}

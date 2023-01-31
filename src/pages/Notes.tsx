@@ -104,6 +104,26 @@ const NotesPage = () => {
     })
   }
 
+  const handleDeleteAttachment = (attachmentId: string) => {
+    asyncFetch(`attachment/${attachmentId}`, 'DELETE').then(response => {
+      if (response.data) {
+        console.log(response.data)
+      }
+    })
+  }
+
+  const handleSaveAttachment = (data: FormData, cb: (msg?: string) => void) => {
+    asyncFetch('attachment', 'POST_FORM_DATA', data).then(response => {
+      if (response.errors) {
+        cb(response.message)
+      } else {
+        if (response.data) {
+          cb('test')
+        }
+      }
+    })
+  }
+
   return (
     <>
       <div className='App'>
@@ -119,6 +139,8 @@ const NotesPage = () => {
             handleEditNote={handleEditNote}
             filterNotes={filterByCategory}
             categories={categories}
+            handleDeleteAttachment={handleDeleteAttachment}
+            handleSaveAttachment={handleSaveAttachment}
           />
         )}
       </div>

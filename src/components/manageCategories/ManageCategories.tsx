@@ -3,9 +3,9 @@ import { ICategory } from '../addCategory/AddCategory'
 import Modal from '../modal/Modal'
 import stylesBtn from '../../styles/buttons.module.scss'
 
-interface IMenageCategories {
+interface IManageCategories {
   categories: ICategory[]
-  handleCloseMenageModal: () => void
+  handleCloseManageModal: () => void
   handleRemoveCategory: (categoryId: string) => void
   handleEditCategory: (category: ICategory, cb?: () => void) => void
   isOpen: boolean
@@ -14,10 +14,10 @@ interface IMenageCategories {
 const ManageCategories = ({
   categories,
   handleEditCategory,
-  handleCloseMenageModal,
+  handleCloseManageModal,
   handleRemoveCategory,
   isOpen,
-}: IMenageCategories) => {
+}: IManageCategories) => {
   const inputRefs = useRef<HTMLInputElement[]>([])
 
   const test = (id: string, elIndex: number) => {
@@ -31,7 +31,7 @@ const ManageCategories = ({
   }
 
   return (
-    <Modal title='Manage Categories' isDisabledBtn={true} handleClose={handleCloseMenageModal} isOpen={isOpen}>
+    <Modal title='Manage Categories' isDisabledBtn={true} handleClose={handleCloseManageModal} isOpen={isOpen}>
       <table className='table'>
         <thead>
           <tr>

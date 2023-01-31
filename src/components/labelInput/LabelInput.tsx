@@ -5,7 +5,7 @@ interface ILabelInput {
   type: string
   labelText: string
   isLabelVisible: boolean
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
   value?: string
   multiple?: boolean

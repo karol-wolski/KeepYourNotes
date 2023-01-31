@@ -34,6 +34,8 @@ interface INotes {
   handleEditNote: (note: Note, cb?: () => void) => void
   filterNotes: (categoryId: string) => void
   categories: ICategory[]
+  handleDeleteAttachment: (attachmentId: string) => void
+  handleSaveAttachment: (data: FormData, cb: (msg?: string) => void) => void
 }
 
 type Notes = Note[]
@@ -45,6 +47,8 @@ const Notes = ({
   handleEditNote,
   filterNotes,
   categories,
+  handleDeleteAttachment,
+  handleSaveAttachment,
 }: INotes) => {
   const [notes, setNotes] = useState(notesArray)
 
@@ -64,6 +68,8 @@ const Notes = ({
                   handleEditNote={handleEditNote}
                   filterNotes={filterNotes}
                   categories={categories}
+                  handleDeleteAttachment={handleDeleteAttachment}
+                  handleSaveAttachment={handleSaveAttachment}
                 />
               </div>
             ))}

@@ -10,6 +10,7 @@ import stylesBtn from '../../styles/buttons.module.scss'
 import stylesCard from './Note.module.scss'
 import useNotes from '../../hooks/useNotes'
 import useBoolean from '../../hooks/useBoolean'
+import ManageAttachments from '../manageAttachments/ManageAttachments'
 
 interface INote {
   note: NoteType
@@ -18,6 +19,8 @@ interface INote {
   handleEditNote: (note: NoteType, cb?: () => void) => void
   filterNotes: (categoryId: string) => void
   categories: ICategory[]
+  handleDeleteAttachment: (attachmentId: string) => void
+  handleSaveAttachment: (data: FormData, cb: () => void) => void
 }
 
 const Note = ({
@@ -27,15 +30,21 @@ const Note = ({
   handleEditNote,
   filterNotes,
   categories: categoriesArray,
+  handleDeleteAttachment,
+  handleSaveAttachment,
 }: INote) => {
   const [displayModal, { setFalse: handleClose, setTrue: openModal }] = useBoolean(false)
   const [displayRemoveModal, { setFalse: closeRemoveModal, setTrue: openRemoveModal }] = useBoolean(false)
   const [displayEditModal, { setFalse: closeEditModal, setTrue: openEditModal }] = useBoolean(false)
+  const [
+    displayManageAttatchmentsModal,
+    { setFalse: closeManageAttatchmentsModal, setTrue: openManageAttatchmentsModal },
+  ] = useBoolean(false)
+
+  const { notes: singleNote, isLoading, refresh } = useNotes(note._id)
   const { _id, title, desc, categories, pinIt, backgroundColor } = note
 
-  const { notes: singleNote, isLoading } = useNotes(_id)
-
-  const bgColor = BG_COLORS.find(bg => bg.id === backgroundColor)
+  const bgColor = !isLoading ? BG_COLORS.find(bg => bg.id === backgroundColor) : null
 
   const pinItOnChange = () => {
     const editNote = {
@@ -87,7 +96,7 @@ const Note = ({
                   )
                 })}
           </div>
-          <div className='d-grid gap-2 d-md-flex justify-content-md-between mt-2'>
+          <div className='d-grid gap-2 d-md-flex justify-content-md-between mt-2 align-items-center'>
             <div className='gap-1 d-flex justify-content-start'>
               <button
                 type='button'
@@ -112,6 +121,14 @@ const Note = ({
                 title='Duplicate note'
               >
                 <i className='bi bi-files'></i>
+              </button>
+              <button
+                type='button'
+                className={`btn btn-warning btn-sm ${stylesBtn.btn__primary}`}
+                onClick={openManageAttatchmentsModal}
+                title='Manage attachments'
+              >
+                <i className='bi bi-paperclip'></i>
               </button>
             </div>
             <button type='button' className={`btn btn-primary btn-sm ${stylesBtn.btn__secondary}`} onClick={openModal}>
@@ -147,6 +164,17 @@ const Note = ({
           handleEditNote={handleEditNote}
           categories={categoriesArray}
           isOpen={displayEditModal}
+        />
+      )}
+      {displayManageAttatchmentsModal && singleNote[0].attachments && (
+        <ManageAttachments
+          attachments={singleNote[0].attachments}
+          handleModalClose={closeManageAttatchmentsModal}
+          isOpen={displayManageAttatchmentsModal}
+          handleRemoveAttachment={handleDeleteAttachment}
+          handleSaveAttachment={handleSaveAttachment}
+          noteId={_id}
+          refreshNote={refresh}
         />
       )}
     </>
