@@ -1,34 +1,51 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ICategory } from '../addCategory/AddCategory'
 import Modal from '../modal/Modal'
 import stylesBtn from '../../styles/buttons.module.scss'
+import { isEqual } from '../../helpers/isEqual'
+import Spinner from '../spinner/Spinner'
+import useFetch from '../../hooks/useFetch'
 
 interface IManageCategories {
   categories: ICategory[]
   handleCloseManageModal: () => void
-  handleRemoveCategory: (categoryId: string) => void
-  handleEditCategory: (category: ICategory, cb?: () => void) => void
+  update: (categoryArray: ICategory[]) => void
   isOpen: boolean
 }
 
-const ManageCategories = ({
-  categories,
-  handleEditCategory,
-  handleCloseManageModal,
-  handleRemoveCategory,
-  isOpen,
-}: IManageCategories) => {
+const ManageCategories = ({ categories, handleCloseManageModal, update, isOpen }: IManageCategories) => {
   const inputRefs = useRef<HTMLInputElement[]>([])
+  const { data, isLoading, fetchData } = useFetch<ICategory>()
+  const [activeBtnName, setActiveBtnName] = useState<string>('')
+  const [currentMethod, setCurrentMethod] = useState<string>('')
 
-  const test = (id: string, elIndex: number) => {
+  const removeCategory = (categoryId: string) => {
+    fetchData(`categories/${categoryId}`, 'DELETE')
+    setCurrentMethod('DELETE')
+  }
+
+  const updateCategory = (id: string, elIndex: number) => {
     const inputRef = inputRefs.current[elIndex]
-    const editCategory = {
+    const category = {
       ...categories[elIndex],
       name: inputRef.value,
     }
-
-    handleEditCategory(editCategory)
+    setCurrentMethod('PATCH')
+    fetchData(`categories/${id}`, 'PATCH', category)
   }
+
+  useEffect(() => {
+    if (currentMethod === 'DELETE' && data) {
+      const removeCategory = categories.filter(category => category._id !== data._id)
+      update(removeCategory)
+    }
+    if (currentMethod === 'PATCH' && data) {
+      const editCategory = categories.map(categoryEl =>
+        categoryEl._id === data._id ? { ...categoryEl, ...data } : categoryEl,
+      )
+      update(editCategory)
+    }
+  }, [data, currentMethod])
 
   return (
     <Modal title='Manage Categories' isDisabledBtn={true} handleClose={handleCloseManageModal} isOpen={isOpen}>
@@ -54,17 +71,33 @@ const ManageCategories = ({
                 <td>
                   <button
                     className={`btn btn-sm btn-warning ${stylesBtn.btn__primary}`}
-                    onClick={() => test(id, index)}
+                    onClick={() => {
+                      setActiveBtnName(`update-${index}`)
+                      updateCategory(id, index)
+                    }}
+                    aria-label='Update category'
                   >
-                    <i className='bi bi-check2'></i>
+                    {isLoading && isEqual<string>(activeBtnName, `update-${index}`) ? (
+                      <Spinner altText='Updating...' classCSS='text-white' />
+                    ) : (
+                      <i className='bi bi-check2'></i>
+                    )}
                   </button>
                 </td>
                 <td>
                   <button
                     className={`btn btn-sm btn-danger ${stylesBtn.btn__danger}`}
-                    onClick={() => handleRemoveCategory(id)}
+                    onClick={() => {
+                      setActiveBtnName(`delete-${index}`)
+                      removeCategory(id)
+                    }}
+                    aria-label='Remove category'
                   >
-                    <i className='bi bi-trash'></i>
+                    {isLoading && isEqual<string>(activeBtnName, `delete-${index}`) ? (
+                      <Spinner altText='Removing...' classCSS='text-white' />
+                    ) : (
+                      <i className='bi bi-trash'></i>
+                    )}
                   </button>
                 </td>
               </tr>

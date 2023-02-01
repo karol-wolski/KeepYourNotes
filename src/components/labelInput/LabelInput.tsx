@@ -6,19 +6,23 @@ interface ILabelInput {
   labelText: string
   isLabelVisible: boolean
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   placeholder?: string
   value?: string
   multiple?: boolean
+  inputRef?: React.RefObject<HTMLInputElement>
 }
 const LabelInput = ({
   id,
   type,
   labelText,
   onChange,
+  onKeyDown,
   isLabelVisible,
   placeholder,
   value,
   multiple = false,
+  inputRef,
 }: ILabelInput) => {
   return (
     <>
@@ -30,10 +34,12 @@ const LabelInput = ({
         className={`form-control ${styles.input}`}
         id={id}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         name={id}
         placeholder={placeholder}
         defaultValue={value}
         multiple={multiple}
+        ref={inputRef}
       />
     </>
   )
