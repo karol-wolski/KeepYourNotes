@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { ICategory, INewCategory } from '../components/addCategory/AddCategory'
 import AddNote from '../components/add-note/AddNote'
 import Categories from '../components/categories/Categories'
 import Navigation from '../components/navigation/Navigation'
@@ -13,7 +12,7 @@ import LoaderPage from '../components/loaderPage/LoaderPage'
 
 const NotesPage = () => {
   const { notes, isLoading, setNotes } = useNotes()
-  const { categories, setCategories } = useCategories()
+  const { categories } = useCategories()
   const [filteredNotes, setFilteredNotes] = useState<Note[]>(notes)
   const [isOpenAddNoteModal, { setTrue: openAddNoteModal, setFalse: closeAddNoteModal }] = useBoolean()
   const [isOpenCategories, { setFalse: closeCategories, toggle: toggleCategories }] = useBoolean()
@@ -64,14 +63,6 @@ const NotesPage = () => {
     })
   }
 
-  const handleSaveCategory = (data: INewCategory) => {
-    asyncFetch('categories', 'POST', data).then(({ data: resData }) => {
-      if (resData) {
-        setCategories(prevState => [...prevState, resData])
-      }
-    })
-  }
-
   const filterByCategory = (categoryId: string) => {
     let filteredNotes = notes.filter(note => note.categories?.find(category => category === categoryId))
     if (categoryId === 'all') filteredNotes = notes
@@ -81,27 +72,6 @@ const NotesPage = () => {
   const searchByTitle = (text: string) => {
     const filteredNotes = notes.filter(note => note.title.toLowerCase().includes(text.toLowerCase()))
     setFilteredNotes(filteredNotes)
-  }
-
-  const handleRemoveCategory = (categoryId: string) => {
-    asyncFetch(`categories/${categoryId}`, 'DELETE').then(response => {
-      if (response.data) {
-        const removeCategory = categories.filter(category => category._id !== categoryId)
-        setCategories(removeCategory)
-      }
-    })
-  }
-
-  const handleEditCategory = (category: ICategory, cb?: () => void) => {
-    asyncFetch(`categories/${category._id}`, 'PATCH', category).then(response => {
-      if (response.message === 'Success') {
-        const editCategory = categories.map(categoryEl =>
-          categoryEl._id === category._id ? { ...categoryEl, ...category } : categoryEl,
-        )
-        setCategories(editCategory)
-        if (cb) cb()
-      }
-    })
   }
 
   const handleDeleteAttachment = (attachmentId: string) => {
@@ -153,15 +123,7 @@ const NotesPage = () => {
         />
       )}
       {isOpenCategories && (
-        <Categories
-          handleClose={closeCategories}
-          categories={categories}
-          filter={filterByCategory}
-          handleRemoveCategory={handleRemoveCategory}
-          handleEditCategory={handleEditCategory}
-          handleSaveCategory={handleSaveCategory}
-          isOpen={isOpenCategories}
-        />
+        <Categories handleClose={closeCategories} filter={filterByCategory} isOpen={isOpenCategories} />
       )}
     </>
   )

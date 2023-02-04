@@ -1,28 +1,17 @@
 import useBoolean from '../../hooks/useBoolean'
-import AddCategory, { ICategory, INewCategory } from '../addCategory/AddCategory'
+import AddCategory from '../addCategory/AddCategory'
 import ManageCategories from '../manageCategories/ManageCategories'
 import FocusTrap from 'focus-trap-react'
 import stylesBtn from '../../styles/buttons.module.scss'
-
+import useCategories from '../../hooks/useCategories'
 interface ICategories {
   handleClose: () => void
-  categories: ICategory[]
   filter: (categoryId: string) => void
-  handleRemoveCategory: (categoryId: string) => void
-  handleEditCategory: (category: ICategory, cb?: () => void) => void
-  handleSaveCategory: (category: INewCategory, cb?: () => void) => void
   isOpen: boolean
 }
 
-const Categories = ({
-  handleClose,
-  categories,
-  filter,
-  handleRemoveCategory,
-  handleEditCategory,
-  handleSaveCategory,
-  isOpen,
-}: ICategories) => {
+const Categories = ({ handleClose, filter, isOpen }: ICategories) => {
+  const { categories, update, isLoading, errors } = useCategories()
   const [isOpenManageModal, { setTrue: openManageModal, setFalse: closeManageModal }] = useBoolean()
 
   const categoryOnClick = (id: string) => {
@@ -47,7 +36,7 @@ const Categories = ({
             ></button>
           </div>
           <div className='offcanvas-body'>
-            <AddCategory handleSaveCategory={handleSaveCategory} categories={categories} />
+            <AddCategory update={update} categories={categories} />
             <div className='list-group'>
               <button type='button' className={`btn btn-primary ${stylesBtn.btn__secondary}`} onClick={openManageModal}>
                 <i className='bi bi-folder'></i> Manage categories
@@ -55,6 +44,7 @@ const Categories = ({
               <button type='button' className='list-group-item list-group-item-action' onClick={() => filter('all')}>
                 all
               </button>
+              {isLoading && <p>Loading...</p>}
               {categories &&
                 categories.map(({ _id: id, name }) => (
                   <button
@@ -66,6 +56,7 @@ const Categories = ({
                     {name}
                   </button>
                 ))}
+              {errors && <p>{errors}</p>}
             </div>
           </div>
         </div>
@@ -74,8 +65,7 @@ const Categories = ({
         <ManageCategories
           categories={categories}
           handleCloseManageModal={closeManageModal}
-          handleEditCategory={handleEditCategory}
-          handleRemoveCategory={handleRemoveCategory}
+          update={update}
           isOpen={isOpenManageModal}
         />
       )}
