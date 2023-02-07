@@ -1,22 +1,25 @@
 import { EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
-import { SetStateAction, useState, useRef } from 'react'
+import { SetStateAction, useState, useRef, useEffect } from 'react'
 import { ICategory } from '../addCategory/AddCategory'
-import { AddNote as AddNoteType } from '../notes/Notes'
+import { AddNote as AddNoteType, Note } from '../notes/Notes'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import LabelInput from '../labelInput/LabelInput'
 import Modal from '../modal/Modal'
 import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
+import useFetch from '../../hooks/useFetch'
+import { IUpdateNotesArray } from '../../pages/Notes'
 
 interface IAddNote {
-  handleSaveNote: (data: FormData, cb: (msg: string) => void) => void
+  update: (obj: IUpdateNotesArray) => void
   handleClose: () => void
   categories: ICategory[]
   isOpen: boolean
 }
 
-const AddNote = ({ handleSaveNote, handleClose, categories, isOpen }: IAddNote) => {
+const AddNote = ({ update, handleClose, categories, isOpen }: IAddNote) => {
+  const { data, errors, isLoading, fetchData, statusCode } = useFetch<Note>()
   const formRef = useRef<HTMLFormElement>(null)
   const [note, setNote] = useState<AddNoteType>({
     title: '',
@@ -24,9 +27,6 @@ const AddNote = ({ handleSaveNote, handleClose, categories, isOpen }: IAddNote) 
     pinIt: false,
     categories: [],
   })
-  const [errors, setErrors] = useState('')
-
-  const errorMsg = (msg: string) => setErrors(msg)
 
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
 
@@ -64,13 +64,22 @@ const AddNote = ({ handleSaveNote, handleClose, categories, isOpen }: IAddNote) 
     data.append('desc', note.desc)
     data.append('pinIt', JSON.stringify(note.pinIt))
     if (note.categories) data.append('categories', JSON.stringify(note.categories))
-    handleSaveNote(data, errorMsg)
+    fetchData('notes', 'POST_FORM_DATA', data)
   }
+
+  useEffect(() => {
+    if (statusCode === 201 && data) {
+      update({
+        method: 'POST',
+        data: data,
+      })
+    }
+  }, [data, statusCode])
 
   return (
     <Modal
       title='Add note'
-      btnName='Save'
+      btnName={isLoading ? 'Saving...' : 'Save'}
       isDisabledBtn={!isVisibleSendButton}
       handleClose={handleClose}
       isOpen={isOpen}

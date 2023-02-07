@@ -4,64 +4,49 @@ import Categories from '../components/categories/Categories'
 import Navigation from '../components/navigation/Navigation'
 import Notes, { Note } from '../components/notes/Notes'
 import SearchForm from '../components/searchForm/SearchForm'
-import { asyncFetch } from '../helpers/asyncFetch'
 import useBoolean from '../hooks/useBoolean'
 import useCategories from '../hooks/useCategories'
 import useNotes from '../hooks/useNotes'
 import LoaderPage from '../components/loaderPage/LoaderPage'
 
+export interface IUpdateNotesArray {
+  method: string
+  data: Note
+}
+
 const NotesPage = () => {
-  const { notes, isLoading, setNotes } = useNotes()
+  const { notes = [], errors, isLoading, update } = useNotes<Note[]>()
   const { categories } = useCategories()
   const [filteredNotes, setFilteredNotes] = useState<Note[]>(notes)
   const [isOpenAddNoteModal, { setTrue: openAddNoteModal, setFalse: closeAddNoteModal }] = useBoolean()
   const [isOpenCategories, { setFalse: closeCategories, toggle: toggleCategories }] = useBoolean()
+  const [modifyNote, setModifyNote] = useState<IUpdateNotesArray>()
+
+  const updateNotesArray = (obj: IUpdateNotesArray) => setModifyNote(obj)
 
   useEffect(() => {
-    const sortArray = notes.sort((a, b) => Number(b.pinIt) - Number(a.pinIt))
-    setFilteredNotes(sortArray)
+    if (notes.length > 0) {
+      const sortArray = notes.sort((a, b) => Number(b.pinIt) - Number(a.pinIt))
+      setFilteredNotes(sortArray)
+    }
   }, [notes])
 
-  const handleSaveNewNote = (data: FormData, cb: (msg: string) => void) => {
-    asyncFetch('notes', 'POST_FORM_DATA', data).then(response => {
-      if (response.errors) {
-        cb(response.message)
-      } else {
-        setNotes(prevState => [...prevState, response.data])
-        closeAddNoteModal()
-      }
-    })
-  }
-
-  const handleRemoveNote = (noteId: string) => {
-    asyncFetch(`notes/${noteId}`, 'DELETE').then(response => {
-      if (response.data) {
-        const removeNOte = notes.filter(note => note._id !== noteId)
-        setNotes(removeNOte)
-      }
-    })
-  }
-
-  const handleDuplicateNote = (noteId: string) => {
-    const note = notes.find(note => note._id === noteId)
-    if (note) {
-      asyncFetch(`notes/duplicate/${noteId}`, 'GET').then(response => {
-        if (response.data) {
-          setNotes(prevState => [...prevState, response.data])
-        }
-      })
+  useEffect(() => {
+    if (modifyNote?.method === 'DELETE' && modifyNote?.data) {
+      const removeNote = notes.filter(note => note._id !== modifyNote.data._id)
+      update(removeNote)
     }
-  }
-
-  const handleEditNote = (note: Note, cb?: () => void) => {
-    asyncFetch(`notes/${note._id}`, 'PATCH', note).then(response => {
-      if (response.message === 'Success') {
-        const editNotes = notes.map(noteEl => (noteEl._id === note._id ? { ...noteEl, ...note } : noteEl))
-        setNotes(editNotes)
-        if (cb) cb()
-      }
-    })
-  }
+    if (modifyNote?.method === 'PATCH' && modifyNote?.data) {
+      const editNotes = notes.map(noteEl =>
+        noteEl._id === modifyNote?.data._id ? { ...noteEl, ...modifyNote.data } : noteEl,
+      )
+      update(editNotes)
+    }
+    if (modifyNote?.method === 'POST' && modifyNote?.data) {
+      const saveNote = [...notes, modifyNote.data]
+      update(saveNote)
+    }
+  }, [modifyNote])
 
   const filterByCategory = (categoryId: string) => {
     let filteredNotes = notes.filter(note => note.categories?.find(category => category === categoryId))
@@ -74,50 +59,19 @@ const NotesPage = () => {
     setFilteredNotes(filteredNotes)
   }
 
-  const handleDeleteAttachment = (attachmentId: string) => {
-    asyncFetch(`attachment/${attachmentId}`, 'DELETE').then(response => {
-      if (response.data) {
-        console.log(response.data)
-      }
-    })
-  }
-
-  const handleSaveAttachment = (data: FormData, cb: (msg?: string) => void) => {
-    asyncFetch('attachment', 'POST_FORM_DATA', data).then(response => {
-      if (response.errors) {
-        cb(response.message)
-      } else {
-        if (response.data) {
-          cb('test')
-        }
-      }
-    })
-  }
-
   return (
     <>
       <div className='App'>
         <Navigation openAddNoteModal={openAddNoteModal} openCategories={toggleCategories} />
         <SearchForm searchByTitle={searchByTitle} />
-        {isLoading ? (
-          <LoaderPage isDark={false} />
-        ) : (
-          <Notes
-            notesArray={filteredNotes}
-            handleRemoveNote={handleRemoveNote}
-            handleDuplicateNote={handleDuplicateNote}
-            handleEditNote={handleEditNote}
-            filterNotes={filterByCategory}
-            categories={categories}
-            handleDeleteAttachment={handleDeleteAttachment}
-            handleSaveAttachment={handleSaveAttachment}
-          />
-        )}
+        {errors && <p>{errors}</p>}
+        {isLoading && <LoaderPage isDark={false} />}
+        {filteredNotes && <Notes notes={filteredNotes} update={updateNotesArray} filterNotes={filterByCategory} />}
       </div>
       {isOpenAddNoteModal && (
         <AddNote
           handleClose={closeAddNoteModal}
-          handleSaveNote={handleSaveNewNote}
+          update={updateNotesArray}
           categories={categories}
           isOpen={isOpenAddNoteModal}
         />

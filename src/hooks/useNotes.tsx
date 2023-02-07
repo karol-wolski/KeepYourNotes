@@ -1,25 +1,28 @@
 import { useEffect, useState } from 'react'
-import { Note } from '../components/notes/Notes'
-import { asyncFetch } from '../helpers/asyncFetch'
+import useFetch from './useFetch'
 
-const useNotes = (id?: string) => {
-  const [notes, setNotes] = useState<Note[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [shouldRefetch, refetch] = useState({})
-  const refresh = () => refetch({})
-
+const useNotes = <T,>(id?: string) => {
+  const { data, errors, isLoading, fetchData } = useFetch<T>()
+  const [notes, setNotes] = useState<T>()
   const path = id ? `notes/${id}` : 'notes'
+  const update = (note: T) => setNotes(note)
+  const [refetch, setRefetch] = useState({})
+
+  const refresh = () => {
+    setRefetch({})
+  }
 
   useEffect(() => {
-    asyncFetch(path, 'GET').then(response => {
-      if (response.data) {
-        setNotes(response.data)
-        setIsLoading(false)
-      }
-    })
-  }, [id, shouldRefetch])
+    fetchData(path, 'GET')
+  }, [refetch])
 
-  return { notes, isLoading, setNotes, refresh }
+  useEffect(() => {
+    if (data) {
+      setNotes(data)
+    }
+  }, [data])
+
+  return { notes, errors, isLoading, fetchData, refresh, update }
 }
 
 export default useNotes
