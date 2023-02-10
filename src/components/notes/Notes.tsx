@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { ICategory } from '../addCategory/AddCategory'
+import useCategories from '../../hooks/useCategories'
+import { IUpdateNotesArray } from '../../pages/Notes'
 import Note from '../note/Note'
 
 export type Attachment = {
@@ -28,49 +28,22 @@ export type Note = {
 }
 
 interface INotes {
-  notesArray: Notes
-  handleRemoveNote: (noteId: string) => void
-  handleDuplicateNote: (noteId: string) => void
-  handleEditNote: (note: Note, cb?: () => void) => void
   filterNotes: (categoryId: string) => void
-  categories: ICategory[]
-  handleDeleteAttachment: (attachmentId: string) => void
-  handleSaveAttachment: (data: FormData, cb: (msg?: string) => void) => void
+  notes: Note[]
+  update: (obj: IUpdateNotesArray) => void
 }
 
-type Notes = Note[]
-
-const Notes = ({
-  notesArray,
-  handleRemoveNote,
-  handleDuplicateNote,
-  handleEditNote,
-  filterNotes,
-  categories,
-  handleDeleteAttachment,
-  handleSaveAttachment,
-}: INotes) => {
-  const [notes, setNotes] = useState(notesArray)
-
-  useEffect(() => setNotes(notesArray), [notesArray])
+const Notes = ({ notes, filterNotes, update }: INotes) => {
+  const { categories } = useCategories()
 
   return (
     <div className='container'>
       <>
-        {notes.length > 0 ? (
+        {notes && notes.length > 0 ? (
           <div className='row g-3'>
             {notes.map(note => (
               <div key={note._id} className='col-12 col-sm-6 col-md-4 col-xl-3'>
-                <Note
-                  note={note}
-                  handleRemoveNote={handleRemoveNote}
-                  handleDuplicateNote={handleDuplicateNote}
-                  handleEditNote={handleEditNote}
-                  filterNotes={filterNotes}
-                  categories={categories}
-                  handleDeleteAttachment={handleDeleteAttachment}
-                  handleSaveAttachment={handleSaveAttachment}
-                />
+                <Note note={note} filterNotes={filterNotes} categories={categories} update={update} />
               </div>
             ))}
           </div>

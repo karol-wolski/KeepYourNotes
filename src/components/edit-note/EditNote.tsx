@@ -8,15 +8,18 @@ import { Note } from '../notes/Notes'
 import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
 import Modal from '../modal/Modal'
 import LabelInput from '../labelInput/LabelInput'
+import useFetch from '../../hooks/useFetch'
+import { IUpdateNotesArray } from '../../pages/Notes'
 interface IEditNote {
   note: Note
-  handleEditNote: (data: Note, cb?: () => void) => void
   handleClose: () => void
   categories: ICategory[]
   isOpen: boolean
+  update: (obj: IUpdateNotesArray) => void
 }
 
-const EditNote = ({ note, handleEditNote, handleClose, categories, isOpen }: IEditNote) => {
+const EditNote = ({ note, handleClose, categories, isOpen, update }: IEditNote) => {
+  const { data, isLoading, fetchData, statusCode } = useFetch<Note>()
   const [editNote, setNote] = useState<Note>(note)
   const [bgColors] = useState(BG_COLORS)
   const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
@@ -32,6 +35,15 @@ const EditNote = ({ note, handleEditNote, handleClose, categories, isOpen }: IEd
   useEffect(() => {
     setEditorState(htmlToDraftBlocks(note.desc))
   }, [])
+
+  useEffect(() => {
+    if (statusCode === 200 && data) {
+      update({
+        method: 'PATCH',
+        data: data,
+      })
+    }
+  }, [data, statusCode])
 
   const isVisibleSendButton = !!editNote.title.length && !!editNote.desc.length
 
@@ -75,12 +87,14 @@ const EditNote = ({ note, handleEditNote, handleClose, categories, isOpen }: IEd
     })
   }
 
+  const saveNote = (note: Note) => fetchData(`notes/${note._id}`, 'PATCH', note)
+
   return (
     <Modal
       title='Edit note'
-      btnName='Save'
+      btnName={isLoading ? 'Saving...' : 'Save'}
       handleClose={handleClose}
-      handleBtnEvent={() => handleEditNote(editNote, handleClose)}
+      handleBtnEvent={() => saveNote(editNote)}
       isDisabledBtn={!isVisibleSendButton}
       isOpen={isOpen}
     >

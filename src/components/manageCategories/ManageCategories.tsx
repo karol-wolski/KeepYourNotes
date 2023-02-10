@@ -72,12 +72,12 @@ const ManageCategories = ({ categories, handleCloseManageModal, update, isOpen }
                   <button
                     className={`btn btn-sm btn-warning ${stylesBtn.btn__primary}`}
                     onClick={() => {
-                      setActiveBtnName(`update-${index}`)
+                      setActiveBtnName(`update-${id}`)
                       updateCategory(id, index)
                     }}
                     aria-label='Update category'
                   >
-                    {isLoading && isEqual<string>(activeBtnName, `update-${index}`) ? (
+                    {isLoading && isEqual<string>(activeBtnName, `update-${id}`) ? (
                       <Spinner altText='Updating...' classCSS='text-white' />
                     ) : (
                       <i className='bi bi-check2'></i>
@@ -88,12 +88,12 @@ const ManageCategories = ({ categories, handleCloseManageModal, update, isOpen }
                   <button
                     className={`btn btn-sm btn-danger ${stylesBtn.btn__danger}`}
                     onClick={() => {
-                      setActiveBtnName(`delete-${index}`)
+                      setActiveBtnName(`delete-${id}`)
                       removeCategory(id)
                     }}
                     aria-label='Remove category'
                   >
-                    {isLoading && isEqual<string>(activeBtnName, `delete-${index}`) ? (
+                    {isLoading && isEqual<string>(activeBtnName, `delete-${id}`) ? (
                       <Spinner altText='Removing...' classCSS='text-white' />
                     ) : (
                       <i className='bi bi-trash'></i>
