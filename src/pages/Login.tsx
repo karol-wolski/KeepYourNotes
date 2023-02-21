@@ -29,7 +29,7 @@ const LoginPage = () => {
       <LoginForm handleOnSubmit={handleOnSubmit} />
 
       <div className='d-flex justify-content-between align-items-center mt-2'>
-        <Link to='/remindPassword' className={`${styles.link} ${styles['link__reset']}`}>
+        <Link to='/remind-password' className={`${styles.link} ${styles['link__reset']}`}>
           Reset your password
         </Link>
         <Link to='/signup' className={`${styles.link} ${styles['link__sign-up']}`}>
