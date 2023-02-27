@@ -7,6 +7,10 @@ export type linkArray = ILinkObj[]
 
 export const settingsLinksArray: linkArray = [
   {
+    path: '/profile/app',
+    name: 'Application Settings',
+  },
+  {
     path: '/profile/edit',
     name: 'Profile',
   },

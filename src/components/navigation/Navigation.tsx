@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { Link, useLocation } from 'react-router-dom'
 import { AuthContext, IAuthContext } from '../../context/AuthContext'
 import { removeFromLocalStorage } from '../../helpers/localStorage'
@@ -49,7 +50,7 @@ const Navigation = ({ openAddNoteModal, openCategories }: INavigation) => {
             {isProfileSettings ? (
               <>
                 <Link className='btn text-white' to='/' role='button'>
-                  Notes
+                  <FormattedMessage id='app.notes' defaultMessage='Notes' />
                 </Link>
               </>
             ) : (
@@ -62,14 +63,14 @@ const Navigation = ({ openAddNoteModal, openCategories }: INavigation) => {
                   aria-controls='offcanvasScrolling'
                   onClick={openCategories}
                 >
-                  Categories
+                  <FormattedMessage id='app.categories' defaultMessage='Categories' />
                 </button>
                 <button
                   type='button'
                   className={`btn btn-primary btn-sm ${stylesBtn.btn__primary}`}
                   onClick={openAddNoteModal}
                 >
-                  Add note
+                  <FormattedMessage id='app.addNote' defaultMessage='Add note' />
                 </button>
               </>
             )}
@@ -83,18 +84,23 @@ const Navigation = ({ openAddNoteModal, openCategories }: INavigation) => {
               aria-expanded={isUserNavOpen ? true : false}
               onClick={toggleNavOpen}
             >
-              Settings
+              <FormattedMessage id='app.settings' defaultMessage='Settings' />
             </Link>
 
             <ul className={`${isUserNavOpen ? 'd-block' : ''} dropdown-menu`}>
               <li>
+                <Link className='btn' to='/profile/app' role='button'>
+                  <FormattedMessage id='app.application' defaultMessage='Application' />
+                </Link>
+              </li>
+              <li>
                 <Link className='btn' to='/profile/edit' role='button'>
-                  Profile
+                  <FormattedMessage id='app.profile' defaultMessage='Profile' />
                 </Link>
               </li>
               <li>
                 <button className='dropdown-item' onClick={logOut}>
-                  Logout
+                  <FormattedMessage id='app.logout' defaultMessage='Logout' />
                 </button>
               </li>
             </ul>
