@@ -26,7 +26,7 @@ const LoginPage = () => {
   }
 
   return (
-    <LayoutForm title='Login'>
+    <LayoutForm title={<FormattedMessage id='app.login' defaultMessage='Login' />}>
       <LoginForm handleOnSubmit={handleOnSubmit} />
 
       <div className='d-flex justify-content-between align-items-center mt-2'>

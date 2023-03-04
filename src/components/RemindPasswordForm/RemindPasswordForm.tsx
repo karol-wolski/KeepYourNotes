@@ -4,6 +4,7 @@ import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
+import { FormattedMessage } from 'react-intl'
 
 interface IRemindPassword {
   handleOnSubmit: (email: string, cb: (status: string, msg: string) => void) => void
@@ -62,7 +63,13 @@ const RemindPasswordForm = ({ handleOnSubmit }: IRemindPassword) => {
   return (
     <form>
       <div className='mb-3'>
-        <LabelInput id='email' type='email' labelText='Email' onChange={setDataOnChange} isLabelVisible />
+        <LabelInput
+          id='email'
+          type='email'
+          labelText={<FormattedMessage id='app.email' defaultMessage='Email' />}
+          onChange={setDataOnChange}
+          isLabelVisible
+        />
         {errors.email && <Alert type={ALERT_TYPE.DANGER} text={errors.email} />}
       </div>
       {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
@@ -74,7 +81,7 @@ const RemindPasswordForm = ({ handleOnSubmit }: IRemindPassword) => {
         onClick={e => sendData(e)}
         disabled={!isVisibleSendButton}
       >
-        Submit
+        <FormattedMessage id='app.submit' defaultMessage='Submit' />
       </button>
     </form>
   )

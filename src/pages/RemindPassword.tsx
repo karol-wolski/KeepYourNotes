@@ -1,3 +1,4 @@
+import { FormattedMessage } from 'react-intl'
 import RemindPasswordForm from '../components/RemindPasswordForm/RemindPasswordForm'
 import { STATUS } from '../constants/constants'
 import { asyncFetch } from '../helpers/asyncFetch'
@@ -15,7 +16,7 @@ const RemindPasswordPage = () => {
   }
 
   return (
-    <LayoutForm title='Remind Password'>
+    <LayoutForm title={<FormattedMessage id='app.remindPassword' defaultMessage='Remiond password' />}>
       <RemindPasswordForm handleOnSubmit={handleOnSubmit} />
     </LayoutForm>
   )

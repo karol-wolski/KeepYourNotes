@@ -3,6 +3,7 @@ import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
+import { FormattedMessage } from 'react-intl'
 
 interface IResetPassword {
   handleOnSubmit: (password: string, cb: (msg: string) => void) => void
@@ -60,14 +61,20 @@ const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
   return (
     <form>
       <div className='mb-3'>
-        <LabelInput id='password' type='password' labelText='Password' onChange={setDataOnChange} isLabelVisible />
+        <LabelInput
+          id='password'
+          type='password'
+          labelText={<FormattedMessage id='app.password' defaultMessage='Password ' />}
+          onChange={setDataOnChange}
+          isLabelVisible
+        />
         {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
       </div>
       <div className='mb-3'>
         <LabelInput
           id='confirmPassword'
           type='password'
-          labelText='Confirm Password'
+          labelText={<FormattedMessage id='app.passwordConfirm' defaultMessage='Confirm password' />}
           onChange={setDataOnChange}
           isLabelVisible
         />
@@ -82,7 +89,7 @@ const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
         onClick={e => sendData(e)}
         disabled={!isVisibleSendButton}
       >
-        Submit
+        <FormattedMessage id='app.submit' defaultMessage='Submit' />
       </button>
     </form>
   )
