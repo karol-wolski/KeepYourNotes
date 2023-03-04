@@ -3,7 +3,7 @@ import styles from './LayoutForm.module.scss'
 
 interface ILayoutForm {
   children: ReactNode
-  title: string
+  title: string | ReactNode
 }
 const LayoutForm = ({ children, title }: ILayoutForm) => {
   return (

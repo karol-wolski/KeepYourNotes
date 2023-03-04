@@ -1,4 +1,5 @@
 import { ReactElement, useState } from 'react'
+import { useIntl } from 'react-intl'
 import styles from './LabelInput.module.scss'
 
 interface ILabelInput {
@@ -29,6 +30,12 @@ const LabelInput = ({
   const toggle = () => setShowPassword(prevState => !prevState)
   const inputTypeIfPassword = type === 'password' && showPassword ? 'text' : 'password'
 
+  const { formatMessage } = useIntl()
+
+  const showHidePassword = showPassword
+    ? formatMessage({ id: 'app.hidePassword', defaultMessage: 'Hide password' })
+    : formatMessage({ id: 'app.showPassword', defaultMessage: 'Show password' })
+
   return (
     <>
       <label htmlFor={id} className={`form-label ${!isLabelVisible && 'visually-hidden'} `}>
@@ -52,8 +59,8 @@ const LabelInput = ({
             type='button'
             onClick={toggle}
             className='position-absolute top-0 end-0 h-100 bg-transparent border-0'
-            aria-label='Show and hide password'
-            title='Show and hide password'
+            aria-label={showHidePassword}
+            title={showHidePassword}
           >
             {showPassword ? <i className='bi bi-eye-slash'></i> : <i className='bi bi-eye'></i>}
           </button>
