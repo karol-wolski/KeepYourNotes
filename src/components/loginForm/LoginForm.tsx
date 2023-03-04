@@ -3,6 +3,7 @@ import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
+import { FormattedMessage } from 'react-intl'
 
 interface ILoginForm {
   handleOnSubmit: (
@@ -58,11 +59,23 @@ const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
   return (
     <form>
       <div className='mb-3'>
-        <LabelInput id='email' type='email' labelText='Email' onChange={setDataOnChange} isLabelVisible />
+        <LabelInput
+          id='email'
+          type='email'
+          labelText={<FormattedMessage id='app.email' defaultMessage='Email' />}
+          onChange={setDataOnChange}
+          isLabelVisible
+        />
         {errors.email && <Alert type={ALERT_TYPE.DANGER} text={errors.email} />}
       </div>
       <div className='mb-3'>
-        <LabelInput id='password' type='password' labelText='Password' onChange={setDataOnChange} isLabelVisible />
+        <LabelInput
+          id='password'
+          type='password'
+          labelText={<FormattedMessage id='app.password' defaultMessage='Password' />}
+          onChange={setDataOnChange}
+          isLabelVisible
+        />
         {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
       </div>
       {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
@@ -73,7 +86,7 @@ const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
         onClick={e => sendData(e)}
         disabled={!isVisibleSendButton}
       >
-        Submit
+        <FormattedMessage id='app.submit' defaultMessage='Submit' />
       </button>
     </form>
   )
