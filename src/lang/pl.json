@@ -32,5 +32,7 @@
   "app.login": "Logowanie",
   "app.application": "Aplikacja",
   "app.language": "Język",
-  "app.notes": "Notatki"
+  "app.notes": "Notatki",
+  "app.showPassword": "Pokaż hasło",
+  "app.hidePassword": "Ukryj hasło"
 }

@@ -1,4 +1,5 @@
 import { useContext } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 import LoginForm from '../components/loginForm/LoginForm'
 import { AuthContext, IAuthContext } from '../context/AuthContext'
@@ -30,10 +31,10 @@ const LoginPage = () => {
 
       <div className='d-flex justify-content-between align-items-center mt-2'>
         <Link to='/remind-password' className={`${styles.link} ${styles['link__reset']}`}>
-          Reset your password
+          <FormattedMessage id='app.resetPassword' defaultMessage='Reset your password ' />
         </Link>
         <Link to='/signup' className={`${styles.link} ${styles['link__sign-up']}`}>
-          Sign up
+          <FormattedMessage id='app.signUp' defaultMessage='Sign up' />
         </Link>
       </div>
     </LayoutForm>

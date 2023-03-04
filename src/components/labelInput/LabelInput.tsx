@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { ReactElement, useState } from 'react'
 import styles from './LabelInput.module.scss'
 
 interface ILabelInput {
   id: string
   type: string
-  labelText: string
+  labelText: string | ReactElement
   isLabelVisible: boolean
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
@@ -28,6 +28,7 @@ const LabelInput = ({
   const [showPassword, setShowPassword] = useState(false)
   const toggle = () => setShowPassword(prevState => !prevState)
   const inputTypeIfPassword = type === 'password' && showPassword ? 'text' : 'password'
+
   return (
     <>
       <label htmlFor={id} className={`form-label ${!isLabelVisible && 'visually-hidden'} `}>
@@ -51,8 +52,8 @@ const LabelInput = ({
             type='button'
             onClick={toggle}
             className='position-absolute top-0 end-0 h-100 bg-transparent border-0'
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
-            title={showPassword ? 'Hide password' : 'Show password'}
+            aria-label='Show and hide password'
+            title='Show and hide password'
           >
             {showPassword ? <i className='bi bi-eye-slash'></i> : <i className='bi bi-eye'></i>}
           </button>
