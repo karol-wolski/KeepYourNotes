@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
+import { useIntl } from 'react-intl'
 
 interface ISearchForm {
   searchByTitle: (text: string) => void
@@ -16,6 +17,8 @@ const SearchForm = ({ searchByTitle }: ISearchForm) => {
     searchByTitle(searchTitle)
   }
 
+  const { formatMessage } = useIntl()
+
   return (
     <div className='container'>
       <div className='row'>
@@ -24,13 +27,13 @@ const SearchForm = ({ searchByTitle }: ISearchForm) => {
             <LabelInput
               id='searchInput'
               type='text'
-              placeholder='Search the note'
+              placeholder={formatMessage({ id: 'app.searchNote', defaultMessage: 'Search Notethe note' })}
               onChange={onChangeInput}
               isLabelVisible={false}
-              labelText='Search the note'
+              labelText={formatMessage({ id: 'app.searchNote', defaultMessage: 'Search the note' })}
             />
             <button type='submit' className={`btn btn-primary mx-1 ${stylesBtn.btn__secondary}`} onClick={sendText}>
-              Search
+              {formatMessage({ id: 'app.search', defaultMessage: 'Search' })}
             </button>
           </div>
         </form>
