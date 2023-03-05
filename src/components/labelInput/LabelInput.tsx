@@ -27,16 +27,17 @@ const LabelInput = ({
 }: ILabelInput) => {
   const [showPassword, setShowPassword] = useState(false)
   const toggle = () => setShowPassword(prevState => !prevState)
-  const inputTypeIfPassword = type === 'password' && showPassword ? 'text' : 'password'
+  const typePassword = type === 'password'
+  const inputTypeIfPassword = typePassword && showPassword ? 'text' : 'password'
 
   return (
     <>
       <label htmlFor={id} className={`form-label ${!isLabelVisible && 'visually-hidden'} `}>
         {labelText}
       </label>
-      <div className='position-relative'>
+      <div className={typePassword ? 'position-relative' : 'd-contents'}>
         <input
-          type={type === 'password' ? inputTypeIfPassword : type}
+          type={typePassword ? inputTypeIfPassword : type}
           className={`form-control ${styles.input}`}
           id={id}
           onChange={onChange}
