@@ -23,3 +23,7 @@ code {
 .link {
   text-decoration: none;
 }
+
+.d-contents {
+  display: contents;
+}
