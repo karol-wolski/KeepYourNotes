@@ -37,5 +37,8 @@
   "app.hidePassword": "Hide password",
   "app.goToPage": "Go to {page}.",
   "app.showAndHidePassword": "Show and hide password",
-  "app.searchNote": "Search the note"
+  "app.searchNote": "Search the note",
+  "app.saving": "Saving...",
+  "app.titleNote": "Note title",
+  "app.addFile": "Add file"
 }

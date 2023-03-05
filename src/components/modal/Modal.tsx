@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 import FocusTrap from 'focus-trap-react'
 import stylesBtn from '../../styles/buttons.module.scss'
 import stylesModal from './Modal.module.scss'
+import { useIntl } from 'react-intl'
 interface IModal {
   title: string
   children: ReactNode
@@ -23,6 +24,7 @@ const Modal = ({
   isOpen,
   btnSubmitType = 'button',
 }: IModal) => {
+  const { formatMessage } = useIntl()
   return (
     <FocusTrap active={isOpen}>
       <div className={`modal fade show ${stylesModal.modal}`} tabIndex={-1}>
@@ -46,7 +48,7 @@ const Modal = ({
                 data-bs-dismiss='modal'
                 onClick={handleClose}
               >
-                Close
+                {formatMessage({ id: 'app.close', defaultMessage: 'Close' })}
               </button>
               {btnName && (
                 <button

@@ -37,5 +37,8 @@
   "app.hidePassword": "Ukryj hasło",
   "app.goToPage": "Przejdź do {page}.",
   "app.showAndHidePassword": "Pokaż lub ukryj hasło",
-  "app.searchNote": "Szukaj notatkę"
+  "app.searchNote": "Szukaj notatkę",
+  "app.saving": "Zapisywanie...",
+  "app.titleNote": "Tytuł notatki",
+  "app.addFile": "Dodaj plik"
 }
