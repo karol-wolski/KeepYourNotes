@@ -5,6 +5,7 @@ import stylesBtn from '../../styles/buttons.module.scss'
 import { isEqual } from '../../helpers/isEqual'
 import Spinner from '../spinner/Spinner'
 import useFetch from '../../hooks/useFetch'
+import { useIntl } from 'react-intl'
 
 interface IManageCategories {
   categories: ICategory[]
@@ -47,14 +48,21 @@ const ManageCategories = ({ categories, handleCloseManageModal, update, isOpen }
     }
   }, [data, currentMethod])
 
+  const { formatMessage } = useIntl()
+
   return (
-    <Modal title='Manage Categories' isDisabledBtn={true} handleClose={handleCloseManageModal} isOpen={isOpen}>
+    <Modal
+      title={formatMessage({ id: 'app.manageCategories', defaultMessage: 'Manage Categories' })}
+      isDisabledBtn={true}
+      handleClose={handleCloseManageModal}
+      isOpen={isOpen}
+    >
       <table className='table'>
         <thead>
           <tr>
-            <th scope='col'>Category</th>
-            <th scope='col'>Save</th>
-            <th scope='col'>Remove</th>
+            <th scope='col'>{formatMessage({ id: 'app.category', defaultMessage: 'Category' })}</th>
+            <th scope='col'>{formatMessage({ id: 'app.save', defaultMessage: 'Save' })}</th>
+            <th scope='col'>{formatMessage({ id: 'app.remove', defaultMessage: 'Remove' })}</th>
           </tr>
         </thead>
         <tbody>
@@ -75,10 +83,13 @@ const ManageCategories = ({ categories, handleCloseManageModal, update, isOpen }
                       setActiveBtnName(`update-${id}`)
                       updateCategory(id, index)
                     }}
-                    aria-label='Update category'
+                    aria-label={formatMessage({ id: 'app.updateCategory', defaultMessage: 'Update category' })}
                   >
                     {isLoading && isEqual<string>(activeBtnName, `update-${id}`) ? (
-                      <Spinner altText='Updating...' classCSS='text-white' />
+                      <Spinner
+                        altText={formatMessage({ id: 'app.updating', defaultMessage: 'Updating...' })}
+                        classCSS='text-white'
+                      />
                     ) : (
                       <i className='bi bi-check2'></i>
                     )}
@@ -91,10 +102,13 @@ const ManageCategories = ({ categories, handleCloseManageModal, update, isOpen }
                       setActiveBtnName(`delete-${id}`)
                       removeCategory(id)
                     }}
-                    aria-label='Remove category'
+                    aria-label={formatMessage({ id: 'app.removeCategory', defaultMessage: 'Remove category' })}
                   >
                     {isLoading && isEqual<string>(activeBtnName, `delete-${id}`) ? (
-                      <Spinner altText='Removing...' classCSS='text-white' />
+                      <Spinner
+                        altText={formatMessage({ id: 'app.removing', defaultMessage: 'Removing...' })}
+                        classCSS='text-white'
+                      />
                     ) : (
                       <i className='bi bi-trash'></i>
                     )}

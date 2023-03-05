@@ -4,6 +4,7 @@ import ManageCategories from '../manageCategories/ManageCategories'
 import FocusTrap from 'focus-trap-react'
 import stylesBtn from '../../styles/buttons.module.scss'
 import useCategories from '../../hooks/useCategories'
+import { useIntl } from 'react-intl'
 interface ICategories {
   handleClose: () => void
   filter: (categoryId: string) => void
@@ -19,13 +20,15 @@ const Categories = ({ handleClose, filter, isOpen }: ICategories) => {
     handleClose()
   }
 
+  const { formatMessage } = useIntl()
+
   return (
     <>
       <FocusTrap active={isOpen}>
         <div className='offcanvas offcanvas-start show' tabIndex={-1} id='offcanvas' aria-labelledby='offcanvasLabel'>
           <div className='offcanvas-header'>
             <h5 className='offcanvas-title' id='offcanvasLabel'>
-              Categories
+              {formatMessage({ id: 'app.categories', defaultMessage: 'Categories' })}
             </h5>
             <button
               type='button'
@@ -39,12 +42,13 @@ const Categories = ({ handleClose, filter, isOpen }: ICategories) => {
             <AddCategory update={update} categories={categories} />
             <div className='list-group'>
               <button type='button' className={`btn btn-primary ${stylesBtn.btn__secondary}`} onClick={openManageModal}>
-                <i className='bi bi-folder'></i> Manage categories
+                <i className='bi bi-folder'></i>{' '}
+                {formatMessage({ id: 'app.manageCategories', defaultMessage: 'Manage Categories' })}
               </button>
               <button type='button' className='list-group-item list-group-item-action' onClick={() => filter('all')}>
-                all
+                {formatMessage({ id: 'app.all', defaultMessage: 'All' })}
               </button>
-              {isLoading && <p>Loading...</p>}
+              {isLoading && <p>{formatMessage({ id: 'app.loading', defaultMessage: 'Loading...' })}</p>}
               {categories &&
                 categories.map(({ _id: id, name }) => (
                   <button
