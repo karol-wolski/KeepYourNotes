@@ -1,3 +1,4 @@
+import { FormattedMessage, useIntl } from 'react-intl'
 import { Link } from 'react-router-dom'
 import RegisterForm from '../components/registerForm/RegisterForm'
 import { asyncFetch } from '../helpers/asyncFetch'
@@ -19,11 +20,19 @@ const RegisterPage = () => {
       }
     })
   }
+
+  const { formatMessage } = useIntl()
+
   return (
-    <LayoutForm title='Sign up'>
+    <LayoutForm title={formatMessage({ id: 'app.signUp', defaultMessage: 'Sign up' })}>
       <RegisterForm handleOnSubmit={handleOnSubmit} />
       <p className='pt-4 text-center'>
-        Go to <Link to='/login'>Login page</Link>
+        <FormattedMessage
+          id='app.goToPage'
+          values={{
+            page: <Link to='/'>{formatMessage({ id: 'app.login', defaultMessage: 'Login' })}</Link>,
+          }}
+        />
       </p>
     </LayoutForm>
   )

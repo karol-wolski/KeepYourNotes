@@ -3,6 +3,7 @@ import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
+import { useIntl } from 'react-intl'
 
 interface IRegisterForm {
   handleOnSubmit: (
@@ -73,19 +74,38 @@ const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
   }
 
   const isVisibleSendButton = !!data.email.length && !!data.password.length && !!data.username.length
+  const { formatMessage } = useIntl()
 
   return (
     <form>
       <div className='mb-3'>
-        <LabelInput id='username' type='text' labelText='Username' onChange={setDataOnChange} isLabelVisible />
+        <LabelInput
+          id='username'
+          type='text'
+          labelText={formatMessage({ id: 'app.username', defaultMessage: 'Username' })}
+          onChange={setDataOnChange}
+          isLabelVisible
+        />
         {errors.username && <Alert type={ALERT_TYPE.DANGER} text={errors.username} />}
       </div>
       <div className='mb-3'>
-        <LabelInput id='email' type='email' labelText='Email' onChange={setDataOnChange} isLabelVisible />
+        <LabelInput
+          id='email'
+          type='email'
+          labelText={formatMessage({ id: 'app.email', defaultMessage: 'Email' })}
+          onChange={setDataOnChange}
+          isLabelVisible
+        />
         {errors.email && <Alert type={ALERT_TYPE.DANGER} text={errors.email} />}
       </div>
       <div className='mb-3'>
-        <LabelInput id='password' type='password' labelText='Password' onChange={setDataOnChange} isLabelVisible />
+        <LabelInput
+          id='password'
+          type='password'
+          labelText={formatMessage({ id: 'app.password', defaultMessage: 'Password' })}
+          onChange={setDataOnChange}
+          isLabelVisible
+        />
         {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
       </div>
       {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
@@ -97,7 +117,7 @@ const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
         onClick={e => sendData(e)}
         disabled={!isVisibleSendButton}
       >
-        Submit
+        {formatMessage({ id: 'app.submit', defaultMessage: 'Submit' })}
       </button>
     </form>
   )
