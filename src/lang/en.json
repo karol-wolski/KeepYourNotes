@@ -40,5 +40,8 @@
   "app.searchNote": "Search the note",
   "app.saving": "Saving...",
   "app.titleNote": "Note title",
-  "app.addFile": "Add file"
+  "app.addFile": "Add file",
+  "app.categoryExist": "The category name exists.",
+  "app.categoryAdded": "Your category has been successfully added.",
+  "app.categoryAddNew": "Add new category"
 }
