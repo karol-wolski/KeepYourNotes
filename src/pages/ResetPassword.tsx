@@ -1,3 +1,4 @@
+import { FormattedMessage } from 'react-intl'
 import { useLocation } from 'react-router-dom'
 import ResetPasswordForm from '../components/resetPasswordForm/ResetPasswordForm'
 import { asyncFetch } from '../helpers/asyncFetch'
@@ -12,7 +13,7 @@ const ResetPasswordPage = () => {
     })
   }
   return (
-    <LayoutForm title='Reset Password'>
+    <LayoutForm title={<FormattedMessage id='app.resetPassword' defaultMessage='Reset your password' />}>
       <ResetPasswordForm handleOnSubmit={handleOnSubmit} />
     </LayoutForm>
   )
