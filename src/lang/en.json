@@ -36,5 +36,6 @@
   "app.showPassword": "Show password",
   "app.hidePassword": "Hide password",
   "app.goToPage": "Go to {page}.",
-  "app.showAndHidePassword": "Show and hide password"
+  "app.showAndHidePassword": "Show and hide password",
+  "app.searchNote": "Search the note"
 }
