@@ -10,6 +10,7 @@ import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import useFetch from '../../hooks/useFetch'
 import { IUpdateNotesArray } from '../../pages/Notes'
+import { useIntl } from 'react-intl'
 
 interface IAddNote {
   update: (obj: IUpdateNotesArray) => void
@@ -76,10 +77,16 @@ const AddNote = ({ update, handleClose, categories, isOpen }: IAddNote) => {
     }
   }, [data, statusCode])
 
+  const { formatMessage } = useIntl()
+
   return (
     <Modal
-      title='Add note'
-      btnName={isLoading ? 'Saving...' : 'Save'}
+      title={formatMessage({ id: 'app.addNote', defaultMessage: 'Add note' })}
+      btnName={
+        isLoading
+          ? formatMessage({ id: 'app.saving', defaultMessage: 'Saving...' })
+          : formatMessage({ id: 'app.save', defaultMessage: 'Save' })
+      }
       isDisabledBtn={!isVisibleSendButton}
       handleClose={handleClose}
       isOpen={isOpen}
@@ -89,17 +96,17 @@ const AddNote = ({ update, handleClose, categories, isOpen }: IAddNote) => {
       <form ref={formRef}>
         <div className='mb-3'>
           <LabelInput
-            labelText='Title'
+            labelText={formatMessage({ id: 'app.title', defaultMessage: 'Title' })}
             type='text'
             id='title'
             onChange={createNote}
             isLabelVisible={false}
-            placeholder='Note title'
+            placeholder={formatMessage({ id: 'app.titleNote', defaultMessage: 'Note title' })}
           />
         </div>
         <div className='mb-3'>
           <label htmlFor='description' className='form-label visually-hidden'>
-            Note
+            {formatMessage({ id: 'app.note', defaultMessage: 'Note' })}
           </label>
           <EditorWysiwyg editorState={editorState} updateTextDescription={updateTextDescription} />
         </div>
@@ -110,7 +117,7 @@ const AddNote = ({ update, handleClose, categories, isOpen }: IAddNote) => {
             id='files'
             onChange={createNote}
             isLabelVisible={false}
-            placeholder='Add file'
+            placeholder={formatMessage({ id: 'app.addFile', defaultMessage: 'Add file' })}
             multiple={true}
           />
         </div>
