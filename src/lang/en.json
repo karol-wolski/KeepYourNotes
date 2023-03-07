@@ -43,5 +43,11 @@
   "app.addFile": "Add file",
   "app.categoryExist": "The category name exists.",
   "app.categoryAdded": "Your category has been successfully added.",
-  "app.categoryAddNew": "Add new category"
+  "app.categoryAddNew": "Add new category",
+  "app.all": "All",
+  "app.loading": "Loading...",
+  "app.removeCategory": "Remove category",
+  "app.removing": "Removing...",
+  "app.updateCategory": "Update category",
+  "app.updating": "Updating..."
 }

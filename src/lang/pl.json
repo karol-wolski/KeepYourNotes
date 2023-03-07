@@ -43,5 +43,11 @@
   "app.addFile": "Dodaj plik",
   "app.categoryExist": "Nazwa kategorii już istnieje.",
   "app.categoryAdded": "Kategoria została dodana.",
-  "app.categoryAddNew": "Dodaj nową kategorię"
+  "app.categoryAddNew": "Dodaj nową kategorię",
+  "app.all": "Wszystko",
+  "app.loading": "Ładowanie...",
+  "app.removeCategory": "Usuwanie kategorii",
+  "app.removing": "Usuwanie...",
+  "app.updateCategory": "Aktualizacja kategorii",
+  "app.updating": "Aktualizowanie..."
 }
