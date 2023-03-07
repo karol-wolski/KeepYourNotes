@@ -4,6 +4,7 @@ import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
 import { checkCategoryExist } from '../../helpers/checkCategoryExist'
 import useFetch from '../../hooks/useFetch'
+import { useIntl } from 'react-intl'
 
 export interface INewCategory {
   name: string
@@ -22,6 +23,7 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { data, statusCode, isLoading, fetchData } = useFetch<ICategory>()
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+  const { formatMessage } = useIntl()
 
   const [errors, setErrors] = useState('')
   const [success, setSuccess] = useState('')
@@ -36,7 +38,7 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
     }
     if (checkCategoryExist(categories, category)) {
       setSuccess('')
-      setErrors('The category name exists.')
+      setErrors(formatMessage({ id: 'app.categoryExist', defaultMessage: 'The category name exists.' }))
     } else {
       fetchData('categories', 'POST', category)
     }
@@ -61,7 +63,9 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
           inputRef.current.value = ''
         }
         setErrors('')
-        setSuccess('Your category has been successfully added.')
+        setSuccess(
+          formatMessage({ id: 'app.categoryAdded', defaultMessage: 'Your category has been successfully added.' }),
+        )
         if (data) {
           update([...categories, data])
         }
@@ -80,8 +84,8 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
         <LabelInput
           id='name'
           type='text'
-          placeholder='Category name'
-          labelText='Add new category'
+          placeholder={formatMessage({ id: 'app.categoryName', defaultMessage: 'Category name' })}
+          labelText={formatMessage({ id: 'app.categoryAddName', defaultMessage: 'Add new category' })}
           onChange={setBtnDisabled}
           isLabelVisible={false}
           inputRef={inputRef}
@@ -94,7 +98,9 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
           disabled={!isButtonDisabled}
           onClick={handleOnClick}
         >
-          {isLoading ? 'Saving' : 'Add'}
+          {isLoading
+            ? formatMessage({ id: 'app.saving', defaultMessage: 'Saving...' })
+            : formatMessage({ id: 'app.add', defaultMessage: 'Add' })}
         </button>
       </div>
       {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}

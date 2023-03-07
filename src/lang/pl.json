@@ -40,5 +40,8 @@
   "app.searchNote": "Szukaj notatkę",
   "app.saving": "Zapisywanie...",
   "app.titleNote": "Tytuł notatki",
-  "app.addFile": "Dodaj plik"
+  "app.addFile": "Dodaj plik",
+  "app.categoryExist": "Nazwa kategorii już istnieje.",
+  "app.categoryAdded": "Kategoria została dodana.",
+  "app.categoryAddNew": "Dodaj nową kategorię"
 }
