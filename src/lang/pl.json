@@ -33,6 +33,7 @@
   "app.application": "Aplikacja",
   "app.language": "Język",
   "app.notes": "Notatki",
+  "app.note": "Notatka",
   "app.showPassword": "Pokaż hasło",
   "app.hidePassword": "Ukryj hasło",
   "app.goToPage": "Przejdź do {page}.",
