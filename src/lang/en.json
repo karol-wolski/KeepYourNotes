@@ -33,6 +33,7 @@
   "app.application": "Application",
   "app.language": "Language",
   "app.notes": "Notes",
+  "app.note": "Note",
   "app.showPassword": "Show password",
   "app.hidePassword": "Hide password",
   "app.goToPage": "Go to {page}.",

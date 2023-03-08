@@ -10,6 +10,7 @@ import Modal from '../modal/Modal'
 import LabelInput from '../labelInput/LabelInput'
 import useFetch from '../../hooks/useFetch'
 import { IUpdateNotesArray } from '../../pages/Notes'
+import { useIntl } from 'react-intl'
 interface IEditNote {
   note: Note
   handleClose: () => void
@@ -38,6 +39,7 @@ const EditNote = ({ note, handleClose, categories, isOpen, update }: IEditNote) 
 
   useEffect(() => {
     if (statusCode === 200 && data) {
+      console.log('xxx: ', data)
       update({
         method: 'PATCH',
         data: data,
@@ -58,9 +60,9 @@ const EditNote = ({ note, handleClose, categories, isOpen, update }: IEditNote) 
   }
 
   const toggleCategories = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const isCategory = editNote.categories && editNote.categories.includes(event.target.value)
+    const isCategory = editNote.categories?.includes(event.target.value)
     if (isCategory) {
-      editNote.categories = editNote.categories && editNote.categories.filter(item => item !== event.target.value)
+      editNote.categories = editNote.categories?.filter(item => item !== event.target.value)
     } else {
       editNote.categories?.push(event.target.value)
     }
@@ -89,10 +91,16 @@ const EditNote = ({ note, handleClose, categories, isOpen, update }: IEditNote) 
 
   const saveNote = (note: Note) => fetchData(`notes/${note._id}`, 'PATCH', note)
 
+  const { formatMessage } = useIntl()
+
   return (
     <Modal
-      title='Edit note'
-      btnName={isLoading ? 'Saving...' : 'Save'}
+      title={formatMessage({ id: 'app.editNote', defaultMessage: 'Edit note' })}
+      btnName={
+        isLoading
+          ? formatMessage({ id: 'app.saving', defaultMessage: 'Saving...' })
+          : formatMessage({ id: 'app.save', defaultMessage: 'Save' })
+      }
       handleClose={handleClose}
       handleBtnEvent={() => saveNote(editNote)}
       isDisabledBtn={!isVisibleSendButton}
@@ -101,9 +109,9 @@ const EditNote = ({ note, handleClose, categories, isOpen, update }: IEditNote) 
       <div className='mb-3'>
         <LabelInput
           id='title'
-          labelText='Title'
+          labelText={formatMessage({ id: 'app.title', defaultMessage: 'Title' })}
           type='text'
-          placeholder='Title'
+          placeholder={formatMessage({ id: 'app.title', defaultMessage: 'Title' })}
           onChange={createNote}
           isLabelVisible={false}
           value={note.title}
@@ -111,7 +119,7 @@ const EditNote = ({ note, handleClose, categories, isOpen, update }: IEditNote) 
       </div>
       <div className='mb-3'>
         <label htmlFor='exampleFormControlTextarea1' className='form-label visually-hidden'>
-          Note
+          {formatMessage({ id: 'app.note', defaultMessage: 'Note' })}
         </label>
         <EditorWysiwyg editorState={editorState} updateTextDescription={updateTextDescription} />
       </div>
@@ -127,7 +135,7 @@ const EditNote = ({ note, handleClose, categories, isOpen, update }: IEditNote) 
                   id={name}
                   value={id}
                   onChange={toggleCategories}
-                  defaultChecked={isChecked ? true : false}
+                  defaultChecked={isChecked}
                 />
                 {name}
               </label>
@@ -135,7 +143,7 @@ const EditNote = ({ note, handleClose, categories, isOpen, update }: IEditNote) 
           )
         })}
       <div className='mt-4'>
-        <p>Set the color</p>
+        <p>{formatMessage({ id: 'app.setColor', defaultMessage: 'Set the color' })}</p>
         <div className='d-flex'>
           {bgColors.map(bgColor => {
             return (

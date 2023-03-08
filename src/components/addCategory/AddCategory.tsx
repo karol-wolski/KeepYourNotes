@@ -85,7 +85,7 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
           id='name'
           type='text'
           placeholder={formatMessage({ id: 'app.categoryName', defaultMessage: 'Category name' })}
-          labelText={formatMessage({ id: 'app.categoryAddName', defaultMessage: 'Add new category' })}
+          labelText={formatMessage({ id: 'app.categoryAddNew', defaultMessage: 'Add new category' })}
           onChange={setBtnDisabled}
           isLabelVisible={false}
           inputRef={inputRef}
