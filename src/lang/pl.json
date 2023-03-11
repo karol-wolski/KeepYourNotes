@@ -50,5 +50,6 @@
   "app.removeCategory": "Usuwanie kategorii",
   "app.removing": "Usuwanie...",
   "app.updateCategory": "Aktualizacja kategorii",
-  "app.updating": "Aktualizowanie..."
+  "app.updating": "Aktualizowanie...",
+  "app.removeNoteQuestion": "Czy na pewno chcesz usunąć notatkę?"
 }

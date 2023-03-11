@@ -13,6 +13,7 @@ import ManageAttachments from '../manageAttachments/ManageAttachments'
 import useFetch from '../../hooks/useFetch'
 import { useEffect, useState } from 'react'
 import { IUpdateNotesArray } from '../../pages/Notes'
+import { useIntl } from 'react-intl'
 
 interface INote {
   note: NoteType
@@ -66,6 +67,8 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
     }
   }, [data, statusCode])
 
+  const { formatMessage } = useIntl()
+
   return (
     <>
       <div className={`card ${stylesCard.card}`} style={{ backgroundColor: bgColor?.bgColor, color: bgColor?.color }}>
@@ -114,7 +117,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
                 type='button'
                 className={`btn btn-danger btn-sm ${stylesBtn.btn__danger}`}
                 onClick={openRemoveModal}
-                title='Remove note'
+                title={formatMessage({ id: 'app.removeNote', defaultMessage: 'Remove note' })}
               >
                 <i className='bi bi-trash'></i>
               </button>
@@ -122,7 +125,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
                 type='button'
                 className={`btn btn-warning btn-sm ${stylesBtn.btn__primary}`}
                 onClick={openEditModal}
-                title='Edit note'
+                title={formatMessage({ id: 'app.editNote', defaultMessage: 'Edit note' })}
               >
                 <i className='bi bi-pencil'></i>
               </button>
@@ -130,7 +133,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
                 type='button'
                 className={`btn btn-dark btn-sm ${stylesBtn.btn__dark}`}
                 onClick={() => handleDuplicateNote(_id)}
-                title='Duplicate note'
+                title={formatMessage({ id: 'app.duplicateNote', defaultMessage: 'Duplicate note' })}
               >
                 <i className='bi bi-files'></i>
               </button>
@@ -138,7 +141,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
                 type='button'
                 className={`btn btn-warning btn-sm ${stylesBtn.btn__primary}`}
                 onClick={openManageAttatchmentsModal}
-                title='Manage attachments'
+                title={formatMessage({ id: 'app.manageAttachments', defaultMessage: 'Manage attachments' })}
               >
                 <i className='bi bi-paperclip'></i>
               </button>
@@ -148,7 +151,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
               className={`btn btn-primary btn-sm ${stylesBtn.btn__secondary}`}
               onClick={openFullNote}
             >
-              Full note
+              {formatMessage({ id: 'app.fullNote', defaultMessage: 'Full note' })}
             </button>
           </div>
         </div>
@@ -164,13 +167,22 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
       )}
       {displayRemoveModal && (
         <Modal
-          title={`Remove note: ${title} `}
-          btnName={isLoading ? 'Removing...' : 'Remove'}
+          title={`${formatMessage({ id: 'app.removeNote', defaultMessage: 'Remove note: ' })}: ${title} `}
+          btnName={
+            isLoading
+              ? formatMessage({ id: 'app.removing', defaultMessage: 'Removing...' })
+              : formatMessage({ id: 'app.remove', defaultMessage: 'Remove' })
+          }
           handleBtnEvent={() => removeNote(_id)}
           handleClose={closeRemoveModal}
           isOpen={displayRemoveModal}
         >
-          <p>Are you sure you want to delete this note?</p>
+          <p>
+            {formatMessage({
+              id: 'app.removeNoteQuestion',
+              defaultMessage: 'Are you sure you want to delete this note?',
+            })}
+          </p>
         </Modal>
       )}
       {displayEditModal && (
