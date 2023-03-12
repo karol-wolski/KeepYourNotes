@@ -8,6 +8,7 @@ import Spinner from '../spinner/Spinner'
 import { isEqual } from '../../helpers/isEqual'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import useNotes from '../../hooks/useNotes'
+import { useIntl } from 'react-intl'
 
 interface IManageAttachments {
   isOpen: boolean
@@ -20,6 +21,8 @@ const ManageAttachments = ({ isOpen, handleModalClose, noteId }: IManageAttachme
   const { notes, errors: errorsNotes, isLoading: isLoadingNotes, refresh } = useNotes<Note>(noteId)
   const { data, errors, isLoading, fetchData, statusCode } = useFetch<Attachment>()
   const [activeBtnName, setActiveBtnName] = useState<string>('')
+
+  const { formatMessage } = useIntl()
 
   useEffect(() => {
     if (statusCode === 201) {
@@ -45,8 +48,12 @@ const ManageAttachments = ({ isOpen, handleModalClose, noteId }: IManageAttachme
 
   return (
     <Modal
-      title='Manage Attachments'
-      btnName={isLoading && isEqual<string>(activeBtnName, 'save') ? 'Saving...' : 'Save'}
+      title={formatMessage({ id: 'app.manageAttachments', defaultMessage: 'Manage attachments' })}
+      btnName={
+        isLoading && isEqual<string>(activeBtnName, 'save')
+          ? formatMessage({ id: 'app.saving', defaultMessage: 'Saving...' })
+          : formatMessage({ id: 'app.save', defaultMessage: 'Save' })
+      }
       handleBtnEvent={saveAttachment}
       handleClose={handleModalClose}
       isOpen={isOpen}
@@ -54,9 +61,9 @@ const ManageAttachments = ({ isOpen, handleModalClose, noteId }: IManageAttachme
       <table className='table'>
         <thead>
           <tr>
-            <th scope='col'>Category</th>
-            <th scope='col'>Open</th>
-            <th scope='col'>Remove</th>
+            <th scope='col'>{formatMessage({ id: 'app.category', defaultMessage: 'Category' })}</th>
+            <th scope='col'>{formatMessage({ id: 'app.open', defaultMessage: 'Open' })}</th>
+            <th scope='col'>{formatMessage({ id: 'app.remove', defaultMessage: 'Remove' })}</th>
           </tr>
         </thead>
         <tbody>
@@ -81,10 +88,13 @@ const ManageAttachments = ({ isOpen, handleModalClose, noteId }: IManageAttachme
                       setActiveBtnName(`delete-${id}`)
                       removeAttachment(id)
                     }}
-                    aria-label='Remove attachment'
+                    aria-label={formatMessage({ id: 'app.removeAttachment', defaultMessage: 'Remove attachment' })}
                   >
                     {isLoading && isEqual<string>(activeBtnName, `delete-${id}`) ? (
-                      <Spinner altText='Removing...' classCSS='text-white' />
+                      <Spinner
+                        altText={formatMessage({ id: 'app.removing', defaultMessage: 'Removing...' })}
+                        classCSS='text-white'
+                      />
                     ) : (
                       <i className='bi bi-trash'></i>
                     )}
@@ -94,15 +104,23 @@ const ManageAttachments = ({ isOpen, handleModalClose, noteId }: IManageAttachme
             ))}
         </tbody>
       </table>
-      {isLoadingNotes && <p>Loading...</p>}
-      {errorsNotes && <p>We cannot load your attachments</p>}
+      {isLoadingNotes && <p>{formatMessage({ id: 'app.loading', defaultMessage: 'Loading...' })}</p>}
+      {errorsNotes && (
+        <p>{formatMessage({ id: 'app.cannotLoadAttachments', defaultMessage: 'We cannot load your attachments.' })}</p>
+      )}
       <form ref={formRef}>
         <LabelInput
-          labelText='Add files'
+          labelText={formatMessage({
+            id: 'app.addFile',
+            defaultMessage: 'Add file',
+          })}
           type='file'
           id='files'
           isLabelVisible={false}
-          placeholder='Add file'
+          placeholder={formatMessage({
+            id: 'app.addFile',
+            defaultMessage: 'Add file',
+          })}
           multiple={true}
         />
       </form>

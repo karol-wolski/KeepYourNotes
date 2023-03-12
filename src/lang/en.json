@@ -51,5 +51,6 @@
   "app.removing": "Removing...",
   "app.updateCategory": "Update category",
   "app.updating": "Updating...",
-  "app.removeNoteQuestion": "Are you sure you want to delete this note?"
+  "app.removeNoteQuestion": "Are you sure you want to delete this note?",
+  "app.cannotLoadAttachments": "We cannot load your attachments."
 }

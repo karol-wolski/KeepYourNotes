@@ -51,5 +51,6 @@
   "app.removing": "Usuwanie...",
   "app.updateCategory": "Aktualizacja kategorii",
   "app.updating": "Aktualizowanie...",
-  "app.removeNoteQuestion": "Czy na pewno chcesz usunąć notatkę?"
+  "app.removeNoteQuestion": "Czy na pewno chcesz usunąć notatkę?",
+  "app.cannotLoadAttachments": "Nie możemy załadować Twoich załączników."
 }
