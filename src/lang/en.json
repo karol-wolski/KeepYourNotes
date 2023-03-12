@@ -52,5 +52,7 @@
   "app.updateCategory": "Update category",
   "app.updating": "Updating...",
   "app.removeNoteQuestion": "Are you sure you want to delete this note?",
-  "app.cannotLoadAttachments": "We cannot load your attachments."
+  "app.cannotLoadAttachments": "We cannot load your attachments.",
+  "app.noNotes": "You do not have any notes yet.",
+  "app.clickAddNoteBtn": "Click Add note button and add your first note."
 }
