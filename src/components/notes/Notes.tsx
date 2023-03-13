@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl'
 import useCategories from '../../hooks/useCategories'
 import { IUpdateNotesArray } from '../../pages/Notes'
 import Note from '../note/Note'
@@ -35,11 +36,12 @@ interface INotes {
 
 const Notes = ({ notes, filterNotes, update }: INotes) => {
   const { categories } = useCategories()
+  const { formatMessage } = useIntl()
 
   return (
     <div className='container'>
       <>
-        {notes && notes.length > 0 ? (
+        {notes && [].length > 0 ? (
           <div className='row g-3'>
             {notes.map(note => (
               <div key={note._id} className='col-12 col-sm-6 col-md-4 col-xl-3'>
@@ -49,9 +51,14 @@ const Notes = ({ notes, filterNotes, update }: INotes) => {
           </div>
         ) : (
           <div className='row'>
-            <p className='fs-4 text-center'>You do not have any notes yet.</p>
+            <p className='fs-4 text-center'>
+              {formatMessage({ id: 'app.noNote', defaultMessage: 'You do not have any notes yet.' })}
+            </p>
             <p className='text-center'>
-              Click <span className='fw-semibold'>Add note</span> button and add your first note.
+              {formatMessage({
+                id: 'app.clickAddNoteBtn',
+                defaultMessage: 'Click Add note button and add your first note.',
+              })}
             </p>
           </div>
         )}
