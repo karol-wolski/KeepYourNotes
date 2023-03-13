@@ -54,5 +54,7 @@
   "app.removeNoteQuestion": "Czy na pewno chcesz usunąć notatkę?",
   "app.cannotLoadAttachments": "Nie możemy załadować Twoich załączników.",
   "app.noNote": "Nie masz jeszcze żadnych notatek",
-  "app.clickAddNoteBtn": "Wybierz Dodaj notatkę żeby dodać swoją pierwszą notatkę."
+  "app.clickAddNoteBtn": "Wybierz Dodaj notatkę żeby dodać swoją pierwszą notatkę.",
+  "app.error": "Błąd",
+  "app.copyClipboard": "Skopiuj do schowka"
 }
