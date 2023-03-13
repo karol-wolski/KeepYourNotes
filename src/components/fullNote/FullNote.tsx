@@ -7,6 +7,7 @@ import { copyToClipboard } from '../../helpers/copyToClipboard'
 import stylesNote from './FullNote.module.scss'
 import stylesBtn from '../../styles/buttons.module.scss'
 import useNotes from '../../hooks/useNotes'
+import { useIntl } from 'react-intl'
 
 interface IModal {
   noteId: string
@@ -20,11 +21,15 @@ const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArra
   const { notes, errors, isLoading } = useNotes<Note>(noteId)
   const [isCopied, setIsCopied] = useState<boolean>(false)
   const handleSetIsCopied = () => setIsCopied(true)
-  const title = (isLoading && 'Loading...') || (notes && notes.title) || (errors && errors)
+  const { formatMessage } = useIntl()
+  const title =
+    (isLoading && formatMessage({ id: 'app.loading', defaultMessage: 'Loading...' })) ||
+    (notes && notes.title) ||
+    (errors && formatMessage({ id: 'app.error', defaultMessage: 'Error' }))
 
   return (
     <Modal handleClose={handleClose} title={title} isOpen={isOpen}>
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <p>{formatMessage({ id: 'app.loading', defaultMessage: 'Loading...' })}</p>}
       {errors && <p>{errors}</p>}
       {notes && (
         <>
@@ -65,7 +70,7 @@ const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArra
                 isCopied ? stylesBtn.btn__primary : stylesBtn.btn__secondary
               }`}
               onClick={() => copyToClipboard(notes.desc, handleSetIsCopied)}
-              title='Copy to clipboard'
+              title={formatMessage({ id: 'app.copyClipboard', defaultMessage: 'Copy text to clipboard' })}
             >
               <i className={isCopied ? 'bi bi-clipboard-check-fill' : 'bi bi-clipboard-fill'}></i>
             </button>
