@@ -66,5 +66,9 @@
   "app.passwordMaxChars": "Hasło powinno mieć mniej niż 16 znaków.",
   "app.usernameMinChars": "Nazwa użytkownika powinna mieć minimum 2 znaki.",
   "app.usernameMaxChars": "Nazwa użytkownika powinna mieć mniej niż 16 znaków.",
-  "app.submitting": "Wysyłanie..."
+  "app.submitting": "Wysyłanie...",
+  "app.polish": "Polski",
+  "app.english": "Angielski",
+  "app.selectUILangauge": "Wybierz język interfejsu użytkownika",
+  "app.appSettings": "Ustawienia aplikacji"
 }

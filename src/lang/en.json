@@ -66,5 +66,9 @@
   "app.passwordMaxChars": "Password should have less than 16 characters.",
   "app.usernameMinChars": "Username should have at least 2 characters.",
   "app.usernameMaxChars": "Username should have less than 16 characters.",
-  "app.submitting": "Submitting..."
+  "app.submitting": "Submitting...",
+  "app.polish": "Polish",
+  "app.english": "English",
+  "app.selectUILangauge": "Select the language of the user interface",
+  "app.appSettings": "Application Settings"
 }

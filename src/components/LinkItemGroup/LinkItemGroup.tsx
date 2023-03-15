@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl'
 import { Link, useLocation } from 'react-router-dom'
 import { linkArray } from '../../constants/settingLinksArray'
 import stylesBtn from '../../styles/buttons.module.scss'
@@ -10,6 +11,7 @@ interface ILinkItemGroup {
 const LinkItemGroup = ({ linkArray }: ILinkItemGroup) => {
   const { pathname } = useLocation()
   const isListLinkActive = (path: string) => pathname.includes(path)
+  const { formatMessage } = useIntl()
 
   return (
     <div className={`list-group ${styles.list}`}>
@@ -22,7 +24,7 @@ const LinkItemGroup = ({ linkArray }: ILinkItemGroup) => {
           }`}
           aria-current={isListLinkActive(link.path)}
         >
-          {link.name}
+          {formatMessage({ id: link.translateId, defaultMessage: link.name })}
         </Link>
       ))}
     </div>

@@ -1,3 +1,4 @@
+import { useIntl } from 'react-intl'
 import { LANGUAGE_ARRAY } from '../../constants/languagesArray'
 import { settingsLinksArray } from '../../constants/settingLinksArray'
 import LayoutSettings from '../../layout/LayoutSettings/LayoutSettings'
@@ -13,15 +14,19 @@ const Settings = ({ changeLanguage }: ISettingPage) => {
   }
 
   const currentLang = localStorage.getItem('lang')
+  const { formatMessage } = useIntl()
 
   return (
     <LayoutSettings linksArray={settingsLinksArray}>
       <label htmlFor='languages' className='mb-2'>
-        Language
+        {formatMessage({ id: 'app.language', defaultMessage: 'Language' })}
       </label>
       <select
         className='form-select'
-        aria-label='Select the language of the user interface'
+        aria-label={formatMessage({
+          id: 'app.selectUILangauge',
+          defaultMessage: 'Select the language of the user interface',
+        })}
         onChange={updateLanguageOnChange}
         defaultValue={currentLang || 'en'}
         name='languages'
@@ -29,7 +34,7 @@ const Settings = ({ changeLanguage }: ISettingPage) => {
       >
         {LANGUAGE_ARRAY.map(option => (
           <option key={option.id} value={option.value}>
-            {option.name}
+            {formatMessage({ id: option.translateId, defaultMessage: option.name })}
           </option>
         ))}
       </select>
