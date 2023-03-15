@@ -5,6 +5,7 @@ import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
 import formValidation from '../../helpers/formValidation'
+import { useIntl } from 'react-intl'
 
 interface IErrorsFields extends IUser {
   form: string
@@ -66,13 +67,15 @@ const EditUserAccount = ({ userData, sendData }: IEditUserAccount) => {
     }
   }
 
+  const { formatMessage } = useIntl()
+
   return (
     <form>
       <div>
         <LabelInput
           id='username'
           type='text'
-          labelText='username'
+          labelText={formatMessage({ id: 'app.username', defaultMessage: 'Username' })}
           onChange={setDataOnChange}
           value={username}
           isLabelVisible
@@ -80,7 +83,14 @@ const EditUserAccount = ({ userData, sendData }: IEditUserAccount) => {
         {errors.username && <Alert type={ALERT_TYPE.DANGER} text={errors.username} />}
       </div>
       <div>
-        <LabelInput id='email' type='email' labelText='Email' onChange={setDataOnChange} value={email} isLabelVisible />
+        <LabelInput
+          id='email'
+          type='email'
+          labelText={formatMessage({ id: 'app.email', defaultMessage: 'Email' })}
+          onChange={setDataOnChange}
+          value={email}
+          isLabelVisible
+        />
         {errors.username && <Alert type={ALERT_TYPE.DANGER} text={errors.username} />}
       </div>
       {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
@@ -92,7 +102,7 @@ const EditUserAccount = ({ userData, sendData }: IEditUserAccount) => {
         onClick={handleSendData}
         disabled={!isVisibleSendButton}
       >
-        Submit
+        {formatMessage({ id: 'app.submit', defaultMessage: 'Submit' })}
       </button>
     </form>
   )

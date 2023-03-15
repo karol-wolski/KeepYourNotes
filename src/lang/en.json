@@ -56,5 +56,6 @@
   "app.noNotes": "You do not have any notes yet.",
   "app.clickAddNoteBtn": "Click Add note button and add your first note.",
   "app.error": "Error",
-  "app.copyClipboard": "Copy text to clipboard"
+  "app.copyClipboard": "Copy text to clipboard",
+  "app.email": "Email"
 }
