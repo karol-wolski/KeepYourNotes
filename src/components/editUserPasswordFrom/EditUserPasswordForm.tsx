@@ -4,6 +4,7 @@ import useObject from '../../hooks/useObject'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
+import { useIntl } from 'react-intl'
 
 export interface INewPassword {
   password: string
@@ -80,27 +81,35 @@ const EditUserPasswordForm = ({ sendData }: IEditUserPassword) => {
     }
   }
 
+  const { formatMessage } = useIntl()
+
   return (
     <form>
       <div className='mb-3'>
         <LabelInput
           id='currentPassword'
           type='password'
-          labelText='Current password'
+          labelText={formatMessage({ id: 'app.passwordCurrent', defaultMessage: 'Current Password' })}
           onChange={setDataOnChange}
           isLabelVisible
         />
         {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
       </div>
       <div className='mb-3'>
-        <LabelInput id='password' type='password' labelText='Password' onChange={setDataOnChange} isLabelVisible />
+        <LabelInput
+          id='password'
+          type='password'
+          labelText={formatMessage({ id: 'app.password', defaultMessage: 'Password' })}
+          onChange={setDataOnChange}
+          isLabelVisible
+        />
         {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
       </div>
       <div className='mb-3'>
         <LabelInput
           id='confirmPassword'
           type='password'
-          labelText='Confirm Password'
+          labelText={formatMessage({ id: 'app.passwordConfirm', defaultMessage: 'Confirm Password' })}
           onChange={setDataOnChange}
           isLabelVisible
         />
@@ -115,7 +124,7 @@ const EditUserPasswordForm = ({ sendData }: IEditUserPassword) => {
         onClick={handleSendData}
         disabled={!isVisibleSendButton}
       >
-        Submit
+        {formatMessage({ id: 'app.submit', defaultMessage: 'Submit' })}
       </button>
     </form>
   )

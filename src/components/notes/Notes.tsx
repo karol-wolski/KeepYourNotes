@@ -41,7 +41,7 @@ const Notes = ({ notes, filterNotes, update }: INotes) => {
   return (
     <div className='container'>
       <>
-        {notes && [].length > 0 ? (
+        {notes && notes.length > 0 ? (
           <div className='row g-3'>
             {notes.map(note => (
               <div key={note._id} className='col-12 col-sm-6 col-md-4 col-xl-3'>
