@@ -56,5 +56,6 @@
   "app.noNote": "Nie masz jeszcze żadnych notatek",
   "app.clickAddNoteBtn": "Wybierz Dodaj notatkę żeby dodać swoją pierwszą notatkę.",
   "app.error": "Błąd",
-  "app.copyClipboard": "Skopiuj do schowka"
+  "app.copyClipboard": "Skopiuj do schowka",
+  "app.email": "Email"
 }
