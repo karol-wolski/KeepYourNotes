@@ -57,5 +57,14 @@
   "app.clickAddNoteBtn": "Click Add note button and add your first note.",
   "app.error": "Error",
   "app.copyClipboard": "Copy text to clipboard",
-  "app.email": "Email"
+  "app.email": "Email",
+  "app.passwordsNotTheSame": "The passwords are not identical.",
+  "app.confirmPassword8chars": "Confirm Password should have at least 8 characters.",
+  "app.emailMinChars": "Email should have at least 6 characters.",
+  "app.emailWrongFormat": "The email address is in the wrong format.",
+  "app.passwordMinChars": "Password should have at least 8 characters.",
+  "app.passwordMaxChars": "Password should have less than 16 characters.",
+  "app.usernameMinChars": "Username should have at least 2 characters.",
+  "app.usernameMaxChars": "Username should have less than 16 characters.",
+  "app.submitting": "Submitting..."
 }

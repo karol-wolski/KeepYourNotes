@@ -1,60 +1,76 @@
-import { useState } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
+import useFetch from '../../hooks/useFetch'
+import useObject from '../../hooks/useObject'
+import { AuthContext, IAuthContext } from '../../context/AuthContext'
+import { addToLocalStorage } from '../../helpers/localStorage'
 
 interface ILoginForm {
-  handleOnSubmit: (
-    email: string,
-    password: string,
-    cb: React.Dispatch<React.SetStateAction<{ email?: string; password?: string; form: string }>>,
-  ) => void
+  email: string
+  password: string
 }
 
-const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
-  const [data, setData] = useState({
+type FieldError = { translateId: string; errorMsg: string } | undefined
+
+interface ILoginErrors {
+  email: FieldError
+  password: FieldError
+}
+
+interface IResponse {
+  token: string
+}
+
+const LoginForm = () => {
+  const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
+  const { data, errors, isLoading, fetchData, statusCode } = useFetch<IResponse>()
+  const [form, setForm] = useState<ILoginForm>({
     email: '',
     password: '',
   })
 
-  const [errors, setErrors] = useState<{
-    email?: string
-    password?: string
-    form: string
-  }>({
-    email: '',
-    password: '',
-    form: '',
+  const [errorsForm, setErrors, clearErrors] = useObject<ILoginErrors>({
+    email: undefined,
+    password: undefined,
   })
 
   const setDataOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({
-      ...data,
+    setForm({
+      ...form,
       [event.target.name]: event.target.value,
     })
   }
 
-  const isEmailValidate = formValidation.isEmailValidate(data.email)
-
-  const isPasswordValidate = formValidation.isPasswordValidate(data.password)
+  const isEmailValidate = formValidation.isEmailValidate(form.email)
+  const isPasswordValidate = formValidation.isPasswordValidate(form.password)
 
   const sendData = (event: React.FormEvent) => {
     event.preventDefault()
-    const { email, password } = data
+    const { email, password } = form
     if (isEmailValidate.isValidate && isPasswordValidate.isValidate) {
-      handleOnSubmit(email, password, setErrors)
+      fetchData('auth/login', 'POST', { email: email, password: password })
     } else {
       setErrors({
-        form: '',
-        email: isEmailValidate.errorMsg,
-        password: isPasswordValidate.errorMsg,
+        email: isEmailValidate.error,
+        password: isPasswordValidate.error,
       })
     }
   }
 
-  const isVisibleSendButton = !!data.email.length && !!data.password.length
+  const isVisibleSendButton = !!form.email.length && !!form.password.length
+  const { formatMessage } = useIntl()
+
+  useEffect(() => {
+    if (statusCode === 200 && data) {
+      clearErrors()
+      addToLocalStorage('token', data.token)
+      setIsLoggedIn((state: boolean) => !state)
+    }
+  }, [statusCode, data])
 
   return (
     <form>
@@ -66,7 +82,15 @@ const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.email && <Alert type={ALERT_TYPE.DANGER} text={errors.email} />}
+        {errorsForm.email && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.email.translateId,
+              defaultMessage: errorsForm.email.errorMsg,
+            })}
+          />
+        )}
       </div>
       <div className='mb-3'>
         <LabelInput
@@ -76,9 +100,17 @@ const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
+        {errorsForm.password && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.password.translateId,
+              defaultMessage: errorsForm.password.errorMsg,
+            })}
+          />
+        )}
       </div>
-      {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
+      {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
 
       <button
         type='submit'
@@ -86,7 +118,9 @@ const LoginForm = ({ handleOnSubmit }: ILoginForm) => {
         onClick={e => sendData(e)}
         disabled={!isVisibleSendButton}
       >
-        <FormattedMessage id='app.submit' defaultMessage='Submit' />
+        {isLoading
+          ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
+          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
       </button>
     </form>
   )

@@ -57,5 +57,14 @@
   "app.clickAddNoteBtn": "Wybierz Dodaj notatkę żeby dodać swoją pierwszą notatkę.",
   "app.error": "Błąd",
   "app.copyClipboard": "Skopiuj do schowka",
-  "app.email": "Email"
+  "app.email": "Email",
+  "app.passwordsNotTheSame": "Hasła nie są takie same.",
+  "app.confirmPassword8chars": "Potwierdź hasło powinno mieć minimum 8 znaków.",
+  "app.emailMinChars": "Email powinien mieć minimum 6 znaków.",
+  "app.emailWrongFormat": "Błędny format adresu email.",
+  "app.passwordMinChars": "Hasło powinno mieć minimum 8 znaków.",
+  "app.passwordMaxChars": "Hasło powinno mieć mniej niż 16 znaków.",
+  "app.usernameMinChars": "Nazwa użytkownika powinna mieć minimum 2 znaki.",
+  "app.usernameMaxChars": "Nazwa użytkownika powinna mieć mniej niż 16 znaków.",
+  "app.submitting": "Wysyłanie..."
 }

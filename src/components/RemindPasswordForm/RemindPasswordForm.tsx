@@ -1,64 +1,64 @@
-import { useState } from 'react'
-import { STATUS } from '../../constants/constants'
+import { useState, useEffect } from 'react'
 import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
+import useFetch from '../../hooks/useFetch'
+import useObject from '../../hooks/useObject'
 
 interface IRemindPassword {
-  handleOnSubmit: (email: string, cb: (status: string, msg: string) => void) => void
+  email: string
 }
 
-const RemindPasswordForm = ({ handleOnSubmit }: IRemindPassword) => {
-  const [data, setData] = useState({
+type FieldError = { translateId: string; errorMsg: string } | undefined
+interface IRemindPasswordErrors {
+  email: FieldError
+}
+
+interface IResponse {
+  message: string
+}
+
+const RemindPasswordForm = () => {
+  const { formatMessage } = useIntl()
+  const { data, errors, successMsg, clearSuccessMsg, isLoading, fetchData, statusCode } = useFetch<IResponse>()
+  const [form, setForm] = useState<IRemindPassword>({
     email: '',
   })
 
-  const [errors, setErrors] = useState({
-    email: '',
-    form: '',
+  const [errorsForm, setErrors, clearErrors] = useObject<IRemindPasswordErrors>({
+    email: undefined,
   })
-
-  const [success, setSuccess] = useState('')
 
   const setDataOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({
-      ...data,
+    setForm({
+      ...form,
       [event.target.name]: event.target.value,
     })
   }
 
-  const isEmailValidate = formValidation.isEmailValidate(data.email)
-
-  const setApiMsg = (status: string, msg: string) => {
-    if (status === STATUS.SUCCESS) {
-      setErrors({
-        email: '',
-        form: '',
-      })
-      setSuccess(msg)
-    }
-    if (status === STATUS.ERROR) {
-      setErrors({ ...errors, form: msg })
-      setSuccess('')
-    }
-  }
+  const isEmailValidate = formValidation.isEmailValidate(form.email)
 
   const sendData = (event: React.FormEvent) => {
     event.preventDefault()
-    const { email } = data
     if (isEmailValidate.isValidate) {
-      handleOnSubmit(email, setApiMsg)
+      fetchData('user/forgotPassword', 'PATCH', form)
     } else {
       setErrors({
-        ...errors,
-        email: isEmailValidate.errorMsg,
+        ...errorsForm,
+        email: isEmailValidate.error,
       })
     }
   }
 
-  const isVisibleSendButton = !!data.email.length
+  const isVisibleSendButton = !!form.email.length
+
+  useEffect(() => {
+    if (statusCode === 200 && successMsg) clearErrors()
+    const timeout = setTimeout(clearSuccessMsg, 3000)
+    return () => clearTimeout(timeout)
+  }, [statusCode, data])
 
   return (
     <form>
@@ -70,10 +70,18 @@ const RemindPasswordForm = ({ handleOnSubmit }: IRemindPassword) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.email && <Alert type={ALERT_TYPE.DANGER} text={errors.email} />}
+        {errorsForm.email && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.email.translateId,
+              defaultMessage: errorsForm.email.errorMsg,
+            })}
+          />
+        )}
       </div>
-      {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
-      {success && <Alert type={ALERT_TYPE.SUCCESS} text={success} />}
+      {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
+      {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
       <button
         type='submit'
@@ -81,7 +89,9 @@ const RemindPasswordForm = ({ handleOnSubmit }: IRemindPassword) => {
         onClick={e => sendData(e)}
         disabled={!isVisibleSendButton}
       >
-        <FormattedMessage id='app.submit' defaultMessage='Submit' />
+        {isLoading
+          ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
+          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
       </button>
     </form>
   )
