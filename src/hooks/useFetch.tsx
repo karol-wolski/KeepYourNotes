@@ -7,11 +7,13 @@ type Payload = object | FormData
 
 const useFetch = <T,>() => {
   const [data, setData] = useState<T>()
+  const [successMsg, setSuccessMsg] = useState<string>('')
   const [errors, setErrors] = useState<string>('')
   const [statusCode, setStatusCode] = useState<number | undefined>()
   const [isLoading, { setTrue: setIsLoading, setFalse: setIsNotLoading }] = useBoolean(false)
   const [refetch, setRefetch] = useState({})
   const refresh = () => setRefetch({})
+  const clearSuccessMsg = () => setSuccessMsg('')
   const fetchData = useCallback(
     async (path: string, method: Method, payload?: Payload) => {
       try {
@@ -22,6 +24,7 @@ const useFetch = <T,>() => {
         setStatusCode(response.status)
         if (response.status === 200 || response.status === 201) {
           setData(data)
+          setSuccessMsg(message)
         } else {
           setErrors(message)
         }
@@ -33,7 +36,7 @@ const useFetch = <T,>() => {
     },
     [refetch],
   )
-  return { data, errors, statusCode, isLoading, refresh, fetchData }
+  return { data, successMsg, clearSuccessMsg, errors, statusCode, isLoading, refresh, fetchData }
 }
 
 export default useFetch

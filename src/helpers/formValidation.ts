@@ -1,70 +1,96 @@
+import translation from '../lang/en.json'
+
 const isEmailValidate = (email: string) => {
   let isValidate = false
-  let errorMsg = ''
+  let error
 
   if (email.length < 5) {
-    errorMsg = 'Email should have at least 6 characters.'
+    error = {
+      translateId: 'app.emailMinChars',
+      errorMsg: translation['app.emailMinChars'],
+    }
   } else if (!/\S+@\S+\.\S+/.test(email)) {
-    errorMsg = 'The email address is in the wrong format.'
+    error = {
+      translateId: 'app.emailWrongFormat',
+      errorMsg: translation['app.emailWrongFormat'],
+    }
   } else {
     isValidate = true
   }
 
   return {
     isValidate,
-    errorMsg,
+    error,
   }
 }
 
 const isPasswordValidate = (password: string) => {
   let isValidate = false
-  let errorMsg = ''
+  let error
 
   if (password.length < 8) {
-    errorMsg = 'Password should have at least 8 characters.'
+    error = {
+      translateId: 'app.passwordMinChars',
+      errorMsg: translation['app.passwordMinChars'],
+    }
   } else if (password.length >= 16) {
-    errorMsg = 'Password should have less than 16 characters.'
+    error = {
+      translateId: 'app.passwordMaxChars',
+      errorMsg: translation['app.passwordMaxChars'],
+    }
   } else {
     isValidate = true
   }
   return {
     isValidate,
-    errorMsg,
+    error,
   }
 }
 
 const isConfirmPasswordValidate = (password: string, confirmPassword: string) => {
   let isValidate = false
-  let errorMsg = ''
+  let error
 
   if (confirmPassword.length < 8) {
-    errorMsg = 'Confirm Password should have at least 8 characters.'
+    error = {
+      translateId: 'app.confirmPassword8chars',
+      errorMsg: translation['app.confirmPassword8chars'],
+    }
   } else if (password !== confirmPassword) {
-    errorMsg = 'The passwords are not identical.'
+    error = {
+      translateId: 'app.passwordsNotTheSame',
+      errorMsg: translation['app.passwordsNotTheSame'],
+    }
   } else {
     isValidate = true
   }
   return {
     isValidate,
-    errorMsg,
+    error,
   }
 }
 
 const isUsernameValidate = (username: string) => {
   let isValidate = false
-  let errorMsg = ''
+  let error
 
   if (username.length < 2) {
-    errorMsg = 'Username should have at least 2 characters.'
+    error = {
+      translateId: 'app.usernameMinChars',
+      errorMsg: translation['app.usernameMinChars'],
+    }
   } else if (username.length > 16) {
-    errorMsg = 'Username should have less than 16 characters.'
+    error = {
+      translateId: 'app.usernameMaxChars',
+      errorMsg: translation['app.usernameMaxChars'],
+    }
   } else {
     isValidate = true
   }
 
   return {
     isValidate,
-    errorMsg,
+    error,
   }
 }
 

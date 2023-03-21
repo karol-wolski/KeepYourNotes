@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 import useObject from '../../hooks/useObject'
 import { IUser } from '../../hooks/useUsers'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
@@ -6,25 +6,32 @@ import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
 import formValidation from '../../helpers/formValidation'
 import { useIntl } from 'react-intl'
+import useFetch from '../../hooks/useFetch'
 
-interface IErrorsFields extends IUser {
-  form: string
+type FieldError = { translateId: string; errorMsg: string } | undefined
+
+interface IErrorsFields {
+  email: FieldError
+  username: FieldError
+}
+
+interface IResponse {
+  message: string
+  data: IUser
 }
 
 interface IEditUserAccount {
   userData: IUser
-  sendData: (user: IUser, cb: (status: number, message: string) => void) => void
 }
 
-const EditUserAccount = ({ userData, sendData }: IEditUserAccount) => {
+const EditUserAccount = ({ userData }: IEditUserAccount) => {
+  const { formatMessage } = useIntl()
   const [user, updateUser] = useObject<IUser>(userData)
-  const [errors, setErrors, clearErrors] = useObject<IErrorsFields>({
-    email: '',
-    username: '',
-    form: '',
+  const { data, successMsg, clearSuccessMsg, errors, isLoading, fetchData, statusCode } = useFetch<IResponse>()
+  const [errorsForm, setErrors, clearErrors] = useObject<IErrorsFields>({
+    email: undefined,
+    username: undefined,
   })
-
-  const [success, setSuccess] = useState('')
 
   const { username, email } = user
 
@@ -35,39 +42,32 @@ const EditUserAccount = ({ userData, sendData }: IEditUserAccount) => {
     })
   }
 
-  const isVisibleSendButton = !!user.email.length || !!user.username.length
-
-  const setMessage = (status: number, message: string) => {
-    if (status === 200) {
-      setSuccess(message)
-      clearErrors()
-    } else {
-      setSuccess('')
-      setErrors({ ...errors, form: message })
-    }
-  }
-
   const isEmailValidate = formValidation.isEmailValidate(email)
   const isUsernameValidate = formValidation.isUsernameValidate(username)
+  const isVisibleSendButton = !!user.email.length || !!user.username.length
 
   const handleSendData = (event: React.FormEvent) => {
     event.preventDefault()
     if (isUsernameValidate.isValidate && isEmailValidate.isValidate) {
-      const newUser = {
+      const updatedUser = {
         username: username,
         email: email,
       }
-      sendData(newUser, setMessage)
+      fetchData('user/me', 'PATCH', updatedUser)
     } else {
       setErrors({
-        ...errors,
-        email: isEmailValidate.errorMsg,
-        username: isUsernameValidate.errorMsg,
+        ...errorsForm,
+        email: isEmailValidate.error,
+        username: isUsernameValidate.error,
       })
     }
   }
 
-  const { formatMessage } = useIntl()
+  useEffect(() => {
+    if (statusCode === 200 && successMsg) clearErrors()
+    const timeout = setTimeout(clearSuccessMsg, 3000)
+    return () => clearTimeout(timeout)
+  }, [statusCode, data])
 
   return (
     <form>
@@ -80,7 +80,15 @@ const EditUserAccount = ({ userData, sendData }: IEditUserAccount) => {
           value={username}
           isLabelVisible
         />
-        {errors.username && <Alert type={ALERT_TYPE.DANGER} text={errors.username} />}
+        {errorsForm.username && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.username.translateId,
+              defaultMessage: errorsForm.username.errorMsg,
+            })}
+          />
+        )}
       </div>
       <div>
         <LabelInput
@@ -91,10 +99,18 @@ const EditUserAccount = ({ userData, sendData }: IEditUserAccount) => {
           value={email}
           isLabelVisible
         />
-        {errors.username && <Alert type={ALERT_TYPE.DANGER} text={errors.username} />}
+        {errorsForm.email && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.email.translateId,
+              defaultMessage: errorsForm.email.errorMsg,
+            })}
+          />
+        )}
       </div>
-      {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
-      {success && <Alert type={ALERT_TYPE.SUCCESS} text={success} />}
+      {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
+      {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
       <button
         type='submit'
@@ -102,7 +118,9 @@ const EditUserAccount = ({ userData, sendData }: IEditUserAccount) => {
         onClick={handleSendData}
         disabled={!isVisibleSendButton}
       >
-        {formatMessage({ id: 'app.submit', defaultMessage: 'Submit' })}
+        {isLoading
+          ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
+          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
       </button>
     </form>
   )

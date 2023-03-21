@@ -1,80 +1,90 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
 import { useIntl } from 'react-intl'
+import useFetch from '../../hooks/useFetch'
+import useObject from '../../hooks/useObject'
 
 interface IRegisterForm {
-  handleOnSubmit: (
-    username: string,
-    email: string,
-    password: string,
-    cbError: React.Dispatch<React.SetStateAction<{ form: string }>>,
-    cbSuccess: (msg: string) => void,
-  ) => void
+  username: string
+  email: string
+  password: string
+  confirmPassword: string
 }
 
-const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
-  const [data, setData] = useState({
+type FieldError = { translateId: string; errorMsg: string } | undefined
+
+interface IRegisterFormErrors {
+  username: FieldError
+  email: FieldError
+  password: FieldError
+  confirmPassword: FieldError
+}
+
+interface IResponse {
+  message: string
+}
+
+const RegisterForm = () => {
+  const { formatMessage } = useIntl()
+  const { data, errors, successMsg, clearSuccessMsg, isLoading, fetchData, statusCode } = useFetch<IResponse>()
+  const [form, setForm] = useState<IRegisterForm>({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
   })
 
-  const [errors, setErrors] = useState<{
-    username?: string
-    email?: string
-    password?: string
-    form: string
-  }>({
-    username: '',
-    email: '',
-    password: '',
-    form: '',
+  const [errorsForm, setErrors, clearErrors] = useObject<IRegisterFormErrors>({
+    username: undefined,
+    email: undefined,
+    password: undefined,
+    confirmPassword: undefined,
   })
 
-  const [success, setSuccess] = useState('')
-
-  const setSuccesMsg = (msg: string) => {
-    setErrors({
-      username: '',
-      email: '',
-      password: '',
-      form: '',
-    })
-    setSuccess(msg)
-  }
-
   const setDataOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({
-      ...data,
+    setForm({
+      ...form,
       [event.target.name]: event.target.value,
     })
   }
 
-  const isUsernameValidate = formValidation.isUsernameValidate(data.username)
-  const isEmailValidate = formValidation.isEmailValidate(data.email)
-  const isPasswordValidate = formValidation.isPasswordValidate(data.password)
+  const isUsernameValidate = formValidation.isUsernameValidate(form.username)
+  const isEmailValidate = formValidation.isEmailValidate(form.email)
+  const isPasswordValidate = formValidation.isPasswordValidate(form.password)
+  const isConfirmPasswordValidate = formValidation.isConfirmPasswordValidate(form.password, form.confirmPassword)
 
   const sendData = (event: React.FormEvent) => {
     event.preventDefault()
-    const { username, email, password } = data
-    if (isEmailValidate.isValidate && isPasswordValidate.isValidate && isUsernameValidate.isValidate) {
-      handleOnSubmit(username, email, password, setErrors, setSuccesMsg)
+    const { username, email, password } = form
+    if (
+      isEmailValidate.isValidate &&
+      isPasswordValidate.isValidate &&
+      isUsernameValidate.isValidate &&
+      isConfirmPasswordValidate.isValidate
+    ) {
+      fetchData('auth/register', 'POST', { username: username, email: email, password: password })
     } else {
       setErrors({
-        ...errors,
-        username: isUsernameValidate.errorMsg,
-        email: isEmailValidate.errorMsg,
-        password: isPasswordValidate.errorMsg,
+        ...errorsForm,
+        username: isUsernameValidate.error,
+        email: isEmailValidate.error,
+        password: isPasswordValidate.error,
+        confirmPassword: isConfirmPasswordValidate.error,
       })
     }
   }
 
-  const isVisibleSendButton = !!data.email.length && !!data.password.length && !!data.username.length
-  const { formatMessage } = useIntl()
+  const isVisibleSendButton =
+    !!form.email.length && !!form.password.length && !!form.username.length && !!form.confirmPassword.length
+
+  useEffect(() => {
+    if (statusCode === 200 && successMsg) clearErrors()
+    const timeout = setTimeout(clearSuccessMsg, 3000)
+    return () => clearTimeout(timeout)
+  }, [statusCode, data])
 
   return (
     <form>
@@ -86,7 +96,12 @@ const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.username && <Alert type={ALERT_TYPE.DANGER} text={errors.username} />}
+        {errorsForm.username && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({ id: errorsForm.username.translateId, defaultMessage: errorsForm.username.errorMsg })}
+          />
+        )}
       </div>
       <div className='mb-3'>
         <LabelInput
@@ -96,7 +111,12 @@ const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.email && <Alert type={ALERT_TYPE.DANGER} text={errors.email} />}
+        {errorsForm.email && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({ id: errorsForm.email.translateId, defaultMessage: errorsForm.email.errorMsg })}
+          />
+        )}
       </div>
       <div className='mb-3'>
         <LabelInput
@@ -106,10 +126,33 @@ const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
+        {errorsForm.password && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({ id: errorsForm.password.translateId, defaultMessage: errorsForm.password.errorMsg })}
+          />
+        )}
       </div>
-      {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
-      {success && <Alert type={ALERT_TYPE.SUCCESS} text={success} />}
+      <div className='mb-3'>
+        <LabelInput
+          id='confirmPassword'
+          type='password'
+          labelText={formatMessage({ id: 'app.passwordConfirm', defaultMessage: 'Confirm Password' })}
+          onChange={setDataOnChange}
+          isLabelVisible
+        />
+        {errorsForm.confirmPassword && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.confirmPassword.translateId,
+              defaultMessage: errorsForm.confirmPassword.errorMsg,
+            })}
+          />
+        )}
+      </div>
+      {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
+      {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
       <button
         type='submit'
@@ -117,7 +160,9 @@ const RegisterForm = ({ handleOnSubmit }: IRegisterForm) => {
         onClick={e => sendData(e)}
         disabled={!isVisibleSendButton}
       >
-        {formatMessage({ id: 'app.submit', defaultMessage: 'Submit' })}
+        {isLoading
+          ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
+          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
       </button>
     </form>
   )

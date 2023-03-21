@@ -1,62 +1,74 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { useLocation } from 'react-router-dom'
+import useFetch from '../../hooks/useFetch'
+import useObject from '../../hooks/useObject'
 
 interface IResetPassword {
-  handleOnSubmit: (password: string, cb: (msg: string) => void) => void
+  password: string
+  confirmPassword: string
 }
 
-const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
-  const [data, setData] = useState({
+type FieldError = { translateId: string; errorMsg: string } | undefined
+interface IResetPasswordErrors {
+  password: FieldError
+  confirmPassword: FieldError
+}
+
+interface IResponse {
+  token: string
+}
+
+const ResetPasswordForm = () => {
+  const { formatMessage } = useIntl()
+  const { data, errors, successMsg, clearSuccessMsg, isLoading, fetchData, statusCode } = useFetch<IResponse>()
+  const [form, setForm] = useState<IResetPassword>({
     password: '',
     confirmPassword: '',
   })
 
-  const [errors, setErrors] = useState({
-    password: '',
-    confirmPassword: '',
-    form: '',
+  const [errorsForm, setErrors, clearErrors] = useObject<IResetPasswordErrors>({
+    password: undefined,
+    confirmPassword: undefined,
   })
-
-  const [success, setSuccess] = useState('')
 
   const setDataOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({
-      ...data,
+    setForm({
+      ...form,
       [event.target.name]: event.target.value,
     })
   }
 
-  const setApiMsg = (msg: string) => {
-    setErrors({
-      password: '',
-      confirmPassword: '',
-      form: '',
-    })
-    setSuccess(msg)
-  }
-
-  const isPasswordValidate = formValidation.isPasswordValidate(data.password)
-  const isConfirmPasswordValidate = formValidation.isConfirmPasswordValidate(data.password, data.confirmPassword)
+  const isPasswordValidate = formValidation.isPasswordValidate(form.password)
+  const isConfirmPasswordValidate = formValidation.isConfirmPasswordValidate(form.password, form.confirmPassword)
 
   const sendData = (event: React.FormEvent) => {
     event.preventDefault()
-    const { password } = data
+    const { password } = form
+    const location = useLocation().search
+    const token = new URLSearchParams(location).get('resetId')
     if (isPasswordValidate.isValidate && isConfirmPasswordValidate.isValidate) {
-      handleOnSubmit(password, setApiMsg)
+      fetchData('user/resetPassword', 'PATCH', { password: password, resetToken: token })
     } else {
       setErrors({
-        ...errors,
-        password: isPasswordValidate.errorMsg,
-        confirmPassword: isConfirmPasswordValidate.errorMsg,
+        ...errorsForm,
+        password: isPasswordValidate.error,
+        confirmPassword: isConfirmPasswordValidate.error,
       })
     }
   }
 
-  const isVisibleSendButton = !!data.password.length && !!data.confirmPassword.length
+  const isVisibleSendButton = !!form.password.length && !!form.confirmPassword.length
+
+  useEffect(() => {
+    if (statusCode === 200 && successMsg) clearErrors()
+    const timeout = setTimeout(clearSuccessMsg, 3000)
+    return () => clearTimeout(timeout)
+  }, [statusCode, data])
 
   return (
     <form>
@@ -68,7 +80,15 @@ const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
+        {errorsForm.password && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.password.translateId,
+              defaultMessage: errorsForm.password.errorMsg,
+            })}
+          />
+        )}
       </div>
       <div className='mb-3'>
         <LabelInput
@@ -78,10 +98,18 @@ const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.confirmPassword && <Alert type={ALERT_TYPE.DANGER} text={errors.confirmPassword} />}
+        {errorsForm.confirmPassword && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.confirmPassword.translateId,
+              defaultMessage: errorsForm.confirmPassword.errorMsg,
+            })}
+          />
+        )}
       </div>
-      {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
-      {success && <Alert type={ALERT_TYPE.SUCCESS} text={success} />}
+      {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
+      {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
       <button
         type='submit'
@@ -89,7 +117,9 @@ const ResetPasswordForm = ({ handleOnSubmit }: IResetPassword) => {
         onClick={e => sendData(e)}
         disabled={!isVisibleSendButton}
       >
-        <FormattedMessage id='app.submit' defaultMessage='Submit' />
+        {isLoading
+          ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
+          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
       </button>
     </form>
   )

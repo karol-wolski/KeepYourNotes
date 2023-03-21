@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import formValidation from '../../helpers/formValidation'
 import useObject from '../../hooks/useObject'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
 import { useIntl } from 'react-intl'
+import useFetch from '../../hooks/useFetch'
 
 export interface INewPassword {
   password: string
@@ -17,71 +18,62 @@ interface IPasswordFields {
   confirmPassword: string
 }
 
-interface IErrorsFields extends IPasswordFields {
-  form: string
+interface IErrorsFields {
+  currentPassword: { translateId: string; errorMsg: string } | undefined
+  password: { translateId: string; errorMsg: string } | undefined
+  confirmPassword: { translateId: string; errorMsg: string } | undefined
 }
 
-interface IEditUserPassword {
-  sendData: (password: INewPassword, cb: (status: number, message: string) => void) => void
-}
-
-const EditUserPasswordForm = ({ sendData }: IEditUserPassword) => {
-  const [data, setData] = useObject<IPasswordFields>({
+const EditUserPasswordForm = () => {
+  const { formatMessage } = useIntl()
+  const { data, errors, successMsg, clearSuccessMsg, isLoading, fetchData, statusCode } = useFetch<INewPassword>()
+  const [form, setForm] = useObject<IPasswordFields>({
     currentPassword: '',
     password: '',
     confirmPassword: '',
   })
 
-  const [errors, setErrors, clearErrors] = useObject<IErrorsFields>({
-    currentPassword: '',
-    password: '',
-    confirmPassword: '',
-    form: '',
+  const [errorsForm, setErrors, clearErrors] = useObject<IErrorsFields>({
+    currentPassword: undefined,
+    password: undefined,
+    confirmPassword: undefined,
   })
-
-  const [success, setSuccess] = useState('')
 
   const setDataOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setData({
-      ...data,
+    setForm({
+      ...form,
       [event.target.name]: event.target.value,
     })
   }
 
-  const setMessage = (status: number, message: string) => {
-    if (status === 200) {
-      setSuccess(message)
-      clearErrors()
-    } else {
-      setSuccess('')
-      setErrors({ ...errors, form: message })
-    }
-  }
-
-  const isCurrentPasswordValidate = formValidation.isPasswordValidate(data.currentPassword)
-  const isPasswordValidate = formValidation.isPasswordValidate(data.password)
-  const isConfirmPasswordValidate = formValidation.isConfirmPasswordValidate(data.password, data.confirmPassword)
-  const isVisibleSendButton = !!data.currentPassword.length && !!data.password.length && !!data.confirmPassword.length
+  const isCurrentPasswordValidate = formValidation.isPasswordValidate(form.currentPassword)
+  const isPasswordValidate = formValidation.isPasswordValidate(form.password)
+  const isConfirmPasswordValidate = formValidation.isConfirmPasswordValidate(form.password, form.confirmPassword)
+  const isVisibleSendButton = !!form.currentPassword.length && !!form.password.length && !!form.confirmPassword.length
 
   const handleSendData = (event: React.FormEvent) => {
     event.preventDefault()
     const newPasswordData: INewPassword = {
-      password: data.currentPassword,
-      newPassword: data.password,
+      password: form.currentPassword,
+      newPassword: form.password,
     }
     if (isCurrentPasswordValidate.isValidate && isPasswordValidate.isValidate && isConfirmPasswordValidate.isValidate) {
-      sendData(newPasswordData, setMessage)
+      fetchData('user/passwordMe', 'PATCH', newPasswordData)
     } else {
       setErrors({
-        ...errors,
-        currentPassword: isCurrentPasswordValidate.errorMsg,
-        password: isPasswordValidate.errorMsg,
-        confirmPassword: isConfirmPasswordValidate.errorMsg,
+        ...errorsForm,
+        currentPassword: isCurrentPasswordValidate.error,
+        password: isPasswordValidate.error,
+        confirmPassword: isConfirmPasswordValidate.error,
       })
     }
   }
 
-  const { formatMessage } = useIntl()
+  useEffect(() => {
+    if (statusCode === 200 && successMsg) clearErrors()
+    const timeout = setTimeout(clearSuccessMsg, 3000)
+    return () => clearTimeout(timeout)
+  }, [statusCode, data])
 
   return (
     <form>
@@ -93,7 +85,15 @@ const EditUserPasswordForm = ({ sendData }: IEditUserPassword) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
+        {errorsForm.currentPassword && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.currentPassword.translateId,
+              defaultMessage: errorsForm.currentPassword.errorMsg,
+            })}
+          />
+        )}
       </div>
       <div className='mb-3'>
         <LabelInput
@@ -103,7 +103,15 @@ const EditUserPasswordForm = ({ sendData }: IEditUserPassword) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.password && <Alert type={ALERT_TYPE.DANGER} text={errors.password} />}
+        {errorsForm.password && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.password.translateId,
+              defaultMessage: errorsForm.password.errorMsg,
+            })}
+          />
+        )}
       </div>
       <div className='mb-3'>
         <LabelInput
@@ -113,10 +121,18 @@ const EditUserPasswordForm = ({ sendData }: IEditUserPassword) => {
           onChange={setDataOnChange}
           isLabelVisible
         />
-        {errors.confirmPassword && <Alert type={ALERT_TYPE.DANGER} text={errors.confirmPassword} />}
+        {errorsForm.confirmPassword && (
+          <Alert
+            type={ALERT_TYPE.DANGER}
+            text={formatMessage({
+              id: errorsForm.confirmPassword.translateId,
+              defaultMessage: errorsForm.confirmPassword.errorMsg,
+            })}
+          />
+        )}
       </div>
-      {errors.form && <Alert type={ALERT_TYPE.DANGER} text={errors.form} />}
-      {success && <Alert type={ALERT_TYPE.SUCCESS} text={success} />}
+      {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
+      {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
       <button
         type='submit'
@@ -124,7 +140,9 @@ const EditUserPasswordForm = ({ sendData }: IEditUserPassword) => {
         onClick={handleSendData}
         disabled={!isVisibleSendButton}
       >
-        {formatMessage({ id: 'app.submit', defaultMessage: 'Submit' })}
+        {isLoading
+          ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
+          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
       </button>
     </form>
   )
