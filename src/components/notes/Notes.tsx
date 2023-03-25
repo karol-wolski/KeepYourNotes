@@ -1,6 +1,7 @@
 import { useIntl } from 'react-intl'
 import useCategories from '../../hooks/useCategories'
 import { IUpdateNotesArray } from '../../pages/Notes'
+import Masonry from 'react-masonry-css'
 import Note from '../note/Note'
 
 export type Attachment = {
@@ -38,17 +39,26 @@ const Notes = ({ notes, filterNotes, update }: INotes) => {
   const { categories } = useCategories()
   const { formatMessage } = useIntl()
 
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  }
+
   return (
     <div className='container'>
       <>
         {notes && notes.length > 0 ? (
-          <div className='row g-3'>
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className='row'
+            columnClassName='note col-12 col-sm-6 col-md-4 col-xl-3'
+          >
             {notes.map(note => (
-              <div key={note._id} className='col-12 col-sm-6 col-md-4 col-xl-3'>
-                <Note note={note} filterNotes={filterNotes} categories={categories} update={update} />
-              </div>
+              <Note key={note._id} note={note} filterNotes={filterNotes} categories={categories} update={update} />
             ))}
-          </div>
+          </Masonry>
         ) : (
           <div className='row'>
             <p className='fs-4 text-center'>
