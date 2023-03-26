@@ -71,7 +71,10 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
 
   return (
     <>
-      <div className={`card ${stylesCard.card}`} style={{ backgroundColor: bgColor?.bgColor, color: bgColor?.color }}>
+      <div
+        className={`card ${stylesCard.card} mb-3`}
+        style={{ backgroundColor: bgColor?.bgColor, color: bgColor?.color }}
+      >
         <div className='card-body'>
           <div className='position-relative'>
             <div className='position-absolute top-0 end-0'>
