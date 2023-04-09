@@ -1,4 +1,3 @@
-import { useIntl } from 'react-intl'
 import useCategories from '../../hooks/useCategories'
 import { IUpdateNotesArray } from '../../pages/Notes'
 import Masonry from 'react-masonry-css'
@@ -37,7 +36,6 @@ interface INotes {
 
 const Notes = ({ notes, filterNotes, update }: INotes) => {
   const { categories } = useCategories()
-  const { formatMessage } = useIntl()
 
   const breakpointColumnsObj = {
     default: 4,
@@ -48,31 +46,15 @@ const Notes = ({ notes, filterNotes, update }: INotes) => {
 
   return (
     <div className='container'>
-      <>
-        {notes && notes.length > 0 ? (
-          <Masonry
-            breakpointCols={breakpointColumnsObj}
-            className='row'
-            columnClassName='note col-12 col-sm-6 col-md-4 col-xl-3'
-          >
-            {notes.map(note => (
-              <Note key={note._id} note={note} filterNotes={filterNotes} categories={categories} update={update} />
-            ))}
-          </Masonry>
-        ) : (
-          <div className='row'>
-            <p className='fs-4 text-center'>
-              {formatMessage({ id: 'app.noNote', defaultMessage: 'You do not have any notes yet.' })}
-            </p>
-            <p className='text-center'>
-              {formatMessage({
-                id: 'app.clickAddNoteBtn',
-                defaultMessage: 'Click Add note button and add your first note.',
-              })}
-            </p>
-          </div>
-        )}
-      </>
+      <Masonry
+        breakpointCols={breakpointColumnsObj}
+        className='row'
+        columnClassName='note col-12 col-sm-6 col-md-4 col-xl-3'
+      >
+        {notes.map(note => (
+          <Note key={note._id} note={note} filterNotes={filterNotes} categories={categories} update={update} />
+        ))}
+      </Masonry>
     </div>
   )
 }
