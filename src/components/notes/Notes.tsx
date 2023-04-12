@@ -10,13 +10,6 @@ export type Attachment = {
   mimetype: string
 }
 
-export type AddNote = {
-  title: string
-  desc: string
-  pinIt: boolean
-  categories?: string[]
-}
-
 export type Note = {
   _id: string
   title: string
@@ -27,6 +20,8 @@ export type Note = {
   pinIt: boolean
   backgroundColor?: number
 }
+
+export type NewNote = Omit<Note, '_id' | 'createdBy'>
 
 interface INotes {
   filterNotes: (categoryId: string) => void

@@ -7,7 +7,7 @@ interface IModal {
   title: string
   children: ReactNode
   btnName?: string
-  handleBtnEvent?: ((e: React.FormEvent) => Promise<void>) | (() => void)
+  handleBtnEvent?: (e: React.FormEvent) => void
   handleClose: () => void
   isDisabledBtn?: boolean
   isOpen: boolean
