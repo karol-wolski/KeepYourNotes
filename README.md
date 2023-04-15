@@ -29,8 +29,12 @@ Project status: _in progress_
 Project is created with:
 
 - React
-- React-router-dom
+- React-Router-Dom
 - Bootstrap
+- TypeScript
+- React-Masonry-CSS
+- Focus-Trap-React
+- React-INTL
 
 ## Setup
 
@@ -66,13 +70,13 @@ Features list:
 - Log in
 - Sign up
 - Edit user profile
+- PL / EN languages
 
 To do:
 
 - Add / Remove Collabolators
 - Shere the note
 - Light / Dark mdoe
-- PL / EN languages
 
 ## Screenshots
 ### Mobile
@@ -92,8 +96,10 @@ To do:
 <img width="218" alt="image" src="https://user-images.githubusercontent.com/15778908/218490656-4911f341-ac52-4203-8d17-638a900e416c.png">
 <img width="219" alt="image" src="https://user-images.githubusercontent.com/15778908/218491652-7d7382f9-dba7-4818-8701-0ea823fa1b7c.png">
 <img width="223" alt="image" src="https://user-images.githubusercontent.com/15778908/218491544-d28c00e4-7f5c-4de3-b28f-a21cd30196a5.png">
-<img width="220" alt="image" src="https://user-images.githubusercontent.com/15778908/218492127-51543d8a-4c51-4643-8742-4c5ae48c0181.png">
-<img width="220" alt="image" src="https://user-images.githubusercontent.com/15778908/218492416-8cc31f69-5614-452a-b92c-5237f81e69a4.png">
+<img width="220" alt="image" src="https://user-images.githubusercontent.com/15778908/230888933-a6e5fae0-710c-4fe0-b6e2-b725fe669092.png">
+<img width="221" alt="image" src="https://user-images.githubusercontent.com/15778908/230888818-eecad230-5ff1-4c05-b88b-6167c850ed67.png">
+<img width="220" alt="image" src="https://user-images.githubusercontent.com/15778908/230888679-278df746-2b29-4520-abb4-c92884969fd9.png">
+
 </div>
 
 ### Desktop
@@ -112,6 +118,7 @@ To do:
 <img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/218490704-60e41aed-58f4-49e8-b5c7-e7990149e531.png">
 <img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/218491358-019795de-ce96-470e-a677-4075ce8f20c8.png">
 <img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/218491438-c9a4b5b1-5f07-441c-9f15-89cbbb6f0fd5.png">
-<img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/218492222-7f0edd78-0b97-47d1-84b0-233159d6e920.png">
-<img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/218492291-bb2852af-50c0-44b1-ad5a-453d23e91007.png">
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/230888041-ce107dc2-b7c2-4da0-ae6c-0f3550cc6941.png">
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/230888139-26c1b412-5b62-450c-a33f-f46bced6ca45.png">
+<img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/230888409-d43e32a4-434a-4240-addd-7e9357efdc45.png">
 </div>
