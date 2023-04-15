@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import AddNote from '../components/add-note/AddNote'
+import AddEditNote from '../components/addEditNote/AddEditNote'
 import Categories from '../components/categories/Categories'
 import Navigation from '../components/navigation/Navigation'
 import Notes, { Note } from '../components/notes/Notes'
@@ -79,7 +79,7 @@ const NotesPage = () => {
         )}
       </div>
       {isOpenAddNoteModal && (
-        <AddNote
+        <AddEditNote
           handleClose={closeAddNoteModal}
           update={updateNotesArray}
           categories={categories}

@@ -1,7 +1,6 @@
 import { BG_COLORS } from '../../constants/constants'
 import trimText from '../../helpers/trimText'
 import { ICategory } from '../addCategory/AddCategory'
-import EditNote from '../edit-note/EditNote'
 import Modal from '../modal/Modal'
 import { Note as NoteType } from '../notes/Notes'
 import FullNote from '../fullNote/FullNote'
@@ -14,6 +13,7 @@ import useFetch from '../../hooks/useFetch'
 import { useEffect, useState } from 'react'
 import { IUpdateNotesArray } from '../../pages/Notes'
 import { useIntl } from 'react-intl'
+import AddEditNote from '../addEditNote/AddEditNote'
 
 interface INote {
   note: NoteType
@@ -59,7 +59,6 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
 
   useEffect(() => {
     if ((statusCode === 200 || statusCode === 201) && data) {
-      console.log('data:', data)
       update({
         method: method,
         data: data,
@@ -189,7 +188,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
         </Modal>
       )}
       {displayEditModal && (
-        <EditNote
+        <AddEditNote
           note={note}
           handleClose={closeEditModal}
           categories={categoriesArray}
