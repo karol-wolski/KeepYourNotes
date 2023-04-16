@@ -64,6 +64,7 @@
   "app.emailWrongFormat": "The email address is in the wrong format.",
   "app.passwordMinChars": "Password should have at least 8 characters.",
   "app.passwordMaxChars": "Password should have less than 16 characters.",
+  "app.confirmPasswordMaxChars": "Confirm password should have less than 16 characters.",
   "app.usernameMinChars": "Username should have at least 2 characters.",
   "app.usernameMaxChars": "Username should have less than 16 characters.",
   "app.submitting": "Submitting...",

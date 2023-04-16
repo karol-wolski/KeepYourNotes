@@ -64,6 +64,7 @@
   "app.emailWrongFormat": "Błędny format adresu email.",
   "app.passwordMinChars": "Hasło powinno mieć minimum 8 znaków.",
   "app.passwordMaxChars": "Hasło powinno mieć mniej niż 16 znaków.",
+  "app.confirmPasswordMaxChars": "Potwierdź hasło powinno mieć mniej niż 16 znaków.",
   "app.usernameMinChars": "Nazwa użytkownika powinna mieć minimum 2 znaki.",
   "app.usernameMaxChars": "Nazwa użytkownika powinna mieć mniej niż 16 znaków.",
   "app.submitting": "Wysyłanie...",
