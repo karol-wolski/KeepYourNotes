@@ -61,6 +61,11 @@ const isConfirmPasswordValidate = (password: string, confirmPassword: string) =>
       translateId: 'app.passwordsNotTheSame',
       errorMsg: translation['app.passwordsNotTheSame'],
     }
+  } else if (password.length >= 16) {
+    error = {
+      translateId: 'app.confirmPasswordMaxChars',
+      errorMsg: translation['app.confirmPasswordMaxChars'],
+    }
   } else {
     isValidate = true
   }
