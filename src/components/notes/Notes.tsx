@@ -16,7 +16,7 @@ export type Note = {
   desc: string
   attachments?: Attachment[]
   categories?: string[]
-  createdBy: string
+  createdBy?: string
   pinIt: boolean
   backgroundColor?: number
 }
