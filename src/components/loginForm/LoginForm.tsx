@@ -1,13 +1,10 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
 import { FormattedMessage, useIntl } from 'react-intl'
-import useFetch from '../../hooks/useFetch'
 import useObject from '../../hooks/useObject'
-import { AuthContext, IAuthContext } from '../../context/AuthContext'
-import { addToLocalStorage } from '../../helpers/localStorage'
 
 interface ILoginForm {
   email: string
@@ -21,13 +18,14 @@ interface ILoginErrors {
   password: FieldError
 }
 
-interface IResponse {
-  token: string
+interface ILoginFormProps {
+  isLoading?: boolean
+  errors?: string
+  statusCode?: number
+  onSubmit: (email: string, password: string) => void
 }
 
-const LoginForm = () => {
-  const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
-  const { data, errors, isLoading, fetchData, statusCode } = useFetch<IResponse>()
+const LoginForm = ({ onSubmit, isLoading, errors, statusCode }: ILoginFormProps) => {
   const [form, setForm] = useState<ILoginForm>({
     email: '',
     password: '',
@@ -52,7 +50,7 @@ const LoginForm = () => {
     event.preventDefault()
     const { email, password } = form
     if (isEmailValidate.isValidate && isPasswordValidate.isValidate) {
-      fetchData('auth/login', 'POST', { email: email, password: password })
+      onSubmit(email, password)
     } else {
       setErrors({
         email: isEmailValidate.error,
@@ -65,15 +63,13 @@ const LoginForm = () => {
   const { formatMessage } = useIntl()
 
   useEffect(() => {
-    if (statusCode === 200 && data) {
+    if (statusCode === 200) {
       clearErrors()
-      addToLocalStorage('token', data.token)
-      setIsLoggedIn((state: boolean) => !state)
     }
-  }, [statusCode, data])
+  }, [statusCode])
 
   return (
-    <form>
+    <form onSubmit={sendData}>
       <div className='mb-3'>
         <LabelInput
           id='email'
@@ -112,15 +108,10 @@ const LoginForm = () => {
       </div>
       {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
 
-      <button
-        type='submit'
-        className={`btn btn-primary ${styles.btn__primary}`}
-        onClick={e => sendData(e)}
-        disabled={!isVisibleSendButton}
-      >
+      <button type='submit' className={`btn btn-primary ${styles.btn__primary}`} disabled={!isVisibleSendButton}>
         {isLoading
           ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
-          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
+          : formatMessage({ id: 'app.submit', defaultMessage: 'submit' })}
       </button>
     </form>
   )
