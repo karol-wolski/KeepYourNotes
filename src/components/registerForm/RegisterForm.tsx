@@ -4,7 +4,6 @@ import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
 import { useIntl } from 'react-intl'
-import useFetch from '../../hooks/useFetch'
 import useObject from '../../hooks/useObject'
 
 interface IRegisterForm {
@@ -23,13 +22,17 @@ interface IRegisterFormErrors {
   confirmPassword: FieldError
 }
 
-interface IResponse {
-  message: string
+interface IRegisterFormProps {
+  isLoading?: boolean
+  errors?: string
+  statusCode?: number
+  successMsg?: string
+  clearSuccessMsg: () => void
+  onSubmit: (username: string, email: string, password: string) => void
 }
 
-const RegisterForm = () => {
+const RegisterForm = ({ onSubmit, errors, isLoading, statusCode, clearSuccessMsg, successMsg }: IRegisterFormProps) => {
   const { formatMessage } = useIntl()
-  const { data, errors, successMsg, clearSuccessMsg, isLoading, fetchData, statusCode } = useFetch<IResponse>()
   const [form, setForm] = useState<IRegisterForm>({
     username: '',
     email: '',
@@ -65,7 +68,7 @@ const RegisterForm = () => {
       isUsernameValidate.isValidate &&
       isConfirmPasswordValidate.isValidate
     ) {
-      fetchData('auth/register', 'POST', { username: username, email: email, password: password })
+      onSubmit(username, email, password)
     } else {
       setErrors({
         ...errorsForm,
@@ -84,10 +87,10 @@ const RegisterForm = () => {
     if (statusCode === 200 && successMsg) clearErrors()
     const timeout = setTimeout(clearSuccessMsg, 3000)
     return () => clearTimeout(timeout)
-  }, [statusCode, data])
+  }, [statusCode, successMsg])
 
   return (
-    <form>
+    <form onSubmit={sendData}>
       <div className='mb-3'>
         <LabelInput
           id='username'
@@ -154,15 +157,10 @@ const RegisterForm = () => {
       {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
       {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
-      <button
-        type='submit'
-        className={`btn btn-primary ${styles.btn__primary}`}
-        onClick={e => sendData(e)}
-        disabled={!isVisibleSendButton}
-      >
+      <button type='submit' className={`btn btn-primary ${styles.btn__primary}`} disabled={!isVisibleSendButton}>
         {isLoading
           ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
-          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
+          : formatMessage({ id: 'app.submit', defaultMessage: 'Submit' })}
       </button>
     </form>
   )

@@ -4,7 +4,6 @@ import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
 import { FormattedMessage, useIntl } from 'react-intl'
-import useFetch from '../../hooks/useFetch'
 import useObject from '../../hooks/useObject'
 
 interface IRemindPassword {
@@ -16,13 +15,24 @@ interface IRemindPasswordErrors {
   email: FieldError
 }
 
-interface IResponse {
-  message: string
+interface IRemindPasswordForm {
+  isLoading?: boolean
+  errors?: string
+  statusCode?: number
+  successMsg?: string
+  clearSuccessMsg: () => void
+  onSubmit: (email: string) => void
 }
 
-const RemindPasswordForm = () => {
+const RemindPasswordForm = ({
+  onSubmit,
+  errors,
+  isLoading,
+  statusCode,
+  clearSuccessMsg,
+  successMsg,
+}: IRemindPasswordForm) => {
   const { formatMessage } = useIntl()
-  const { data, errors, successMsg, clearSuccessMsg, isLoading, fetchData, statusCode } = useFetch<IResponse>()
   const [form, setForm] = useState<IRemindPassword>({
     email: '',
   })
@@ -43,7 +53,7 @@ const RemindPasswordForm = () => {
   const sendData = (event: React.FormEvent) => {
     event.preventDefault()
     if (isEmailValidate.isValidate) {
-      fetchData('user/forgotPassword', 'PATCH', form)
+      onSubmit(form.email)
     } else {
       setErrors({
         ...errorsForm,
@@ -58,10 +68,10 @@ const RemindPasswordForm = () => {
     if (statusCode === 200 && successMsg) clearErrors()
     const timeout = setTimeout(clearSuccessMsg, 3000)
     return () => clearTimeout(timeout)
-  }, [statusCode, data])
+  }, [statusCode, successMsg])
 
   return (
-    <form>
+    <form onSubmit={sendData}>
       <div className='mb-3'>
         <LabelInput
           id='email'
@@ -83,15 +93,10 @@ const RemindPasswordForm = () => {
       {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
       {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
-      <button
-        type='submit'
-        className={`btn btn-primary ${styles.btn__primary}`}
-        onClick={e => sendData(e)}
-        disabled={!isVisibleSendButton}
-      >
+      <button type='submit' className={`btn btn-primary ${styles.btn__primary}`} disabled={!isVisibleSendButton}>
         {isLoading
           ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
-          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
+          : formatMessage({ id: 'app.submit', defaultMessage: 'Submit' })}
       </button>
     </form>
   )

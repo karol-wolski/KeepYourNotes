@@ -5,7 +5,6 @@ import LabelInput from '../labelInput/LabelInput'
 import styles from '../../styles/buttons.module.scss'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { useLocation } from 'react-router-dom'
-import useFetch from '../../hooks/useFetch'
 import useObject from '../../hooks/useObject'
 
 interface IResetPassword {
@@ -19,13 +18,24 @@ interface IResetPasswordErrors {
   confirmPassword: FieldError
 }
 
-interface IResponse {
-  token: string
+interface IResetPasswordForm {
+  isLoading?: boolean
+  errors?: string
+  statusCode?: number
+  successMsg?: string
+  clearSuccessMsg: () => void
+  onSubmit: (password: string, token: string) => void
 }
 
-const ResetPasswordForm = () => {
+const ResetPasswordForm = ({
+  onSubmit,
+  errors,
+  isLoading,
+  statusCode,
+  clearSuccessMsg,
+  successMsg,
+}: IResetPasswordForm) => {
   const { formatMessage } = useIntl()
-  const { data, errors, successMsg, clearSuccessMsg, isLoading, fetchData, statusCode } = useFetch<IResponse>()
   const [form, setForm] = useState<IResetPassword>({
     password: '',
     confirmPassword: '',
@@ -46,13 +56,13 @@ const ResetPasswordForm = () => {
   const isPasswordValidate = formValidation.isPasswordValidate(form.password)
   const isConfirmPasswordValidate = formValidation.isConfirmPasswordValidate(form.password, form.confirmPassword)
 
+  const location = useLocation().search
   const sendData = (event: React.FormEvent) => {
     event.preventDefault()
     const { password } = form
-    const location = useLocation().search
-    const token = new URLSearchParams(location).get('resetId')
+    const token = new URLSearchParams(location).get('resetId') || ''
     if (isPasswordValidate.isValidate && isConfirmPasswordValidate.isValidate) {
-      fetchData('user/resetPassword', 'PATCH', { password: password, resetToken: token })
+      onSubmit(password, token)
     } else {
       setErrors({
         ...errorsForm,
@@ -68,10 +78,10 @@ const ResetPasswordForm = () => {
     if (statusCode === 200 && successMsg) clearErrors()
     const timeout = setTimeout(clearSuccessMsg, 3000)
     return () => clearTimeout(timeout)
-  }, [statusCode, data])
+  }, [statusCode, successMsg])
 
   return (
-    <form>
+    <form onSubmit={sendData}>
       <div className='mb-3'>
         <LabelInput
           id='password'
@@ -111,15 +121,10 @@ const ResetPasswordForm = () => {
       {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
       {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
-      <button
-        type='submit'
-        className={`btn btn-primary ${styles.btn__primary}`}
-        onClick={e => sendData(e)}
-        disabled={!isVisibleSendButton}
-      >
+      <button type='submit' className={`btn btn-primary ${styles.btn__primary}`} disabled={!isVisibleSendButton}>
         {isLoading
           ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
-          : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
+          : formatMessage({ id: 'app.submit', defaultMessage: 'Submit' })}
       </button>
     </form>
   )
