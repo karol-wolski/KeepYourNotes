@@ -75,30 +75,6 @@ describe('formValidation', () => {
       })
     })
 
-    test('should return error object for password with number of chars less than 8', () => {
-      const pass = 'test123'
-      const confirmPass = 'test123'
-      expect(formValidation.isConfirmPasswordValidate(pass, confirmPass)).toStrictEqual({
-        isValidate: false,
-        error: {
-          translateId: 'app.confirmPassword8chars',
-          errorMsg: 'Confirm Password should have at least 8 characters.',
-        },
-      })
-    })
-
-    test('should return error object for password with number of chars greater than 16', () => {
-      const pass = 'thisIsTooLongPassword'
-      const passConfirm = 'thisIsTooLongPassword'
-      expect(formValidation.isConfirmPasswordValidate(pass, passConfirm)).toStrictEqual({
-        isValidate: false,
-        error: {
-          translateId: 'app.confirmPasswordMaxChars',
-          errorMsg: 'Confirm password should have less than 16 characters.',
-        },
-      })
-    })
-
     test('should return error object for not the same password', () => {
       const pass = 'P@$$w0rd'
       const passConfirm = 'P@$$w0rd1'

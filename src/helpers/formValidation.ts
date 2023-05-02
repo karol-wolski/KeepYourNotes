@@ -51,20 +51,10 @@ const isConfirmPasswordValidate = (password: string, confirmPassword: string) =>
   let isValidate = false
   let error
 
-  if (confirmPassword.length < 8) {
-    error = {
-      translateId: 'app.confirmPassword8chars',
-      errorMsg: translation['app.confirmPassword8chars'],
-    }
-  } else if (password !== confirmPassword) {
+  if (password !== confirmPassword) {
     error = {
       translateId: 'app.passwordsNotTheSame',
       errorMsg: translation['app.passwordsNotTheSame'],
-    }
-  } else if (password.length >= 16) {
-    error = {
-      translateId: 'app.confirmPasswordMaxChars',
-      errorMsg: translation['app.confirmPasswordMaxChars'],
     }
   } else {
     isValidate = true
