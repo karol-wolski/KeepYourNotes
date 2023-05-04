@@ -5,7 +5,6 @@ import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
 import { useIntl } from 'react-intl'
-import useFetch from '../../hooks/useFetch'
 
 export interface INewPassword {
   password: string
@@ -24,9 +23,24 @@ interface IErrorsFields {
   confirmPassword: { translateId: string; errorMsg: string } | undefined
 }
 
-const EditUserPasswordForm = () => {
+interface IEditUserPassword {
+  isLoading?: boolean
+  errors?: string
+  statusCode?: number
+  successMsg?: string
+  clearSuccessMsg: () => void
+  onSubmit: (newPasswordData: INewPassword) => void
+}
+
+const EditUserPasswordForm = ({
+  onSubmit,
+  isLoading,
+  errors,
+  statusCode,
+  successMsg,
+  clearSuccessMsg,
+}: IEditUserPassword) => {
   const { formatMessage } = useIntl()
-  const { data, errors, successMsg, clearSuccessMsg, isLoading, fetchData, statusCode } = useFetch<INewPassword>()
   const [form, setForm] = useObject<IPasswordFields>({
     currentPassword: '',
     password: '',
@@ -58,7 +72,7 @@ const EditUserPasswordForm = () => {
       newPassword: form.password,
     }
     if (isCurrentPasswordValidate.isValidate && isPasswordValidate.isValidate && isConfirmPasswordValidate.isValidate) {
-      fetchData('user/passwordMe', 'PATCH', newPasswordData)
+      onSubmit(newPasswordData)
     } else {
       setErrors({
         ...errorsForm,
@@ -73,10 +87,10 @@ const EditUserPasswordForm = () => {
     if (statusCode === 200 && successMsg) clearErrors()
     const timeout = setTimeout(clearSuccessMsg, 3000)
     return () => clearTimeout(timeout)
-  }, [statusCode, data])
+  }, [statusCode, successMsg])
 
   return (
-    <form>
+    <form onSubmit={handleSendData}>
       <div className='mb-3'>
         <LabelInput
           id='currentPassword'
@@ -134,12 +148,7 @@ const EditUserPasswordForm = () => {
       {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
       {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
-      <button
-        type='submit'
-        className={`btn btn-primary ${stylesBtn.btn__primary}`}
-        onClick={handleSendData}
-        disabled={!isVisibleSendButton}
-      >
+      <button type='submit' className={`btn btn-primary ${stylesBtn.btn__primary}`} disabled={!isVisibleSendButton}>
         {isLoading
           ? formatMessage({ id: 'app.submitting', defaultMessage: 'Submitting...' })
           : formatMessage({ id: 'app.submit', defaultMessage: 'submit...' })}
