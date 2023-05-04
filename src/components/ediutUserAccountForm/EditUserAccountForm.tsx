@@ -6,7 +6,6 @@ import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
 import formValidation from '../../helpers/formValidation'
 import { useIntl } from 'react-intl'
-import useFetch from '../../hooks/useFetch'
 
 type FieldError = { translateId: string; errorMsg: string } | undefined
 
@@ -15,19 +14,27 @@ interface IErrorsFields {
   username: FieldError
 }
 
-interface IResponse {
-  message: string
-  data: IUser
-}
-
 interface IEditUserAccount {
   userData: IUser
+  isLoading?: boolean
+  errors?: string
+  statusCode?: number
+  successMsg?: string
+  clearSuccessMsg: () => void
+  onSubmit: ({ email, username }: IUser) => void
 }
 
-const EditUserAccount = ({ userData }: IEditUserAccount) => {
+const EditUserAccount = ({
+  userData,
+  onSubmit,
+  isLoading,
+  errors,
+  statusCode,
+  successMsg,
+  clearSuccessMsg,
+}: IEditUserAccount) => {
   const { formatMessage } = useIntl()
   const [user, updateUser] = useObject<IUser>(userData)
-  const { data, successMsg, clearSuccessMsg, errors, isLoading, fetchData, statusCode } = useFetch<IResponse>()
   const [errorsForm, setErrors, clearErrors] = useObject<IErrorsFields>({
     email: undefined,
     username: undefined,
@@ -53,7 +60,7 @@ const EditUserAccount = ({ userData }: IEditUserAccount) => {
         username: username,
         email: email,
       }
-      fetchData('user/me', 'PATCH', updatedUser)
+      onSubmit(updatedUser)
     } else {
       setErrors({
         ...errorsForm,
@@ -67,10 +74,10 @@ const EditUserAccount = ({ userData }: IEditUserAccount) => {
     if (statusCode === 200 && successMsg) clearErrors()
     const timeout = setTimeout(clearSuccessMsg, 3000)
     return () => clearTimeout(timeout)
-  }, [statusCode, data])
+  }, [statusCode, successMsg])
 
   return (
-    <form>
+    <form onSubmit={handleSendData}>
       <div>
         <LabelInput
           id='username'
@@ -115,7 +122,6 @@ const EditUserAccount = ({ userData }: IEditUserAccount) => {
       <button
         type='submit'
         className={`btn btn-primary ${stylesBtn.btn__primary} mt-2`}
-        onClick={handleSendData}
         disabled={!isVisibleSendButton}
       >
         {isLoading

@@ -1,24 +1,21 @@
 import { IntlProvider } from 'react-intl'
 import { AuthContext } from '../../context/AuthContext'
-import localeEn from '../../lang/en.json'
 import { render, RenderResult, fireEvent } from '@testing-library/react'
+import localeEn from '../../lang/en.json'
 import userEvent from '@testing-library/user-event'
-import ResetPasswordForm from './ResetPasswordForm'
-import { BrowserRouter } from 'react-router-dom'
+import EditUserPasswordForm from './EditUserPasswordForm'
 
 let form: RenderResult
 
-describe('ResetPasswordForm', () => {
-  const validPassword = 'Pa$$w0rd'
+describe('Edit User Password Form', () => {
   const mockFn = jest.fn()
+  const validPassword = 'Pa$$w0rd'
 
   beforeEach(() => {
     form = render(
       <IntlProvider messages={localeEn} locale='en' defaultLocale='en'>
         <AuthContext.Provider value={{ isLoggedIn: false, setIsLoggedIn: jest.fn() }}>
-          <BrowserRouter>
-            <ResetPasswordForm onSubmit={mockFn} clearSuccessMsg={mockFn} />
-          </BrowserRouter>
+          <EditUserPasswordForm onSubmit={mockFn} clearSuccessMsg={mockFn} />
         </AuthContext.Provider>
         ,
       </IntlProvider>,
@@ -26,8 +23,10 @@ describe('ResetPasswordForm', () => {
   })
 
   test('render form properly', () => {
+    expect(form.getByLabelText(/Current Password/i)).toBeInTheDocument()
     expect(form.getByLabelText('Password')).toBeInTheDocument()
-    expect(form.getByLabelText(/Confirm password/i)).toBeInTheDocument()
+    expect(form.getByLabelText(/Confirm Password/i)).toBeInTheDocument()
+    expect(form.getByText(/submit/i)).toBeInTheDocument()
     expect(form.getByRole('button', { name: /submit/i })).toBeInTheDocument()
   })
 
@@ -37,6 +36,9 @@ describe('ResetPasswordForm', () => {
   })
 
   test('button should be enabled for non-empty form', () => {
+    const currentPassword = form.getByLabelText(/Current Password/i)
+    fireEvent.change(currentPassword, { target: { value: validPassword } })
+
     const password = form.getByLabelText('Password')
     fireEvent.change(password, { target: { value: validPassword } })
 
@@ -47,8 +49,45 @@ describe('ResetPasswordForm', () => {
     expect(btn).not.toHaveAttribute('disabled')
   })
 
+  test('should display an error message for a current password less than 8 characters long', () => {
+    const wrongPassword = 'Pa$$'
+
+    const currentPassword = form.getByLabelText(/Current Password/i)
+    fireEvent.change(currentPassword, { target: { value: wrongPassword } })
+
+    const password = form.getByLabelText('Password')
+    fireEvent.change(password, { target: { value: validPassword } })
+
+    const confirmPassword = form.getByLabelText('Confirm password')
+    fireEvent.change(confirmPassword, { target: { value: validPassword } })
+
+    const btn = form.getByRole('button', { name: /submit/i })
+    userEvent.click(btn)
+    expect(form.getByText('Password should have at least 8 characters.')).toBeInTheDocument()
+  })
+
+  test('should display an error message for a current password longer than 16 characters', () => {
+    const wrongPassword = 'Pa$$w0rd1Pa$$w0rd1'
+
+    const currentPassword = form.getByLabelText(/Current Password/i)
+    fireEvent.change(currentPassword, { target: { value: wrongPassword } })
+
+    const password = form.getByLabelText('Password')
+    fireEvent.change(password, { target: { value: validPassword } })
+
+    const confirmPassword = form.getByLabelText('Confirm password')
+    fireEvent.change(confirmPassword, { target: { value: validPassword } })
+    const btn = form.getByRole('button', { name: /submit/i })
+    userEvent.click(btn)
+    expect(form.getByText('Password should have less than 16 characters.')).toBeInTheDocument()
+  })
+
   test('should display an error message for a password less than 8 characters long', () => {
     const wrongPassword = 'Pa$$'
+
+    const currentPassword = form.getByLabelText(/Current Password/i)
+    fireEvent.change(currentPassword, { target: { value: validPassword } })
+
     const password = form.getByLabelText('Password')
     fireEvent.change(password, { target: { value: wrongPassword } })
 
@@ -62,6 +101,10 @@ describe('ResetPasswordForm', () => {
 
   test('should display an error message for a password longer than 16 characters', () => {
     const wrongPassword = 'Pa$$w0rd1Pa$$w0rd1'
+
+    const currentPassword = form.getByLabelText(/Current Password/i)
+    fireEvent.change(currentPassword, { target: { value: validPassword } })
+
     const password = form.getByLabelText('Password')
     fireEvent.change(password, { target: { value: wrongPassword } })
 
@@ -74,6 +117,10 @@ describe('ResetPasswordForm', () => {
 
   test('should display an error message for non indentical passwords', () => {
     const wrongPassword = 'Pa$$'
+
+    const currentPassword = form.getByLabelText(/Current Password/i)
+    fireEvent.change(currentPassword, { target: { value: validPassword } })
+
     const password = form.getByLabelText('Password')
     fireEvent.change(password, { target: { value: validPassword } })
 
@@ -86,6 +133,9 @@ describe('ResetPasswordForm', () => {
   })
 
   test('should send data', () => {
+    const currentPassword = form.getByLabelText(/Current Password/i)
+    fireEvent.change(currentPassword, { target: { value: validPassword } })
+
     const password = form.getByLabelText('Password')
     fireEvent.change(password, { target: { value: validPassword } })
 
@@ -94,7 +144,8 @@ describe('ResetPasswordForm', () => {
 
     const btn = form.getByRole('button', { name: /submit/i })
     userEvent.click(btn)
+
     expect(mockFn).toBeCalledTimes(1)
-    expect(mockFn).toBeCalledWith(validPassword, '')
+    expect(mockFn).toBeCalledWith({ password: validPassword, newPassword: validPassword })
   })
 })
