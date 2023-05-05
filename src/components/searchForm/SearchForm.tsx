@@ -22,17 +22,17 @@ const SearchForm = ({ searchByTitle }: ISearchForm) => {
   return (
     <div className='container'>
       <div className='row'>
-        <form className='d-inline-flex flex-row justify-content-center'>
+        <form onSubmit={sendText} className='d-inline-flex flex-row justify-content-center'>
           <div className='d-inline-flex col-8 m-3'>
             <LabelInput
               id='searchInput'
               type='text'
-              placeholder={formatMessage({ id: 'app.searchNote', defaultMessage: 'Search Notethe note' })}
+              placeholder={formatMessage({ id: 'app.searchNote', defaultMessage: 'Search the note' })}
               onChange={onChangeInput}
               isLabelVisible={false}
               labelText={formatMessage({ id: 'app.searchNote', defaultMessage: 'Search the note' })}
             />
-            <button type='submit' className={`btn btn-primary mx-1 ${stylesBtn.btn__secondary}`} onClick={sendText}>
+            <button type='submit' className={`btn btn-primary mx-1 ${stylesBtn.btn__secondary}`}>
               {formatMessage({ id: 'app.search', defaultMessage: 'Search' })}
             </button>
           </div>
