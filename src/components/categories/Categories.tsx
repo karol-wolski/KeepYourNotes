@@ -1,10 +1,12 @@
 import useBoolean from '../../hooks/useBoolean'
-import AddCategory from '../addCategory/AddCategory'
+import AddCategory, { ICategory } from '../addCategory/AddCategory'
 import ManageCategories from '../manageCategories/ManageCategories'
 import FocusTrap from 'focus-trap-react'
 import stylesBtn from '../../styles/buttons.module.scss'
 import useCategories from '../../hooks/useCategories'
 import { useIntl } from 'react-intl'
+import { useEffect } from 'react'
+import useFetch from '../../hooks/useFetch'
 interface ICategories {
   handleClose: () => void
   filter: (categoryId: string) => void
@@ -13,6 +15,7 @@ interface ICategories {
 
 const Categories = ({ handleClose, filter, isOpen }: ICategories) => {
   const { categories, update, isLoading, errors } = useCategories()
+  const { data, statusCode, isLoading: isLoadingFetch, fetchData } = useFetch<ICategory>()
   const [isOpenManageModal, { setTrue: openManageModal, setFalse: closeManageModal }] = useBoolean()
 
   const categoryOnClick = (id: string) => {
@@ -20,7 +23,17 @@ const Categories = ({ handleClose, filter, isOpen }: ICategories) => {
     handleClose()
   }
 
+  const onSubmit = (categoryName: string) => {
+    fetchData('categories', 'POST', { name: categoryName })
+  }
+
   const { formatMessage } = useIntl()
+
+  useEffect(() => {
+    if (data) {
+      update([...categories, data])
+    }
+  }, [data])
 
   return (
     <>
@@ -39,7 +52,12 @@ const Categories = ({ handleClose, filter, isOpen }: ICategories) => {
             ></button>
           </div>
           <div className='offcanvas-body'>
-            <AddCategory update={update} categories={categories} />
+            <AddCategory
+              onSubmit={onSubmit}
+              categories={categories}
+              statusCode={statusCode}
+              isLoading={isLoadingFetch}
+            />
             <div className='list-group'>
               <button type='button' className={`btn btn-primary ${stylesBtn.btn__secondary}`} onClick={openManageModal}>
                 <i className='bi bi-folder'></i>{' '}

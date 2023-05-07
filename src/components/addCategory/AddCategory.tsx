@@ -3,7 +3,6 @@ import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
 import { checkCategoryExist } from '../../helpers/checkCategoryExist'
-import useFetch from '../../hooks/useFetch'
 import { useIntl } from 'react-intl'
 
 export interface INewCategory {
@@ -15,13 +14,14 @@ export interface ICategory extends INewCategory {
 }
 
 interface IAddCategory {
-  update: (categoryArray: ICategory[]) => void
+  onSubmit: (categoryName: string) => void
   categories: ICategory[]
+  statusCode?: number
+  isLoading?: boolean
 }
 
-const AddCategory = ({ update, categories }: IAddCategory) => {
+const AddCategory = ({ onSubmit, categories, statusCode, isLoading }: IAddCategory) => {
   const inputRef = useRef<HTMLInputElement>(null)
-  const { data, statusCode, isLoading, fetchData } = useFetch<ICategory>()
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
   const { formatMessage } = useIntl()
 
@@ -40,7 +40,7 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
       setSuccess('')
       setErrors(formatMessage({ id: 'app.categoryExist', defaultMessage: 'The category name exists.' }))
     } else {
-      fetchData('categories', 'POST', category)
+      onSubmit(category.name)
     }
   }
 
@@ -66,9 +66,6 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
         setSuccess(
           formatMessage({ id: 'app.categoryAdded', defaultMessage: 'Your category has been successfully added.' }),
         )
-        if (data) {
-          update([...categories, data])
-        }
         const timeout = setTimeout(() => {
           setSuccess('')
         }, 3000)
@@ -76,10 +73,10 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
       }
     }
     updateAndClear()
-  }, [data, statusCode])
+  }, [statusCode])
 
   return (
-    <form className='mb-2'>
+    <form className='mb-2' onSubmit={handleOnClick}>
       <div className='d-flex'>
         <LabelInput
           id='name'
@@ -92,12 +89,7 @@ const AddCategory = ({ update, categories }: IAddCategory) => {
           onKeyDown={handleKeyDown}
           value=''
         />
-        <button
-          type='button'
-          className={`btn btn-primary ${stylesBtn.btn__primary}`}
-          disabled={!isButtonDisabled}
-          onClick={handleOnClick}
-        >
+        <button type='submit' className={`btn btn-primary ${stylesBtn.btn__primary}`} disabled={!isButtonDisabled}>
           {isLoading
             ? formatMessage({ id: 'app.saving', defaultMessage: 'Saving...' })
             : formatMessage({ id: 'app.add', defaultMessage: 'Add' })}
