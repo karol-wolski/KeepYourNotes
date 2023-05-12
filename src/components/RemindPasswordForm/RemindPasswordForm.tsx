@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
@@ -18,26 +18,16 @@ interface IRemindPasswordErrors {
 interface IRemindPasswordForm {
   isLoading?: boolean
   errors?: string
-  statusCode?: number
-  successMsg?: string
-  clearSuccessMsg: () => void
   onSubmit: (email: string) => void
 }
 
-const RemindPasswordForm = ({
-  onSubmit,
-  errors,
-  isLoading,
-  statusCode,
-  clearSuccessMsg,
-  successMsg,
-}: IRemindPasswordForm) => {
+const RemindPasswordForm = ({ onSubmit, errors, isLoading }: IRemindPasswordForm) => {
   const { formatMessage } = useIntl()
   const [form, setForm] = useState<IRemindPassword>({
     email: '',
   })
 
-  const [errorsForm, setErrors, clearErrors] = useObject<IRemindPasswordErrors>({
+  const [errorsForm, setErrors] = useObject<IRemindPasswordErrors>({
     email: undefined,
   })
 
@@ -64,12 +54,6 @@ const RemindPasswordForm = ({
 
   const isVisibleSendButton = !!form.email.length
 
-  useEffect(() => {
-    if (statusCode === 200 && successMsg) clearErrors()
-    const timeout = setTimeout(clearSuccessMsg, 3000)
-    return () => clearTimeout(timeout)
-  }, [statusCode, successMsg])
-
   return (
     <form onSubmit={sendData}>
       <div className='mb-3'>
@@ -91,7 +75,6 @@ const RemindPasswordForm = ({
         )}
       </div>
       {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
-      {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
       <button type='submit' className={`btn btn-primary ${styles.btn__primary}`} disabled={!isVisibleSendButton}>
         {isLoading

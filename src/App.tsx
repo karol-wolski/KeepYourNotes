@@ -31,6 +31,7 @@ const NotFoundPage = lazy(() => import('./pages/NotFound/NotFound'))
 const SettingsPage = lazy(() => import('./pages/Settings/Settings'))
 const EditUserPage = lazy(() => import('./pages/EditUser/EditUser'))
 const EditPasswordPage = lazy(() => import('./pages/EditPassword/EditPassword'))
+const StatusPage = lazy(() => import('./pages/Status'))
 
 function App() {
   const language = navigator.language.split(/[-_]/)[0]
@@ -123,6 +124,7 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+              <Route path='/status' element={<StatusPage />} />
               <Route path='*' element={<NotFoundPage />} />
             </Routes>
           </Suspense>

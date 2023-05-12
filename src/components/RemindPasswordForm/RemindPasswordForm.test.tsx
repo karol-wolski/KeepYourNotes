@@ -15,7 +15,7 @@ describe('RemindPasswordForm', () => {
     form = render(
       <IntlProvider messages={localeEn} locale='en' defaultLocale='en'>
         <AuthContext.Provider value={{ isLoggedIn: false, setIsLoggedIn: jest.fn() }}>
-          <RemindPasswordForm onSubmit={mockFn} clearSuccessMsg={mockFn} />
+          <RemindPasswordForm onSubmit={mockFn} />
         </AuthContext.Provider>
         ,
       </IntlProvider>,

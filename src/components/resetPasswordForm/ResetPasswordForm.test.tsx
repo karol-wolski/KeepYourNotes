@@ -17,7 +17,7 @@ describe('ResetPasswordForm', () => {
       <IntlProvider messages={localeEn} locale='en' defaultLocale='en'>
         <AuthContext.Provider value={{ isLoggedIn: false, setIsLoggedIn: jest.fn() }}>
           <BrowserRouter>
-            <ResetPasswordForm onSubmit={mockFn} clearSuccessMsg={mockFn} />
+            <ResetPasswordForm onSubmit={mockFn} />
           </BrowserRouter>
         </AuthContext.Provider>
         ,

@@ -71,5 +71,9 @@
   "app.polish": "Polski",
   "app.english": "Angielski",
   "app.selectUILangauge": "Wybierz język interfejsu użytkownika",
-  "app.appSettings": "Ustawienia aplikacji"
+  "app.appSettings": "Ustawienia aplikacji",
+  "app.success": "Sukces",
+  "app.signUpSuccess": "Twoje konto zostało utworzone. Odwiedź swoją skrzynkę pocztową i potwierdź aktywację konta, klikając w przycisk aktywacyjny.",
+  "app.resetPasswordSuccess": "Twoje hasło zostało zmienione. Możesz się teraz zalogować",
+  "app.remindPasswordSuccess": "Email przypominający hasło został wysłany, postępuj zgodnie z instrukcją!"
 }
