@@ -71,5 +71,9 @@
   "app.polish": "Polish",
   "app.english": "English",
   "app.selectUILangauge": "Select the language of the user interface",
-  "app.appSettings": "Application Settings"
+  "app.appSettings": "Application Settings",
+  "app.success": "Success",
+  "app.signUpSuccess": "Your account has been successfully created. Go to your email and click the activation button.",
+  "app.resetPasswordSuccess": "Your password has been successfully changed. You can login now.",
+  "app.remindPasswordSuccess": "Email has been sent, follow the instructions!"
 }

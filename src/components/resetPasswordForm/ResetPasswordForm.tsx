@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import formValidation from '../../helpers/formValidation'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import LabelInput from '../labelInput/LabelInput'
@@ -21,27 +21,17 @@ interface IResetPasswordErrors {
 interface IResetPasswordForm {
   isLoading?: boolean
   errors?: string
-  statusCode?: number
-  successMsg?: string
-  clearSuccessMsg: () => void
   onSubmit: (password: string, token: string) => void
 }
 
-const ResetPasswordForm = ({
-  onSubmit,
-  errors,
-  isLoading,
-  statusCode,
-  clearSuccessMsg,
-  successMsg,
-}: IResetPasswordForm) => {
+const ResetPasswordForm = ({ onSubmit, errors, isLoading }: IResetPasswordForm) => {
   const { formatMessage } = useIntl()
   const [form, setForm] = useState<IResetPassword>({
     password: '',
     confirmPassword: '',
   })
 
-  const [errorsForm, setErrors, clearErrors] = useObject<IResetPasswordErrors>({
+  const [errorsForm, setErrors] = useObject<IResetPasswordErrors>({
     password: undefined,
     confirmPassword: undefined,
   })
@@ -73,12 +63,6 @@ const ResetPasswordForm = ({
   }
 
   const isVisibleSendButton = !!form.password.length && !!form.confirmPassword.length
-
-  useEffect(() => {
-    if (statusCode === 200 && successMsg) clearErrors()
-    const timeout = setTimeout(clearSuccessMsg, 3000)
-    return () => clearTimeout(timeout)
-  }, [statusCode, successMsg])
 
   return (
     <form onSubmit={sendData}>
@@ -119,7 +103,6 @@ const ResetPasswordForm = ({
         )}
       </div>
       {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
-      {successMsg && <Alert type={ALERT_TYPE.SUCCESS} text={successMsg} />}
 
       <button type='submit' className={`btn btn-primary ${styles.btn__primary}`} disabled={!isVisibleSendButton}>
         {isLoading
