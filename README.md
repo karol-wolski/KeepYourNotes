@@ -35,6 +35,7 @@ Project is created with:
 - React-Masonry-CSS
 - Focus-Trap-React
 - React-INTL
+- React-Testing-Library
 
 ## Setup
 
