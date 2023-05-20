@@ -3,7 +3,7 @@
   background-color: $blue;
 
   &__wrapper {
-    background-color: $white;
+    background-color: var(--bs-body-bg);
 
     @media screen and (min-width: 768px) {
       width: 50%;
