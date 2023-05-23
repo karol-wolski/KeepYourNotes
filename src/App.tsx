@@ -1,4 +1,4 @@
-import { useState, Suspense, lazy } from 'react'
+import { useState, Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { IntlProvider } from 'react-intl'
 import LoaderPage from './components/loaderPage/LoaderPage'
@@ -36,15 +36,28 @@ const StatusPage = lazy(() => import('./pages/Status'))
 function App() {
   const language = navigator.language.split(/[-_]/)[0]
   const getLanguageFromLS = localStorage.getItem('lang')
+  const getThemeFromLS = localStorage.getItem('theme')
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(isAuthorized())
   const [languageApp, setLanguageApp] = useState<string>(getLanguageFromLS || language)
+  const [themeApp, setThemeApp] = useState<string>(getThemeFromLS || 'dark')
 
-  const changeAppLanguage = (language: string) => setLanguageApp(language)
+  const changeAppSetting = (value: string, option: 'theme' | 'language') => {
+    if (option === 'theme') {
+      setThemeApp(value)
+    }
+    if (option === 'language') {
+      setLanguageApp(value)
+    }
+  }
 
   const messages = {
     en: localeEn,
     pl: localePl,
   }
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-bs-theme', themeApp)
+  }, [themeApp])
 
   return (
     <IntlProvider messages={messages[languageApp as keyof typeof messages]} locale={languageApp} defaultLocale='en'>
@@ -104,7 +117,7 @@ function App() {
                 path='/profile/app'
                 element={
                   <ProtectedRoute redirectPath='/login' isAllowed={isLoggedIn}>
-                    <SettingsPage changeLanguage={changeAppLanguage} />
+                    <SettingsPage changeAppSetting={changeAppSetting} />
                   </ProtectedRoute>
                 }
               />

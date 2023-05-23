@@ -75,5 +75,9 @@
   "app.success": "Sukces",
   "app.signUpSuccess": "Twoje konto zostało utworzone. Odwiedź swoją skrzynkę pocztową i potwierdź aktywację konta, klikając w przycisk aktywacyjny.",
   "app.resetPasswordSuccess": "Twoje hasło zostało zmienione. Możesz się teraz zalogować",
-  "app.remindPasswordSuccess": "Email przypominający hasło został wysłany, postępuj zgodnie z instrukcją!"
+  "app.remindPasswordSuccess": "Email przypominający hasło został wysłany, postępuj zgodnie z instrukcją!",
+  "app.theme": "Motyw",
+  "app.light": "Jasny",
+  "app.dark": "Ciemny",
+  "app.selectUITheme": "Wybierz motyw aplikacji"
 }

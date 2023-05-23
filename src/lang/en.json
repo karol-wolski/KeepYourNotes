@@ -75,5 +75,9 @@
   "app.success": "Success",
   "app.signUpSuccess": "Your account has been successfully created. Go to your email and click the activation button.",
   "app.resetPasswordSuccess": "Your password has been successfully changed. You can login now.",
-  "app.remindPasswordSuccess": "Email has been sent, follow the instructions!"
+  "app.remindPasswordSuccess": "Email has been sent, follow the instructions!",
+  "app.theme": "Theme",
+  "app.light": "Light",
+  "app.dark": "Dark",
+  "app.selectUITheme": "Select the theme of the app"
 }

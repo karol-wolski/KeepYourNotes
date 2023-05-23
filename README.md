@@ -72,15 +72,17 @@ Features list:
 - Sign up
 - Edit user profile
 - PL / EN languages
+- Light / Dark mode
 
 To do:
 
 - Add / Remove Collabolators
 - Shere the note
-- Light / Dark mdoe
 
 ## Screenshots
+
 ### Mobile
+
 <div>
 <img width="218" alt="image" src="https://user-images.githubusercontent.com/15778908/218483499-1c9efad3-f64a-4ac3-94c4-5eed2d0eaa20.png">
 <img width="218" alt="image" src="https://user-images.githubusercontent.com/15778908/218487836-951c648b-be18-4d62-b3ad-5a3c38e92cbf.png">
@@ -104,6 +106,7 @@ To do:
 </div>
 
 ### Desktop
+
 <div>
 <img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/218486947-a87c9142-9999-4c07-87d8-c1e9e366f1a6.png">
 <img width="960" alt="image" src="https://user-images.githubusercontent.com/15778908/218487900-70f9c591-f616-4b79-aaac-2e8820fb2490.png">
