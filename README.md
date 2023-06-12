@@ -22,6 +22,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 You can see the project by clicking on the link below.\
 [See project](https://keepyour-notes.netlify.app/)
 
+Demo account:  \
+login: test@test.pl \
+pass: Test123@
+
 Project status: _in progress_
 
 ## Technologies and libraries
