@@ -22,7 +22,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 You can see the project by clicking on the link below.\
 [See project](https://keepyour-notes.netlify.app/)
 
-Demo account:  \
+Demo account: \
 login: test@test.pl \
 pass: Test123@
 
@@ -77,6 +77,7 @@ Features list:
 - Edit user profile
 - PL / EN languages
 - Light / Dark mode
+- Print note
 
 To do:
 

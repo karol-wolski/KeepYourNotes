@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, Fragment } from 'react'
 import { ICategory } from '../addCategory/AddCategory'
 import { Attachment, Note } from '../notes/Notes'
 import parse from 'html-react-parser'
@@ -8,6 +8,7 @@ import stylesNote from './FullNote.module.scss'
 import stylesBtn from '../../styles/buttons.module.scss'
 import useNotes from '../../hooks/useNotes'
 import { useIntl } from 'react-intl'
+import { useReactToPrint } from 'react-to-print'
 
 interface IModal {
   noteId: string
@@ -26,9 +27,22 @@ const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArra
     (isLoading && formatMessage({ id: 'app.loading', defaultMessage: 'Loading...' })) ||
     (notes && notes.title) ||
     (errors && formatMessage({ id: 'app.error', defaultMessage: 'Error' }))
+  const ref = useRef<HTMLDivElement | null>(null)
+
+  const handlePrintToPdf = useReactToPrint({
+    content: () => ref?.current,
+    documentTitle: notes?.title,
+    onAfterPrint: () => console.log('success'),
+  })
 
   return (
-    <Modal handleClose={handleClose} title={title} isOpen={isOpen}>
+    <Modal
+      handleClose={handleClose}
+      title={title}
+      isOpen={isOpen}
+      btnName={formatMessage({ id: 'app.printNote', defaultMessage: 'Print note' })}
+      handleBtnEvent={handlePrintToPdf}
+    >
       {isLoading && <p>{formatMessage({ id: 'app.loading', defaultMessage: 'Loading...' })}</p>}
       {errors && <p>{errors}</p>}
       {notes && (
@@ -57,24 +71,26 @@ const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArra
                   )
                 })}
           </div>
-          <>
-            {notes.attachments &&
-              notes.attachments.map((attachment: Attachment) => (
-                <img key={attachment._id} className='img-fluid' src={attachment.path} alt='' />
-              ))}
-          </>
-          <div className={stylesNote.fullNote}>
-            <button
-              type='button'
-              className={`btn btn-sm btn-secondary float-end sticky-top ${stylesNote.btn__copy} ${
-                isCopied ? stylesBtn.btn__primary : stylesBtn.btn__secondary
-              }`}
-              onClick={() => copyToClipboard(notes.desc, handleSetIsCopied)}
-              title={formatMessage({ id: 'app.copyClipboard', defaultMessage: 'Copy text to clipboard' })}
-            >
-              <i className={isCopied ? 'bi bi-clipboard-check-fill' : 'bi bi-clipboard-fill'}></i>
-            </button>
-            {parse(notes.desc)}
+          <div ref={ref}>
+            <>
+              {notes.attachments &&
+                notes.attachments.map((attachment: Attachment) => (
+                  <img key={attachment._id} className='img-fluid' src={attachment.path} alt='' />
+                ))}
+            </>
+            <div className={stylesNote.fullNote}>
+              <button
+                type='button'
+                className={`btn btn-sm btn-secondary float-end sticky-top ${stylesNote.btn__copy} ${
+                  isCopied ? stylesBtn.btn__primary : stylesBtn.btn__secondary
+                }`}
+                onClick={() => copyToClipboard(notes.desc, handleSetIsCopied)}
+                title={formatMessage({ id: 'app.copyClipboard', defaultMessage: 'Copy text to clipboard' })}
+              >
+                <i className={isCopied ? 'bi bi-clipboard-check-fill' : 'bi bi-clipboard-fill'}></i>
+              </button>
+              {parse(notes.desc)}
+            </div>
           </div>
         </>
       )}

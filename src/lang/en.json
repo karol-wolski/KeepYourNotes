@@ -79,5 +79,6 @@
   "app.theme": "Theme",
   "app.light": "Light",
   "app.dark": "Dark",
-  "app.selectUITheme": "Select the theme of the app"
+  "app.selectUITheme": "Select the theme of the app",
+  "app.printNote": "Print note"
 }
