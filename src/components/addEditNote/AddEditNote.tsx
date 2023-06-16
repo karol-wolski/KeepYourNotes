@@ -173,7 +173,7 @@ const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }
         )}
 
         <div className='mt-4'>
-          <p>{formatMessage({ id: 'app.categorories', defaultMessage: 'Set the category' })}</p>
+          <p>{formatMessage({ id: 'app.categories', defaultMessage: 'Set the category' })}</p>
           {categories &&
             categories.map(({ _id: id, name }) => {
               const isChecked = note.categories?.includes(id)
