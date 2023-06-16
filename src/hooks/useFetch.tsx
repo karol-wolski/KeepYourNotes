@@ -1,11 +1,15 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { request } from '../helpers/request'
 import useBoolean from './useBoolean'
+import { AuthContext, IAuthContext } from '../context/AuthContext'
+import { removeFromLocalStorage } from '../helpers/localStorage'
+import { redirect } from 'react-router-dom'
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE' | 'POST_FORM_DATA'
 type Payload = object | FormData
 
 const useFetch = <T,>() => {
+  const { setIsLoggedIn } = useContext(AuthContext) as IAuthContext
   const [data, setData] = useState<T>()
   const [successMsg, setSuccessMsg] = useState<string>('')
   const [errors, setErrors] = useState<string>('')
@@ -25,6 +29,10 @@ const useFetch = <T,>() => {
         if (response.status === 200 || response.status === 201) {
           setData(data)
           setSuccessMsg(message)
+        } else if (response.status === 401) {
+          removeFromLocalStorage('token')
+          setIsLoggedIn(false)
+          return redirect('/login')
         } else {
           setErrors(message)
         }
