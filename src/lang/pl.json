@@ -79,5 +79,6 @@
   "app.theme": "Motyw",
   "app.light": "Jasny",
   "app.dark": "Ciemny",
-  "app.selectUITheme": "Wybierz motyw aplikacji"
+  "app.selectUITheme": "Wybierz motyw aplikacji",
+  "app.printNote": "Drukuj notatkę"
 }
