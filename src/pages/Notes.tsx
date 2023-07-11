@@ -9,6 +9,7 @@ import useCategories from '../hooks/useCategories'
 import useNotes from '../hooks/useNotes'
 import LoaderPage from '../components/loaderPage/LoaderPage'
 import NoNotes from '../components/noNotes/NoNotes'
+import { useIntl } from 'react-intl'
 
 export interface IUpdateNotesArray {
   method: string
@@ -66,6 +67,8 @@ const NotesPage = () => {
     }
   }
 
+  const { formatMessage } = useIntl()
+
   return (
     <>
       <div className='App'>
@@ -75,7 +78,13 @@ const NotesPage = () => {
         {isLoading && <LoaderPage isDark={true} />}
         {notes?.length === 0 && <NoNotes />}
         {!!filteredNotes?.length && (
-          <Notes notes={filteredNotes} update={updateNotesArray} filterNotes={filterByCategory} />
+          <div className='container'>
+            <p>
+              {formatMessage({ id: 'app.numOfNotes', defaultMessage: 'Number of notes' })}:{' '}
+              <span className='fw-bold'>{filteredNotes?.length}</span>
+            </p>
+            <Notes notes={filteredNotes} update={updateNotesArray} filterNotes={filterByCategory} />
+          </div>
         )}
       </div>
       {isOpenAddNoteModal && (
