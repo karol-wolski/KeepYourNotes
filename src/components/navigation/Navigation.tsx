@@ -43,7 +43,7 @@ const Navigation = ({ openAddNoteModal, openCategories }: INavigation) => {
           <span className='navbar-toggler-icon'></span>
         </button>
         <div
-          className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse justify-content-end`}
+          className={`${!isNavCollapsed ? 'collapse' : ''} navbar-collapse justify-content-end`}
           id='navbarSupportedContent'
         >
           <div className='gap-2 d-flex justify-content-start'>
