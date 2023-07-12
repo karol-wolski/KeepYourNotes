@@ -40,17 +40,15 @@ const Notes = ({ notes, filterNotes, update }: INotes) => {
   }
 
   return (
-    <div className='container'>
-      <Masonry
-        breakpointCols={breakpointColumnsObj}
-        className='row'
-        columnClassName='note col-12 col-sm-6 col-md-4 col-xl-3'
-      >
-        {notes.map(note => (
-          <Note key={note._id} note={note} filterNotes={filterNotes} categories={categories} update={update} />
-        ))}
-      </Masonry>
-    </div>
+    <Masonry
+      breakpointCols={breakpointColumnsObj}
+      className='row'
+      columnClassName='note col-12 col-sm-6 col-md-4 col-xl-3'
+    >
+      {notes.map(note => (
+        <Note key={note._id} note={note} filterNotes={filterNotes} categories={categories} update={update} />
+      ))}
+    </Masonry>
   )
 }
 

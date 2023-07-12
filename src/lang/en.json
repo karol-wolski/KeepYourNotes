@@ -80,5 +80,6 @@
   "app.light": "Light",
   "app.dark": "Dark",
   "app.selectUITheme": "Select the theme of the app",
-  "app.printNote": "Print note"
+  "app.printNote": "Print note",
+  "app.numOfNotes": "Number of notes"
 }
