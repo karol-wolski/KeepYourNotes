@@ -8,6 +8,7 @@ const mockDataObj = {
   title: 'Note',
   desc: 'This is first note.',
   pinIt: false,
+  list: [],
 }
 
 const mockDataObj2 = {
@@ -15,6 +16,7 @@ const mockDataObj2 = {
   title: 'Note 2',
   desc: 'This is another note.',
   pinIt: false,
+  list: [],
 }
 
 const mockValue = {

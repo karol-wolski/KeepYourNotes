@@ -15,7 +15,9 @@
 
 ## General info
 
-Keep your notes is an application that let you keep all of your notes in one place.
+<b>Keep your notes</b> is an application that let you keep all of your notes in one place. <br />
+The idea and purpose of this app was to create the application that will be similar to keep.google.com but not a one-to-one copy. <br />
+The main features of the application: user registration and login, notes and categories management, user account management, searching for notes by title, filtering notes by category, two language avaiable (PL, EN), pinning a note to the top of the list of notes. Each note can have such things like: title, description, category, images and own background color, that let you highlight it.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -78,6 +80,9 @@ Features list:
 - PL / EN languages
 - Light / Dark mode
 - Print note
+- Checklist
+- Number of notes
+- Number of attachments
 
 To do:
 

@@ -10,6 +10,12 @@ export type Attachment = {
   mimetype: string
 }
 
+export type CheckListElement = {
+  id: string
+  value: string
+  checked: boolean
+}
+
 export type Note = {
   _id: string
   title: string
@@ -20,6 +26,7 @@ export type Note = {
   pinIt: boolean
   backgroundColor?: number
   numberOfAttachments?: number
+  list: CheckListElement[]
 }
 
 export type NewNote = Omit<Note, '_id' | 'createdBy'>

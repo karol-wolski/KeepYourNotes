@@ -8,6 +8,7 @@ interface ILabelInput {
   labelText: string | ReactElement
   isLabelVisible: boolean
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onKeyUp?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
   placeholder?: string
   value?: string
@@ -19,6 +20,7 @@ const LabelInput = ({
   type,
   labelText,
   onChange,
+  onKeyUp,
   onKeyDown,
   isLabelVisible,
   placeholder,
@@ -48,6 +50,7 @@ const LabelInput = ({
           className={`form-control ${styles.input}`}
           id={id}
           onChange={onChange}
+          onKeyUp={onKeyUp}
           onKeyDown={onKeyDown}
           name={id}
           placeholder={placeholder}
