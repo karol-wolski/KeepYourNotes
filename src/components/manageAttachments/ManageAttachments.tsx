@@ -14,9 +14,10 @@ interface IManageAttachments {
   isOpen: boolean
   handleModalClose: () => void
   noteId: string
+  refresh: () => void
 }
 
-const ManageAttachments = ({ isOpen, handleModalClose, noteId }: IManageAttachments) => {
+const ManageAttachments = ({ isOpen, handleModalClose, noteId, refresh: refreshNotes }: IManageAttachments) => {
   const formRef = useRef<HTMLFormElement>(null)
   const { notes, errors: errorsNotes, isLoading: isLoadingNotes, refresh } = useNotes<Note>(noteId)
   const { data, errors, isLoading, fetchData, statusCode } = useFetch<Attachment>()
@@ -39,11 +40,13 @@ const ManageAttachments = ({ isOpen, handleModalClose, noteId }: IManageAttachme
     const data = new FormData(formRef.current as HTMLFormElement)
     data.append('noteId', noteId)
     setActiveBtnName('save')
-    fetchData('attachment', 'POST_FORM_DATA', data)
+    await fetchData('attachment', 'POST_FORM_DATA', data)
+    refreshNotes()
   }
 
-  const removeAttachment = (id: string) => {
-    fetchData(`attachment/${id}`, 'DELETE')
+  const removeAttachment = async (id: string) => {
+    await fetchData(`attachment/${id}`, 'DELETE')
+    refreshNotes()
   }
 
   return (
@@ -121,7 +124,7 @@ const ManageAttachments = ({ isOpen, handleModalClose, noteId }: IManageAttachme
             id: 'app.addFile',
             defaultMessage: 'Add file',
           })}
-          multiple={true}
+          multiple={false}
         />
       </form>
       {errors && <Alert text={errors} type={ALERT_TYPE.DANGER} />}

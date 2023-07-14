@@ -12,7 +12,7 @@ import ManageAttachments from '../manageAttachments/ManageAttachments'
 import useFetch from '../../hooks/useFetch'
 import { useEffect, useState } from 'react'
 import { IUpdateNotesArray } from '../../pages/Notes'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import AddEditNote from '../addEditNote/AddEditNote'
 
 interface INote {
@@ -20,9 +20,10 @@ interface INote {
   filterNotes: (categoryId: string) => void
   categories: ICategory[]
   update: (obj: IUpdateNotesArray) => void
+  refresh: () => void
 }
 
-const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote) => {
+const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh }: INote) => {
   const [displayFullNote, { setFalse: closeFullModal, setTrue: openFullNote }] = useBoolean(false)
   const [displayRemoveModal, { setFalse: closeRemoveModal, setTrue: openRemoveModal }] = useBoolean(false)
   const [displayEditModal, { setFalse: closeEditModal, setTrue: openEditModal }] = useBoolean(false)
@@ -34,7 +35,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
 
   const { data, fetchData, isLoading, statusCode } = useFetch<NoteType>()
 
-  const { _id, title, desc, categories, pinIt, backgroundColor } = note
+  const { _id, title, desc, categories, pinIt, backgroundColor, numberOfAttachments } = note
 
   const bgColor = BG_COLORS.find(bg => bg.id === backgroundColor)
 
@@ -86,6 +87,16 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
               </button>
             </div>
             <h2 className='card-title'>{title}</h2>
+            {!!numberOfAttachments && (
+              <span className='text-decoration-underline'>
+                <i className='bi bi-paperclip'></i>
+                <FormattedMessage
+                  id={'app.attachmentsCount'}
+                  values={{ count: numberOfAttachments }}
+                  defaultMessage={'{count, plural, =0 {# attachemnts} one {# attachemnt} other {# attachemnts}}'}
+                />
+              </span>
+            )}
           </div>
           <div className='card-text'>{parse(trimText(desc, 160, ' '))}</div>
           <div className='d-flex gap-2 justify-start'>
@@ -201,6 +212,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update }: INote)
           handleModalClose={closeManageAttatchmentsModal}
           isOpen={displayManageAttatchmentsModal}
           noteId={_id}
+          refresh={refresh}
         />
       )}
     </>

@@ -17,7 +17,7 @@ export interface IUpdateNotesArray {
 }
 
 const NotesPage = () => {
-  const { notes, errors, isLoading, update } = useNotes<Note[] | undefined>()
+  const { notes, errors, isLoading, update, refresh } = useNotes<Note[] | undefined>()
   const { categories } = useCategories()
   const [filteredNotes, setFilteredNotes] = useState<Note[] | undefined>()
   const [isOpenAddNoteModal, { setTrue: openAddNoteModal, setFalse: closeAddNoteModal }] = useBoolean()
@@ -83,7 +83,7 @@ const NotesPage = () => {
               {formatMessage({ id: 'app.numOfNotes', defaultMessage: 'Number of notes' })}:{' '}
               <span className='fw-bold'>{filteredNotes?.length}</span>
             </p>
-            <Notes notes={filteredNotes} update={updateNotesArray} filterNotes={filterByCategory} />
+            <Notes notes={filteredNotes} update={updateNotesArray} filterNotes={filterByCategory} refresh={refresh} />
           </div>
         )}
       </div>
