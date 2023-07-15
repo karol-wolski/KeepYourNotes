@@ -81,5 +81,7 @@
   "app.dark": "Ciemny",
   "app.selectUITheme": "Wybierz motyw aplikacji",
   "app.printNote": "Drukuj notatkę",
-  "app.numOfNotes": "Liczba notatek"
+  "app.numOfNotes": "Liczba notatek",
+  "app.attachmentsCount": "{count, plural, =0 {# załączników} one {# załącznik} few {# załączniki} other {# załączników}}",
+  "app.removeAttachment": "Usuń załącznik"
 }

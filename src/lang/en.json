@@ -81,5 +81,7 @@
   "app.dark": "Dark",
   "app.selectUITheme": "Select the theme of the app",
   "app.printNote": "Print note",
-  "app.numOfNotes": "Number of notes"
+  "app.numOfNotes": "Number of notes",
+  "app.attachmentsCount": "{count, plural, =0 {# attachemnts} one {# attachemnt} other {# attachemnts}}",
+  "app.removeAttachment": "Remove attachment"
 }
