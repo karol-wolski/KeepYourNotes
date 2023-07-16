@@ -1,8 +1,8 @@
 import { ContentState, EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
-import { SetStateAction, useState, useRef, useEffect } from 'react'
+import { SetStateAction, useState, useRef, useEffect, KeyboardEvent } from 'react'
 import { ICategory } from '../addCategory/AddCategory'
-import { NewNote, Note } from '../notes/Notes'
+import { CheckListElement, NewNote, Note } from '../notes/Notes'
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import LabelInput from '../labelInput/LabelInput'
 import Modal from '../modal/Modal'
@@ -25,12 +25,14 @@ interface IAddEditNote {
 const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }: IAddEditNote) => {
   const { data, errors, isLoading, fetchData, statusCode } = useFetch<Note>()
   const formRef = useRef<HTMLFormElement>(null)
+  const checkListInputRef = useRef<HTMLInputElement>(null)
   const isEditMode = !!editNote
   const initialNewNote: NewNote = {
     title: '',
     desc: '',
     pinIt: false,
     categories: [],
+    list: [],
   }
   const initialState: Note | NewNote = isEditMode ? editNote : initialNewNote
   const [note, setNote] = useState<Note | NewNote>(initialState)
@@ -75,6 +77,26 @@ const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }
     }
   }
 
+  const toggleChecklistItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const findItem = note.list.find(item => item.value === e.target.id)
+
+    if (findItem) {
+      const updateList = note.list.map(item => {
+        if (item.id === findItem.id) {
+          return {
+            ...item,
+            checked: !item.checked,
+          }
+        }
+        return item
+      })
+      setNote({
+        ...note,
+        list: [...updateList],
+      })
+    }
+  }
+
   const setBgColors = (bgColorId: number) => {
     setNote(prevState => {
       return {
@@ -91,7 +113,33 @@ const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }
     data.append('pinIt', JSON.stringify(note.pinIt))
     if (note.categories) data.append('categories', JSON.stringify(note.categories))
     if (note.backgroundColor) data.append('backgroundColor', JSON.stringify(note.backgroundColor))
+    if (note.list) data.append('list', JSON.stringify(note.list))
     fetchData('notes', 'POST_FORM_DATA', data)
+  }
+  const addChecklistElement = () => {
+    const inputValue = checkListInputRef.current?.value
+    if (!inputValue?.length) return false
+
+    const newChecklistItem: CheckListElement = {
+      id: Math.random().toString(),
+      value: inputValue,
+      checked: false,
+    }
+
+    setNote({
+      ...note,
+      list: [...note.list, newChecklistItem],
+    })
+
+    if (inputValue) {
+      checkListInputRef.current.value = ''
+    }
+  }
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      addChecklistElement()
+    }
   }
 
   const submitEditNote = (note: Note) => fetchData(`notes/${note._id}`, 'PATCH', note)
@@ -156,6 +204,41 @@ const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }
             {formatMessage({ id: 'app.note', defaultMessage: 'Note' })}
           </label>
           <EditorWysiwyg editorState={editorState} updateTextDescription={updateTextDescription} />
+        </div>
+
+        <div className='mb-3'>
+          <p>{formatMessage({ id: 'app.addChecklist', defaultMessage: 'Add checklist' })}</p>
+          {note.list.map(({ id, value, checked }) => {
+            return (
+              <label key={id} htmlFor={value} className='d-block mb-2'>
+                <input
+                  type='checkbox'
+                  name=''
+                  id={value}
+                  className='form-check-input'
+                  onChange={toggleChecklistItem}
+                  defaultChecked={checked}
+                />{' '}
+                {value}
+              </label>
+            )
+          })}
+          <div className='d-block mt-3'>
+            <div className='d-flex'>
+              <LabelInput
+                labelText={formatMessage({ id: 'app.addChecklist', defaultMessage: 'Add checklist' })}
+                type='text'
+                id='checklist'
+                isLabelVisible={false}
+                placeholder={formatMessage({ id: 'app.addChecklistItem', defaultMessage: 'Add checklist item' })}
+                inputRef={checkListInputRef}
+                onKeyUp={handleKeyDown}
+              />
+              <button type='button' onClick={addChecklistElement}>
+                Add
+              </button>
+            </div>
+          </div>
         </div>
 
         {!isEditMode && (

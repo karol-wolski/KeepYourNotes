@@ -83,5 +83,9 @@
   "app.printNote": "Drukuj notatkę",
   "app.numOfNotes": "Liczba notatek",
   "app.attachmentsCount": "{count, plural, =0 {# załączników} one {# załącznik} few {# załączniki} other {# załączników}}",
-  "app.removeAttachment": "Usuń załącznik"
+  "app.removeAttachment": "Usuń załącznik",
+  "app.addChecklist": "Dodaj listę",
+  "app.addChecklistItem": "Dodaj element listy wyboru",
+  "app.editChecklist": "Edytuj listę",
+  "app.removeChecklist": "Usuń listę"
 }

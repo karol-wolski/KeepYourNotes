@@ -83,5 +83,9 @@
   "app.printNote": "Print note",
   "app.numOfNotes": "Number of notes",
   "app.attachmentsCount": "{count, plural, =0 {# attachemnts} one {# attachemnt} other {# attachemnts}}",
-  "app.removeAttachment": "Remove attachment"
+  "app.removeAttachment": "Remove attachment",
+  "app.addChecklist": "Add checklist",
+  "app.addChecklistItem": "Add checklist item",
+  "app.editChecklist": "Edit checklist",
+  "app.removeChecklist": "Remove checklist"
 }

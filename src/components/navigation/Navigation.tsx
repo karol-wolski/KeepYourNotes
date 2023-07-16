@@ -8,6 +8,7 @@ import stylesBtn from '../../styles/buttons.module.scss'
 
 interface INavigation {
   openAddNoteModal?: () => void
+  openAddChecklistModal?: () => void
   openCategories?: () => void
 }
 

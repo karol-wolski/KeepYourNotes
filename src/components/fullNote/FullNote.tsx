@@ -1,4 +1,4 @@
-import { useState, useRef, Fragment } from 'react'
+import { useState, useRef, Fragment, useEffect } from 'react'
 import { ICategory } from '../addCategory/AddCategory'
 import { Attachment, Note } from '../notes/Notes'
 import parse from 'html-react-parser'
@@ -19,7 +19,8 @@ interface IModal {
 }
 
 const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArray, isOpen }: IModal) => {
-  const { notes, errors, isLoading } = useNotes<Note>(noteId)
+  const { notes, errors, isLoading, fetchData } = useNotes<Note>(noteId)
+  const [note, setNote] = useState<Note | undefined>()
   const [isCopied, setIsCopied] = useState<boolean>(false)
   const handleSetIsCopied = () => setIsCopied(true)
   const { formatMessage } = useIntl()
@@ -29,15 +30,41 @@ const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArra
     (errors && formatMessage({ id: 'app.error', defaultMessage: 'Error' }))
   const ref = useRef<HTMLDivElement | null>(null)
 
+  useEffect(() => setNote(notes), [notes])
+
   const handlePrintToPdf = useReactToPrint({
     content: () => ref?.current,
     documentTitle: notes?.title,
     onAfterPrint: () => console.log('success'),
   })
 
+  const toggleChecklistItem = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const findItem = note?.list.find(item => item.value === e.target.id)
+    if (findItem && note) {
+      const updateList = note.list.map(item => {
+        if (item.id === findItem.id) {
+          return {
+            ...item,
+            checked: !item.checked,
+          }
+        }
+        return item
+      })
+      setNote({
+        ...note,
+        list: [...updateList],
+      })
+    }
+  }
+
+  const saveOnClose = async () => {
+    if (note?.list.length) await fetchData(`notes/${noteId}`, 'PATCH', note)
+    handleClose()
+  }
+
   return (
     <Modal
-      handleClose={handleClose}
+      handleClose={saveOnClose}
       title={title}
       isOpen={isOpen}
       btnName={formatMessage({ id: 'app.printNote', defaultMessage: 'Print note' })}
@@ -89,7 +116,24 @@ const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArra
               >
                 <i className={isCopied ? 'bi bi-clipboard-check-fill' : 'bi bi-clipboard-fill'}></i>
               </button>
-              {parse(notes.desc)}
+              {notes.desc && parse(notes.desc)}
+
+              {notes.list &&
+                notes.list.map(({ id, value, checked }) => {
+                  return (
+                    <label key={id} htmlFor={value} className='d-block mb-2'>
+                      <input
+                        type='checkbox'
+                        name=''
+                        id={value}
+                        className='form-check-input'
+                        defaultChecked={checked}
+                        onChange={toggleChecklistItem}
+                      />{' '}
+                      {value}
+                    </label>
+                  )
+                })}
             </div>
           </div>
         </>

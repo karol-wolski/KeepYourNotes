@@ -98,7 +98,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh 
               </span>
             )}
           </div>
-          <div className='card-text'>{parse(trimText(desc, 160, ' '))}</div>
+          {desc && <div className='card-text'>{parse(trimText(desc, 160, ' '))}</div>}
           <div className='d-flex gap-2 justify-start'>
             {categories &&
               categoriesArray &&
