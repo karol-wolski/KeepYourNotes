@@ -13,6 +13,7 @@ import { IUpdateNotesArray } from '../../pages/Notes'
 import { useIntl } from 'react-intl'
 import { BG_COLORS } from '../../constants/constants'
 import htmlToDraft from 'html-to-draftjs'
+import stylesBtn from '../../styles/buttons.module.scss'
 
 interface IAddEditNote {
   update: (obj: IUpdateNotesArray) => void
@@ -95,6 +96,14 @@ const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }
         list: [...updateList],
       })
     }
+  }
+
+  const removeChecklistItem = (id: string) => {
+    const filterList = note.list.filter(item => item.id !== id)
+    setNote({
+      ...note,
+      list: filterList,
+    })
   }
 
   const setBgColors = (bgColorId: number) => {
@@ -210,17 +219,27 @@ const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }
           <p>{formatMessage({ id: 'app.addChecklist', defaultMessage: 'Add checklist' })}</p>
           {note.list.map(({ id, value, checked }) => {
             return (
-              <label key={id} htmlFor={value} className='d-block mb-2'>
-                <input
-                  type='checkbox'
-                  name=''
-                  id={value}
-                  className='form-check-input'
-                  onChange={toggleChecklistItem}
-                  defaultChecked={checked}
-                />{' '}
-                {value}
-              </label>
+              <div className='d-flex align-items-center justify-content-between' key={id}>
+                <label htmlFor={value} className='d-block mb-2'>
+                  <input
+                    type='checkbox'
+                    name={id}
+                    id={value}
+                    className='form-check-input'
+                    onChange={toggleChecklistItem}
+                    defaultChecked={checked}
+                  />{' '}
+                  {value}
+                </label>
+                <button
+                  type='button'
+                  className={`btn btn-danger btn-sm ${stylesBtn.btn__danger}`}
+                  onClick={() => removeChecklistItem(id)}
+                  title={formatMessage({ id: 'app.removeChecklistItem', defaultMessage: 'Remove checklist item' })}
+                >
+                  <i className='bi bi-trash'></i>
+                </button>
+              </div>
             )
           })}
           <div className='d-block mt-3'>

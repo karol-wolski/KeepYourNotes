@@ -87,5 +87,6 @@
   "app.addChecklist": "Dodaj listę",
   "app.addChecklistItem": "Dodaj element listy wyboru",
   "app.editChecklist": "Edytuj listę",
-  "app.removeChecklist": "Usuń listę"
+  "app.removeChecklist": "Usuń listę",
+  "app.removeChecklistItem": "Usuń element wyboru"
 }
