@@ -13,7 +13,7 @@ const RemindPasswordPage = () => {
   const { errors, successMsg, isLoading, fetchData, statusCode } = useFetch<IResponse>()
   const navigate = useNavigate()
   const onSubmit = (email: string) => {
-    fetchData('user/forgotPassword', 'PATCH', { email: email })
+    fetchData('user/forgotPassword', 'PATCH', { email: email, page: 'NOTES' })
   }
 
   useEffect(() => {
