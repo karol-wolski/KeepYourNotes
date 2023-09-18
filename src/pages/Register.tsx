@@ -13,7 +13,7 @@ const RegisterPage = () => {
   const { formatMessage } = useIntl()
 
   const onSubmit = (username: string, email: string, password: string) => {
-    fetchData('auth/register', 'POST', { username: username, email: email, password: password })
+    fetchData('auth/register', 'POST', { username: username, email: email, password: password, page: 'NOTES' })
   }
 
   return (
