@@ -47,3 +47,19 @@ code {
     font-size: 1.6rem;
   }
 }
+
+.about-app {
+  background-color: #fafafa;
+  padding: 3rem;
+  color: #000;
+}
+
+.about-app h2 {
+  margin-bottom: 1.6rem;
+}
+
+@media (min-width: 576px) {
+  .about-app__desc {
+    max-width: 60%;
+  }
+}
