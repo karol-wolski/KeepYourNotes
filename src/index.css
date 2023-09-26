@@ -27,3 +27,23 @@ code {
 .d-contents {
   display: contents;
 }
+
+.homepage-welcome {
+  background: url('./assets/images/welcome.jpg') fixed center no-repeat;
+  background-size: cover;
+}
+
+.homepage-welcome h1 {
+  padding: 1rem;
+}
+
+@media (min-width: 576px) {
+  .homepage-welcome h1 {
+    font-size: 4rem;
+    padding: 1.5rem 3rem;
+  }
+
+  .homepage-welcome span {
+    font-size: 1.6rem;
+  }
+}
