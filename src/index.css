@@ -63,3 +63,21 @@ code {
     max-width: 60%;
   }
 }
+
+.join-us {
+  padding: 1.6rem 1rem;
+}
+
+.join-us h2 {
+  font-size: 2.5rem;
+}
+
+.join-us p {
+  font-size: 2rem;
+}
+
+.join-us-bg-image {
+  background: url('./assets/images/girl.jpg') no-repeat;
+  height: 100vh;
+  background-size: cover;
+}
