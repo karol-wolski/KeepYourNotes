@@ -93,3 +93,12 @@ code {
   font-size: 2rem;
   text-align: center;
 }
+
+.footer {
+  background-color: #0f0f0f;
+  padding: 0.8rem;
+}
+
+.footer a {
+  text-decoration: none;
+}
