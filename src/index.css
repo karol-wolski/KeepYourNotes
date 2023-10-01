@@ -58,6 +58,10 @@ code {
   margin-bottom: 1.6rem;
 }
 
+.about-app__desc {
+  line-height: 1.75;
+}
+
 @media (min-width: 576px) {
   .about-app__desc {
     max-width: 60%;
@@ -70,10 +74,12 @@ code {
 
 .join-us h2 {
   font-size: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .join-us p {
   font-size: 2rem;
+  margin-bottom: 2rem;
 }
 
 .join-us-bg-image {

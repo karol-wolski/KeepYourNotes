@@ -50,7 +50,7 @@ const Navigation = ({ openAddNoteModal, openCategories }: INavigation) => {
           <div className='gap-2 d-flex justify-content-start'>
             {isProfileSettings ? (
               <>
-                <Link className='btn text-white' to='/' role='button'>
+                <Link className='btn text-white' to='/board' role='button'>
                   <FormattedMessage id='app.notes' defaultMessage='Notes' />
                 </Link>
               </>

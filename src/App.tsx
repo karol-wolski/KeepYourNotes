@@ -32,6 +32,7 @@ const SettingsPage = lazy(() => import('./pages/Settings/Settings'))
 const EditUserPage = lazy(() => import('./pages/EditUser/EditUser'))
 const EditPasswordPage = lazy(() => import('./pages/EditPassword/EditPassword'))
 const StatusPage = lazy(() => import('./pages/Status'))
+const Homepage = lazy(() => import('./pages/Homepage'))
 
 function App() {
   const language = navigator.language.split(/[-_]/)[0]
@@ -40,6 +41,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(isAuthorized())
   const [languageApp, setLanguageApp] = useState<string>(getLanguageFromLS || language)
   const [themeApp, setThemeApp] = useState<string>(getThemeFromLS || 'dark')
+  const isLoggedInRedirect = '/board'
 
   const changeAppSetting = (value: string, option: 'theme' | 'language') => {
     if (option === 'theme') {
@@ -66,7 +68,7 @@ function App() {
           <Suspense fallback={<LoaderPage />}>
             <Routes>
               <Route
-                path='/'
+                path='/board'
                 element={
                   <ProtectedRoute redirectPath='/login' isAllowed={isLoggedIn}>
                     <NotesPage />
@@ -76,7 +78,7 @@ function App() {
               <Route
                 path='/login'
                 element={
-                  <ProtectedRoute redirectPath='/' isAllowed={!isLoggedIn}>
+                  <ProtectedRoute redirectPath={isLoggedInRedirect} isAllowed={!isLoggedIn}>
                     <LoginPage />
                   </ProtectedRoute>
                 }
@@ -84,7 +86,7 @@ function App() {
               <Route
                 path='/signup'
                 element={
-                  <ProtectedRoute redirectPath='/' isAllowed={!isLoggedIn}>
+                  <ProtectedRoute redirectPath={isLoggedInRedirect} isAllowed={!isLoggedIn}>
                     <RegisterPage />
                   </ProtectedRoute>
                 }
@@ -92,7 +94,7 @@ function App() {
               <Route
                 path='/activate-account'
                 element={
-                  <ProtectedRoute redirectPath='/' isAllowed={!isLoggedIn}>
+                  <ProtectedRoute redirectPath={isLoggedInRedirect} isAllowed={!isLoggedIn}>
                     <ActivationPage />
                   </ProtectedRoute>
                 }
@@ -100,7 +102,7 @@ function App() {
               <Route
                 path='/remind-password'
                 element={
-                  <ProtectedRoute redirectPath='/' isAllowed={!isLoggedIn}>
+                  <ProtectedRoute redirectPath={isLoggedInRedirect} isAllowed={!isLoggedIn}>
                     <RemindPasswordPage />
                   </ProtectedRoute>
                 }
@@ -108,7 +110,7 @@ function App() {
               <Route
                 path='/reset-password'
                 element={
-                  <ProtectedRoute redirectPath='/' isAllowed={!isLoggedIn}>
+                  <ProtectedRoute redirectPath={isLoggedInRedirect} isAllowed={!isLoggedIn}>
                     <ResetPasswordPage />
                   </ProtectedRoute>
                 }
@@ -138,6 +140,7 @@ function App() {
                 }
               />
               <Route path='/status' element={<StatusPage />} />
+              <Route path='/' element={<Homepage />} />
               <Route path='*' element={<NotFoundPage />} />
             </Routes>
           </Suspense>
