@@ -102,3 +102,37 @@ code {
 .footer a {
   text-decoration: none;
 }
+
+.reviews {
+  background-color: #fafafa;
+  padding: 3rem;
+  color: #000;
+  min-height: 20rem;
+}
+
+.reviews h2 {
+  margin-bottom: 1.6rem;
+}
+
+.reviews-carousel-inner {
+  min-height: 250px;
+}
+
+@media (max-width: 575px) {
+  .reviews-carousel__mobile-btn {
+    top: unset;
+  }
+}
+
+@media (min-width: 576px) {
+  .reviews-carousel {
+    width: 60%;
+  }
+
+  .reviews-carousel-inner {
+    max-width: 37.5rem;
+    min-height: 12rem;
+    margin: 0 auto;
+    line-height: 1.75;
+  }
+}
