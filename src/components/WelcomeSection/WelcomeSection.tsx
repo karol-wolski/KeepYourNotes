@@ -17,12 +17,12 @@ const WelcomeSection = ({ title, desc, btnOnePath, btnOneText, btnTwoPath, btnTw
         <span className='d-block'>{desc}</span>
         <div className='d-flex' style={{ gap: '1.5rem' }}>
           {btnOneText && btnOnePath && (
-            <Link className='btn btn-primary btn-welcome' to={btnOnePath}>
+            <Link className='btn btn-primary' to={btnOnePath}>
               {btnOneText}
             </Link>
           )}
           {btnTwoText && btnTwoPath && (
-            <Link className='btn btn-primary btn-welcome' to={btnTwoPath}>
+            <Link className='btn btn-primary' to={btnTwoPath}>
               {btnTwoText}
             </Link>
           )}
