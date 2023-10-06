@@ -6,7 +6,17 @@
 
   &__content {
     border-radius: unset;
-    max-height: 90vh;
+
+    @media (min-width: 768px) {
+      max-height: 90vh;
+      min-width: 700px;
+    }
+  }
+
+  &__dialog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   &__body {
