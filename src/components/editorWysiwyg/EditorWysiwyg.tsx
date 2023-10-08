@@ -20,12 +20,60 @@ const EditorWysiwyg = ({ content, updateTextDescription }: IEditorWysiwyg) => {
         heading: {
           options: [
             { model: 'paragraph', title: 'Paragraph', class: '.my-class' },
-            { model: 'heading1', view: 'h1', title: 'H1', class: 'h1' },
-            { model: 'heading2', view: 'h2', title: 'H2', class: 'ck-heading_heading2' },
-            { model: 'heading3', view: 'h3', title: 'H3', class: 'ck-heading_heading3' },
-            { model: 'heading4', view: 'h4', title: 'H4', class: 'ck-heading_heading4' },
-            { model: 'heading5', view: 'h5', title: 'H5', class: 'ck-heading_heading5' },
-            { model: 'heading6', view: 'h6', title: 'H6', class: 'ck-heading_heading6' },
+            {
+              model: 'heading1',
+              view: {
+                name: 'h1',
+                classes: ['h1'],
+              },
+              title: 'H1',
+              class: 'h1',
+            },
+            {
+              model: 'heading2',
+              view: {
+                name: 'h2',
+                classes: ['h2'],
+              },
+              title: 'H2',
+              class: 'h2',
+            },
+            {
+              model: 'heading3',
+              view: {
+                name: 'h3',
+                classes: ['h3'],
+              },
+              title: 'H3',
+              class: 'h3',
+            },
+            {
+              model: 'heading4',
+              view: {
+                name: 'h4',
+                classes: ['h4'],
+              },
+              title: 'H4',
+              class: 'ck-heading_heading4',
+            },
+            {
+              model: 'heading5',
+              view: {
+                name: 'h5',
+                classes: ['h5'],
+              },
+              title: 'H5',
+              class: 'ck-heading_heading5',
+            },
+            {
+              model: 'heading6',
+              view: {
+                name: 'h6',
+                classes: ['h6'],
+              },
+              title: 'H6',
+              class: 'ck-heading_heading6',
+            },
           ],
         },
         toolbar: {
