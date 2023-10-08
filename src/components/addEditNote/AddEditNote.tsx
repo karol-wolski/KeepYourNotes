@@ -1,19 +1,15 @@
-import { ContentState, EditorState } from 'draft-js'
-import { stateToHTML } from 'draft-js-export-html'
-import { SetStateAction, useState, useRef, useEffect, KeyboardEvent } from 'react'
+import { useState, useRef, useEffect, KeyboardEvent } from 'react'
 import { ICategory } from '../addCategory/AddCategory'
 import { CheckListElement, NewNote, Note } from '../notes/Notes'
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css'
 import LabelInput from '../labelInput/LabelInput'
 import Modal from '../modal/Modal'
-import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
 import Alert, { ALERT_TYPE } from '../alert/Alert'
 import useFetch from '../../hooks/useFetch'
 import { IUpdateNotesArray } from '../../pages/Notes'
 import { useIntl } from 'react-intl'
 import { BG_COLORS } from '../../constants/constants'
-import htmlToDraft from 'html-to-draftjs'
 import stylesBtn from '../../styles/buttons.module.scss'
+import EditorWysiwyg from '../editorWysiwyg/EditorWysiwyg'
 
 interface IAddEditNote {
   update: (obj: IUpdateNotesArray) => void
@@ -38,20 +34,7 @@ const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }
   const initialState: Note | NewNote = isEditMode ? editNote : initialNewNote
   const [note, setNote] = useState<Note | NewNote>(initialState)
 
-  const [editorState, setEditorState] = useState(() => EditorState.createEmpty())
-
-  const htmlToDraftBlocks = (html: string) => {
-    const blocksFromHtml = htmlToDraft(html)
-    const { contentBlocks, entityMap } = blocksFromHtml
-    const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap)
-    const editorState = EditorState.createWithContent(contentState)
-    return editorState
-  }
-
-  const updateTextDescription = (state: SetStateAction<EditorState>) => {
-    setEditorState(state)
-
-    const data = stateToHTML(editorState.getCurrentContent())
+  const updateTextDescription = (data: string) => {
     setNote(note => {
       return {
         ...note,
@@ -156,10 +139,6 @@ const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }
   const submitNote = (e: React.FormEvent) => (isEditMode ? submitEditNote(note as Note) : submitNewNote(e))
 
   useEffect(() => {
-    setEditorState(htmlToDraftBlocks(note.desc))
-  }, [])
-
-  useEffect(() => {
     if (statusCode === 201 && data) {
       update({
         method: 'POST',
@@ -212,7 +191,7 @@ const AddEditNote = ({ note: editNote, update, handleClose, categories, isOpen }
           <label htmlFor='description' className='form-label visually-hidden'>
             {formatMessage({ id: 'app.note', defaultMessage: 'Note' })}
           </label>
-          <EditorWysiwyg editorState={editorState} updateTextDescription={updateTextDescription} />
+          <EditorWysiwyg content={editNote?.desc || ''} updateTextDescription={updateTextDescription} />
         </div>
 
         <div className='mb-3'>

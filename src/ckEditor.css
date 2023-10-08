@@ -1,0 +1,12 @@
+[data-bs-theme='dark'] {
+  --white: #fff;
+  --ck-color-base-background: #212529 !important;
+  --ck-color-button-default-disabled-background: var(--white) !important;
+  --ck-color-button-default-background: var(--white) !important;
+  --ck-color-tooltip-background: #191b1d !important;
+  --ck-color-tooltip-text: var(--white) !important;
+}
+
+.ck.ck-content {
+  min-height: 15rem;
+}

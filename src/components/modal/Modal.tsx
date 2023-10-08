@@ -28,7 +28,7 @@ const Modal = ({
   return (
     <FocusTrap active={isOpen}>
       <div className={`modal fade show ${stylesModal.modal}`} tabIndex={-1}>
-        <div className='modal-dialog'>
+        <div className={`modal-dialog ${stylesModal.modal__dialog}`}>
           <div className={`modal-content ${stylesModal.modal__content}`}>
             <div className='modal-header'>
               <h5 className='modal-title'>{title}</h5>
