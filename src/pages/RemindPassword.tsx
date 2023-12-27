@@ -17,7 +17,7 @@ const RemindPasswordPage = () => {
   }
 
   useEffect(() => {
-    if (statusCode === 200) navigate('/success', { state: { defaultMessage: successMsg, tranlateId: 'app' } })
+    if (statusCode === 200) navigate('/status', { state: { defaultMessage: successMsg, tranlateId: 'app' } })
   }, [statusCode, successMsg])
 
   return (
