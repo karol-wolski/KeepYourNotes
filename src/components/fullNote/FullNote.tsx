@@ -30,6 +30,14 @@ const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArra
     (errors && formatMessage({ id: 'app.error', defaultMessage: 'Error' }))
   const ref = useRef<HTMLDivElement | null>(null)
 
+  const marginTop = '10px'
+  const marginRight = '5px'
+  const marginBottom = '10px'
+  const marginLeft = '5px'
+  const getPageMargins = () => {
+    return `@page { margin: ${marginTop} ${marginRight} ${marginBottom} ${marginLeft} !important; }`
+  }
+
   useEffect(() => setNote(notes), [notes])
 
   const handlePrintToPdf = useReactToPrint({
@@ -74,6 +82,7 @@ const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArra
       {errors && <p>{errors}</p>}
       {notes && (
         <>
+          <style>{getPageMargins()}</style>
           <div className='d-flex gap-2 justify-start mb-2'>
             {categoriesArray &&
               categoriesArray
