@@ -88,5 +88,18 @@
   "app.addChecklistItem": "Add checklist item",
   "app.editChecklist": "Edit checklist",
   "app.removeChecklist": "Remove checklist",
-  "app.removeChecklistItem": "Remove checklist item"
+  "app.removeChecklistItem": "Remove checklist item",
+  "app.shareNote": "Share note",
+  "app.collaborators": "Collaborators",
+  "app.collaborator": "Collaborator",
+  "app.cannotLoadCollaborators": "We cannot load collaborator.",
+  "app.collaboratorExist": "This collaborator has already been added.",
+  "app.collaboratorAdded": "Collaborator has been successfully added.",
+  "app.removeCollaborator": "Remove collaborator",
+  "app.addNewCollaborator": "Add new collaborator",
+  "app.permission": "Permission",
+  "app.permissions": "Permissions",
+  "app.read": "Read",
+  "app.fullControl": "Full Control",
+  "app.readWrite": "Read and write"
 }

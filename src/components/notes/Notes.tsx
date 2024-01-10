@@ -16,6 +16,12 @@ export type CheckListElement = {
   checked: boolean
 }
 
+export type Collaborator = {
+  _id?: string
+  email: string
+  permission: string
+}
+
 export type Note = {
   _id: string
   title: string
@@ -27,6 +33,7 @@ export type Note = {
   backgroundColor?: number
   numberOfAttachments?: number
   list: CheckListElement[]
+  collaborators?: Collaborator[]
 }
 
 export type NewNote = Omit<Note, '_id' | 'createdBy'>
