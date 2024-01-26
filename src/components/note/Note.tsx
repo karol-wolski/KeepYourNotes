@@ -14,6 +14,9 @@ import { useEffect, useState } from 'react'
 import { IUpdateNotesArray } from '../../pages/Notes'
 import { FormattedMessage, useIntl } from 'react-intl'
 import AddEditNote from '../addEditNote/AddEditNote'
+import ShareNote from '../shareNote/ShareNote'
+import useUsers from '../../hooks/useUsers'
+import { PERMISSIONS } from '../../constants/permissionsNote'
 
 interface INote {
   note: NoteType
@@ -31,12 +34,16 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh 
     displayManageAttatchmentsModal,
     { setFalse: closeManageAttatchmentsModal, setTrue: openManageAttatchmentsModal },
   ] = useBoolean(false)
+  const [displayShareNote, { setFalse: closeShareNoteModal, setTrue: openShareNoteModal }] = useBoolean(false)
   const [method, setMethod] = useState('')
+  const getUser = useUsers()
 
   const { data, fetchData, isLoading, statusCode } = useFetch<NoteType>()
 
-  const { _id, title, desc, categories, pinIt, backgroundColor, numberOfAttachments } = note
+  const { _id, title, desc, categories, pinIt, backgroundColor, numberOfAttachments, collaborators, createdBy } = note
 
+  const collaborator = collaborators?.filter(el => el.email === getUser?.email)[0]?.permission
+  const isAuthor = getUser?._id === createdBy
   const bgColor = BG_COLORS.find(bg => bg.id === backgroundColor)
 
   const pinItOnChange = () => {
@@ -86,6 +93,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh 
                 <i className={pinIt ? 'bi bi-pin-angle-fill' : 'bi bi-pin-angle'}></i>
               </button>
             </div>
+            {collaborator ? <div className='text-center bg-info text-dark fw-bold'>shared for you</div> : ''}
             <h2 className='card-title'>{title}</h2>
             {!!numberOfAttachments && (
               <span className='text-decoration-underline'>
@@ -126,22 +134,26 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh 
           </div>
           <div className='d-grid gap-2 d-md-flex justify-content-md-between mt-2 align-items-center'>
             <div className='gap-1 d-flex justify-content-start'>
-              <button
-                type='button'
-                className={`btn btn-danger btn-sm ${stylesBtn.btn__danger}`}
-                onClick={openRemoveModal}
-                title={formatMessage({ id: 'app.removeNote', defaultMessage: 'Remove note' })}
-              >
-                <i className='bi bi-trash'></i>
-              </button>
-              <button
-                type='button'
-                className={`btn btn-warning btn-sm ${stylesBtn.btn__primary}`}
-                onClick={openEditModal}
-                title={formatMessage({ id: 'app.editNote', defaultMessage: 'Edit note' })}
-              >
-                <i className='bi bi-pencil'></i>
-              </button>
+              {(isAuthor || collaborator === PERMISSIONS.FULL_CONTROL) && (
+                <button
+                  type='button'
+                  className={`btn btn-danger btn-sm ${stylesBtn.btn__danger}`}
+                  onClick={openRemoveModal}
+                  title={formatMessage({ id: 'app.removeNote', defaultMessage: 'Remove note' })}
+                >
+                  <i className='bi bi-trash'></i>
+                </button>
+              )}
+              {(isAuthor || collaborator === PERMISSIONS.READ_WRITE) && (
+                <button
+                  type='button'
+                  className={`btn btn-warning btn-sm ${stylesBtn.btn__primary}`}
+                  onClick={openEditModal}
+                  title={formatMessage({ id: 'app.editNote', defaultMessage: 'Edit note' })}
+                >
+                  <i className='bi bi-pencil'></i>
+                </button>
+              )}
               <button
                 type='button'
                 className={`btn btn-dark btn-sm ${stylesBtn.btn__dark}`}
@@ -150,14 +162,26 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh 
               >
                 <i className='bi bi-files'></i>
               </button>
-              <button
-                type='button'
-                className={`btn btn-warning btn-sm ${stylesBtn.btn__primary}`}
-                onClick={openManageAttatchmentsModal}
-                title={formatMessage({ id: 'app.manageAttachments', defaultMessage: 'Manage attachments' })}
-              >
-                <i className='bi bi-paperclip'></i>
-              </button>
+              {(isAuthor || collaborator === PERMISSIONS.READ_WRITE) && (
+                <button
+                  type='button'
+                  className={`btn btn-warning btn-sm ${stylesBtn.btn__primary}`}
+                  onClick={openManageAttatchmentsModal}
+                  title={formatMessage({ id: 'app.manageAttachments', defaultMessage: 'Manage attachments' })}
+                >
+                  <i className='bi bi-paperclip'></i>
+                </button>
+              )}
+              {(isAuthor || collaborator === PERMISSIONS.FULL_CONTROL) && (
+                <button
+                  type='button'
+                  className={`btn btn-warning btn-sm ${stylesBtn.btn__primary}`}
+                  onClick={openShareNoteModal}
+                  title={formatMessage({ id: 'app.manageAttachments', defaultMessage: 'Share note' })}
+                >
+                  <i className='bi bi-share'></i>
+                </button>
+              )}
             </div>
             <button
               type='button'
@@ -214,6 +238,9 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh 
           noteId={_id}
           refresh={refresh}
         />
+      )}
+      {displayShareNote && (
+        <ShareNote handleModalClose={closeShareNoteModal} isOpen={displayShareNote} noteId={_id} refresh={refresh} />
       )}
     </>
   )

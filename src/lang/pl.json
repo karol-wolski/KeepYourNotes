@@ -88,5 +88,18 @@
   "app.addChecklistItem": "Dodaj element listy wyboru",
   "app.editChecklist": "Edytuj listę",
   "app.removeChecklist": "Usuń listę",
-  "app.removeChecklistItem": "Usuń element wyboru"
+  "app.removeChecklistItem": "Usuń element wyboru",
+  "app.shareNote": "Udostępnij notatkę",
+  "app.collaborators": "Współpracownicy",
+  "app.collaborator": "Współpracownik",
+  "app.cannotLoadCollaborators": "Nie możemy załadować współpracowników",
+  "app.collaboratorExist": "Ten współpracownik został już dodany.",
+  "app.collaboratorAdded": "Współpracownik został dodany.",
+  "app.removeCollaborator": "Usuń współpracownika",
+  "app.addNewCollaborator": "Dodaj nowego współpracownika",
+  "app.permission": "Uprawnienie",
+  "app.permissions": "Uprawnienia",
+  "app.read": "Odczyt",
+  "app.fullControl": "Pełna kontrola",
+  "app.readWrite": "Odczyt i zapis"
 }

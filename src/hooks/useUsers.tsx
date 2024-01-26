@@ -5,6 +5,7 @@ import { redirect } from 'react-router-dom'
 import { AuthContext, IAuthContext } from '../context/AuthContext'
 
 export interface IUser {
+  _id?: string
   email: string
   username: string
 }
