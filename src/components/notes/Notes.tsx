@@ -2,6 +2,7 @@ import useCategories from '../../hooks/useCategories'
 import { IUpdateNotesArray } from '../../pages/Notes'
 import Masonry from 'react-masonry-css'
 import Note from '../note/Note'
+import useUsers from '../../hooks/useUsers'
 
 export type Attachment = {
   _id: string
@@ -47,6 +48,9 @@ interface INotes {
 
 const Notes = ({ notes, filterNotes, update, refresh }: INotes) => {
   const { categories } = useCategories()
+  const getUser = useUsers()
+
+  const userData = { id: getUser?._id || '', email: getUser?.email || '' }
 
   const breakpointColumnsObj = {
     default: 4,
@@ -69,6 +73,7 @@ const Notes = ({ notes, filterNotes, update, refresh }: INotes) => {
           categories={categories}
           update={update}
           refresh={refresh}
+          user={userData}
         />
       ))}
     </Masonry>

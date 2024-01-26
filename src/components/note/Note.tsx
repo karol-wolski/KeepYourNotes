@@ -15,7 +15,6 @@ import { IUpdateNotesArray } from '../../pages/Notes'
 import { FormattedMessage, useIntl } from 'react-intl'
 import AddEditNote from '../addEditNote/AddEditNote'
 import ShareNote from '../shareNote/ShareNote'
-import useUsers from '../../hooks/useUsers'
 import { PERMISSIONS } from '../../constants/permissionsNote'
 
 interface INote {
@@ -24,9 +23,10 @@ interface INote {
   categories: ICategory[]
   update: (obj: IUpdateNotesArray) => void
   refresh: () => void
+  user: { id: string; email: string }
 }
 
-const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh }: INote) => {
+const Note = ({ note, user, filterNotes, categories: categoriesArray, update, refresh }: INote) => {
   const [displayFullNote, { setFalse: closeFullModal, setTrue: openFullNote }] = useBoolean(false)
   const [displayRemoveModal, { setFalse: closeRemoveModal, setTrue: openRemoveModal }] = useBoolean(false)
   const [displayEditModal, { setFalse: closeEditModal, setTrue: openEditModal }] = useBoolean(false)
@@ -36,14 +36,13 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh 
   ] = useBoolean(false)
   const [displayShareNote, { setFalse: closeShareNoteModal, setTrue: openShareNoteModal }] = useBoolean(false)
   const [method, setMethod] = useState('')
-  const getUser = useUsers()
 
   const { data, fetchData, isLoading, statusCode } = useFetch<NoteType>()
 
   const { _id, title, desc, categories, pinIt, backgroundColor, numberOfAttachments, collaborators, createdBy } = note
 
-  const collaborator = collaborators?.filter(el => el.email === getUser?.email)[0]?.permission
-  const isAuthor = getUser?._id === createdBy
+  const collaborator = collaborators?.filter(el => el.email === user.email)[0]?.permission
+  const isAuthor = user.id === createdBy
   const bgColor = BG_COLORS.find(bg => bg.id === backgroundColor)
 
   const pinItOnChange = () => {
@@ -93,7 +92,7 @@ const Note = ({ note, filterNotes, categories: categoriesArray, update, refresh 
                 <i className={pinIt ? 'bi bi-pin-angle-fill' : 'bi bi-pin-angle'}></i>
               </button>
             </div>
-            {collaborator ? <div className='text-center bg-info text-dark fw-bold'>shared for you</div> : ''}
+            {collaborator ? <div className='text-center bg-warning text-dark fw-bold'>shared for you</div> : ''}
             <h2 className='card-title'>{title}</h2>
             {!!numberOfAttachments && (
               <span className='text-decoration-underline'>
