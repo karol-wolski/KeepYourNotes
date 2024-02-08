@@ -4,6 +4,7 @@ import LabelInput from '../labelInput/LabelInput'
 import stylesBtn from '../../styles/buttons.module.scss'
 import { checkCategoryExist } from '../../helpers/checkCategoryExist'
 import { useIntl } from 'react-intl'
+import useAlertMessage from '../../hooks/useAlertMessage'
 
 export interface INewCategory {
   name: string
@@ -24,9 +25,7 @@ const AddCategory = ({ onSubmit, categories, statusCode, isLoading }: IAddCatego
   const inputRef = useRef<HTMLInputElement>(null)
   const [isButtonDisabled, setIsButtonDisabled] = useState(false)
   const { formatMessage } = useIntl()
-
-  const [errors, setErrors] = useState('')
-  const [success, setSuccess] = useState('')
+  const { messaage, set: setMessage } = useAlertMessage()
 
   const setBtnDisabled = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsButtonDisabled(!!event.target.value.length)
@@ -37,8 +36,11 @@ const AddCategory = ({ onSubmit, categories, statusCode, isLoading }: IAddCatego
       name: inputRef.current?.value || '',
     }
     if (checkCategoryExist(categories, category)) {
-      setSuccess('')
-      setErrors(formatMessage({ id: 'app.categoryExist', defaultMessage: 'The category name exists.' }))
+      setMessage({
+        type: ALERT_TYPE.DANGER,
+        translateId: 'app.categoryExist',
+        msg: 'The category name exists.',
+      })
     } else {
       onSubmit(category.name)
     }
@@ -62,12 +64,13 @@ const AddCategory = ({ onSubmit, categories, statusCode, isLoading }: IAddCatego
         if (inputRef.current?.value) {
           inputRef.current.value = ''
         }
-        setErrors('')
-        setSuccess(
-          formatMessage({ id: 'app.categoryAdded', defaultMessage: 'Your category has been successfully added.' }),
-        )
+        setMessage({
+          type: ALERT_TYPE.SUCCESS,
+          translateId: 'app.categoryAdded',
+          msg: 'Your category has been successfully added.',
+        })
         const timeout = setTimeout(() => {
-          setSuccess('')
+          setMessage(undefined)
         }, 3000)
         return () => clearTimeout(timeout)
       }
@@ -95,8 +98,9 @@ const AddCategory = ({ onSubmit, categories, statusCode, isLoading }: IAddCatego
             : formatMessage({ id: 'app.add', defaultMessage: 'Add' })}
         </button>
       </div>
-      {errors && <Alert type={ALERT_TYPE.DANGER} text={errors} />}
-      {success && <Alert type={ALERT_TYPE.SUCCESS} text={success} />}
+      {messaage && (
+        <Alert type={messaage.type} text={formatMessage({ id: messaage.translateId, defaultMessage: messaage.msg })} />
+      )}
     </form>
   )
 }

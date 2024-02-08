@@ -10,6 +10,7 @@ import useNotes from '../../hooks/useNotes'
 import { useIntl } from 'react-intl'
 import formValidation from '../../helpers/formValidation'
 import { PERMISSIONS_ARRAY } from '../../constants/permissionsNote'
+import useAlertMessage from '../../hooks/useAlertMessage'
 
 interface IShareNote {
   isOpen: boolean
@@ -23,7 +24,7 @@ const ShareNote = ({ isOpen, handleModalClose, noteId }: IShareNote) => {
   const selectRef = useRef<HTMLSelectElement>(null)
   const { notes, errors: errorsNotes, isLoading: isLoadingNotes, fetchData, update } = useNotes<Note>(noteId)
   const [activeBtnName, setActiveBtnName] = useState<string>('')
-  const [messaage, SetMessage] = useState<{ type: ALERT_TYPE; translateId: string; msg: string } | undefined>(undefined)
+  const { messaage, set: SetMessage } = useAlertMessage()
   const { formatMessage } = useIntl()
 
   const add = async (event: React.FormEvent) => {
