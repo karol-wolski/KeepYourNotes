@@ -143,6 +143,11 @@ const FullNote = ({ noteId, handleClose, filterNotes, categories: categoriesArra
                     </label>
                   )
                 })}
+              {notes.list && (
+                <p className='text-secondary'>
+                  Done: {note?.list.filter(item => item.checked).length} / {notes.list.length}
+                </p>
+              )}
             </div>
           </div>
         </>
